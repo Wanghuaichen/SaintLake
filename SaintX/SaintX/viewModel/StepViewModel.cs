@@ -16,9 +16,9 @@ namespace SaintX
         public StepViewModel()
         {
             string sDataFolder =  FolderHelper.GetImageFolder();
-            BitmapImage scan = new BitmapImage(new Uri(sDataFolder + "sampleDef.jpg"));
-            BitmapImage dissolve = new BitmapImage(new Uri(sDataFolder + "barcodeDef.png"));
-            BitmapImage tick = new BitmapImage(new Uri(sDataFolder + "genScript.png"));
+            BitmapImage scan = new BitmapImage(new Uri(sDataFolder + "sampleDef.png"));
+            BitmapImage dissolve = new BitmapImage(new Uri(sDataFolder + "barcodeDef.jpg"));
+            BitmapImage tick = new BitmapImage(new Uri(sDataFolder + "genScript.jpg"));
             stepDescs.Add(new StepDesc("样品定义", scan, Stage.AssayDef));
             stepDescs.Add(new StepDesc("条码设置", dissolve, Stage.BarcodeDef));
             stepDescs.Add(new StepDesc("生成脚本", tick, Stage.GenerateScript));
