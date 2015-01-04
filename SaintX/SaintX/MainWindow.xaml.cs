@@ -21,10 +21,11 @@ namespace SaintX
     /// </summary>
     public partial class MainWindow : BaseHost
     {
-       
+        StepViewModel stepViewModel = new StepViewModel();
         public MainWindow()
         {
             InitializeComponent();
+            lstSteps.DataContext = stepViewModel.StepsModel;
         }
 
         
