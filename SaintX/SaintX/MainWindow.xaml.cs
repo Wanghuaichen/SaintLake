@@ -22,14 +22,19 @@ namespace SaintX
     public partial class MainWindow : BaseHost
     {
         StepViewModel stepViewModel = new StepViewModel();
-        public MainWindow()
+        public MainWindow():base()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
             lstSteps.DataContext = stepViewModel.StepsModel;
         }
 
-        
-        
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var userControl in stageUserControls)
+                userControlHost.Children.Add(userControl);
+            NavigateTo(Stage.BarcodeDef);
+        }
 
         #region commands
         private void CommandHelp_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -66,5 +71,22 @@ namespace SaintX
 
         }
 
+    }
+
+    [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
+    public class MyColorConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return new SolidColorBrush((Color)value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            //throw new NotImplementedException();
+            SolidColorBrush solidColorBrush = (SolidColorBrush)value;
+            return solidColorBrush.Color;
+        }
     }
 }

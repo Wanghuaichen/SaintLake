@@ -56,7 +56,7 @@ namespace SaintX.Navigation
         public event EventHandler onSizeChanged;
         protected bool preventUI = false;
         protected Stage farthestStage = Stage.AssayDef;
-        List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
+        protected List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
         public BaseHost()
         {
             AddSteps();
@@ -88,7 +88,7 @@ namespace SaintX.Navigation
 
         protected void NavigateTo(Stage stage)
         {
-            if (onSizeChanged != null)
+            if (onStageChanged != null)
                 onStageChanged(this, new Navigate2Args(stage));
         }
     }
