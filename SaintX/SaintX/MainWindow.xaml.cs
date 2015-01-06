@@ -32,8 +32,8 @@ namespace SaintX
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (var userControl in stageUserControls)
-                userControlHost.Children.Add(userControl);
-            NavigateTo(Stage.BarcodeDef);
+               userControlHost.Children.Add(userControl);
+            NavigateTo(Stage.AssayDef);
         }
 
         #region commands

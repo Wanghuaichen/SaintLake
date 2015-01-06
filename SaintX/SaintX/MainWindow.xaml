@@ -8,23 +8,21 @@
     </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="160"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="150*"/>
+               <ColumnDefinition Width="150"/>
                <ColumnDefinition Width="650*"/>
-               
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Bottom" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp">
+        <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <Grid Name="userControlHost" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="#DFDFFF" SizeChanged="userControlHost_SizeChanged">
+        <Grid Name="userControlHost" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  HorizontalAlignment="Left" VerticalAlignment="Top"  Background="#DFDFFF" SizeChanged="userControlHost_SizeChanged">
         </Grid>
         <Menu Height="24" Grid.Column="3" HorizontalAlignment="Right" Name="menu1"  VerticalAlignment="Top" Width="48" Margin="0,1,0,0">
             <MenuItem Header="帮助" FontFamily="SimSun" FontSize="14" TabIndex="7">

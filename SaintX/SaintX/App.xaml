@@ -25,26 +25,27 @@
             <GradientStop Color="CadetBlue" Offset="1" />
         </LinearGradientBrush>
         
+        <SolidColorBrush Color="Green" x:Key="GreenBrush"/>
+        
         <DataTemplate
            x:Key="ThickBorderListBox"   DataType="Whatever">
             <Border x:Name="TheBorder" BorderBrush="Gray"  BorderThickness="1" Padding="4" CornerRadius="4" Margin="2" >
-                <TextBlock Height="20" FontSize="18" Text="{Binding Path=Name}" Background="{Binding Path=Color,Converter={StaticResource colorConverter}}" Width="200">
+                <TextBlock Height="20" FontSize="18" Text="{Binding Path=Name}" Background="{Binding Path=Color,Converter={StaticResource colorConverter}}" Width="150">
                 </TextBlock>
 
             </Border>
-            <DataTemplate.Triggers>
+            <!--<DataTemplate.Triggers>
                 <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsSelected}"    Value="True">
                     <Setter
                         TargetName="TheBorder"
                         Property="BorderBrush"
-                        Value="{StaticResource SelectedItemBrush}" />
-
+                        Value="{StaticResource GreenBrush}" />
                     <Setter
                         TargetName="TheBorder"
                         Property="BorderThickness"
                         Value="3" />
                 </DataTrigger>
-            </DataTemplate.Triggers>
+            </DataTemplate.Triggers>-->
         </DataTemplate>
 
         <DataTemplate

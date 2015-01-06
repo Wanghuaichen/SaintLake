@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\ColorfulAssay.cs" />
+    <Compile Include="Data\Settings.cs" />
+    <Compile Include="Data\SettingsManager.cs" />
     <Compile Include="Navigation\Interfaces.cs" />
     <Compile Include="Navigation\NavigationImpl.cs" />
     <Compile Include="stageControls\AssayDefinition.xaml.cs">
@@ -68,6 +71,7 @@
       <DependentUpon>BarcodeDefinition.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\FolderHelper.cs" />
+    <Compile Include="Utility\SerializationHelper.cs" />
     <Compile Include="viewModel\StepViewModel.cs" />
     <Compile Include="viewModel\viewModelbase.cs" />
     <Page Include="MainWindow.xaml">
