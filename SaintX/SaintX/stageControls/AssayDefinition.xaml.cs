@@ -34,16 +34,21 @@ namespace SaintX.stageControls
 
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {
-            int maxSampleCount = Utility.GetMaxSampleCount();
-            int i;
-            bok = int.TryParse(txtSampleCount.Text, out i);
-            if (!bok)
-                SetInfo("样品数量必须为数字！", Colors.Red);
-            if (i <= 0 || i > maxSampleCount)
-            {
-                SetInfo(string.Format("样品数量必须介于1和{0}之间", maxSampleCount), Colors.Red);
-                bok = false;
-            }
+            //int maxSampleCount = Utility.GetMaxSampleCount();
+            //int i;
+            //bok = int.TryParse(txtSampleCount.Text, out i);
+            //if (!bok)
+            //    SetInfo("样品数量必须为数字！", Colors.Red);
+            //if (i <= 0 || i > maxSampleCount)
+            //{
+            //    SetInfo(string.Format("样品数量必须介于1和{0}之间", maxSampleCount), Colors.Red);
+            //    bok = false;
+            //}
+
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

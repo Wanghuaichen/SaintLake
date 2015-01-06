@@ -6,12 +6,13 @@
              xmlns:wfi = "clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
              xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" 
              xmlns:bb="clr-namespace:SaintX.Navigation"
+             
              mc:Ignorable="d" 
-             Height="600" Width="1200">
+             >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
-            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="650*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -19,6 +20,7 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <StackPanel Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Label FontFamily="SimSun">实验名：</Label>
             <ListBox  ItemsSource="{Binding}" ItemTemplate="{StaticResource ThickBorderListBox}"  
