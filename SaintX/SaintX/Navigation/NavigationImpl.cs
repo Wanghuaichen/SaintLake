@@ -1,5 +1,5 @@
 ﻿using SaintX.Interfaces;
-using SaintX.stageControls;
+using SaintX.StageControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +53,6 @@ namespace SaintX.Navigation
     public abstract class BaseHost : Window, IHost
     {
         public event EventHandler onStageChanged;
-        public event EventHandler onSizeChanged;
         protected bool preventUI = false;
         protected Stage farthestStage = Stage.AssayDef;
         protected List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
@@ -96,18 +95,31 @@ namespace SaintX.Navigation
     public abstract class BaseUserControl : UserControl, IStageControl
     {
         private Stage _stage;
+        bool resultIsOk = false;
         public BaseUserControl(Stage stage, BaseHost host)
         {
             _stage = stage;
-            host.onStageChanged += host_onStageChanged;
+            host.onStageChanged += onStageChanged;
         }
         
         public BaseUserControl()
         {
         }
 
+        public bool ResultIsOk 
+        { 
+            get
+            {
+                return resultIsOk;
+            }
+            set 
+            {
+                resultIsOk = value;
+            }
+        }
 
-        void host_onStageChanged(object sender, EventArgs e)
+
+        protected virtual void onStageChanged(object sender, EventArgs e)
         {
             Navigate2Args navigate2Args = (Navigate2Args)e;
             this.Visibility = navigate2Args.DestStage == _stage ? Visibility.Visible : Visibility.Hidden;

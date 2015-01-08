@@ -61,6 +61,15 @@ namespace SaintX.Properties {
         }
         
         /// <summary>
+        ///   查找类似 无 的本地化字符串。
+        /// </summary>
+        internal static string EmptyAssay {
+            get {
+                return ResourceManager.GetString("EmptyAssay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件参数错误！ 的本地化字符串。
         /// </summary>
         internal static string FileNameArgumentError {

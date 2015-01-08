@@ -49,6 +49,8 @@ namespace SaintX
         }
         #endregion
 
+
+        #region event
         private void lstSteps_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (preventUI)
@@ -65,14 +67,14 @@ namespace SaintX
                     NavigateTo(stage2Go);
             }
         }
+        #endregion
 
-        private void userControlHost_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
-        }
 
     }
 
+
+
+    #region  color converter
     [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
     public class MyColorConverter : IValueConverter
     {
@@ -89,4 +91,7 @@ namespace SaintX
             return solidColorBrush.Color;
         }
     }
+    #endregion endregion
+
+
 }

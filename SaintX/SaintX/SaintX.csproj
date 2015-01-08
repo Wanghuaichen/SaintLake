@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,8 +61,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\ColorfulAssay.cs" />
+    <Compile Include="Data\GlobalVars.cs" />
+    <Compile Include="Data\SampleInfo.cs" />
     <Compile Include="Data\Settings.cs" />
-    <Compile Include="Data\SettingsManager.cs" />
+    <Compile Include="Data\PanelViewModel.cs" />
+    <Compile Include="Utility\Helper.cs" />
+    <Compile Include="Utility\SettingsManager.cs" />
     <Compile Include="Navigation\Interfaces.cs" />
     <Compile Include="Navigation\NavigationImpl.cs" />
     <Compile Include="stageControls\AssayDefinition.xaml.cs">
@@ -72,6 +77,7 @@
     </Compile>
     <Compile Include="Utility\FolderHelper.cs" />
     <Compile Include="Utility\SerializationHelper.cs" />
+    <Compile Include="Utility\VirtualToggleButton.cs" />
     <Compile Include="viewModel\StepViewModel.cs" />
     <Compile Include="viewModel\viewModelbase.cs" />
     <Page Include="MainWindow.xaml">

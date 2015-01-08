@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:SaintX"
+             xmlns:utility="clr-namespace:SaintX.Utility"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <src:MyColorConverter x:Key="colorConverter"/>
@@ -30,7 +31,7 @@
         <DataTemplate
            x:Key="ThickBorderListBox"   DataType="Whatever">
             <Border x:Name="TheBorder" BorderBrush="Gray"  BorderThickness="1" Padding="4" CornerRadius="4" Margin="2" >
-                <TextBlock Height="20" FontSize="18" Text="{Binding Path=Name}" Background="{Binding Path=Color,Converter={StaticResource colorConverter}}" Width="150">
+                <TextBlock Height="20" FontSize="18" Text="{Binding Path=Name}" Background="{Binding Path=Color,Converter={StaticResource colorConverter}}" Width="120">
                 </TextBlock>
 
             </Border>
@@ -52,10 +53,10 @@
            x:Key="ImageListbox"   DataType="Whatever">
             <Border x:Name="TheBorder" BorderBrush="LightBlue" BorderThickness="2" Padding="4" CornerRadius="4" Margin="2">
                 <StackPanel>
-                    <TextBlock Text="{Binding Path= Name}" Foreground="DarkBlue"  Height="20" Width="120"/>
+                    <TextBlock Text="{Binding Path= Name}" Foreground="DarkBlue"  Height="20" Width="70"/>
                     <Image  Source="{Binding Path =Image}"
                             Stretch="Fill"
-                            Width="120" Height="100" />
+                            Width="80" Height="70" />
                 </StackPanel>
 
                 <Border.Background>
@@ -79,5 +80,31 @@
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
+
+        <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=OneTime}" />
+            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+            <Setter Property="utility:VirtualToggleButton.IsChecked" Value="True" />
+            <Setter Property="utility:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
+        </Style>
+
+        <HierarchicalDataTemplate 
+        x:Key="CheckBoxItemTemplate"
+        ItemsSource="{Binding Children, Mode=OneTime}"
+        >
+            <StackPanel Orientation="Horizontal">
+                <!-- These elements are bound to a FooViewModel object. -->
+                <CheckBox
+            Focusable="False" 
+            IsChecked="{Binding IsChecked}" 
+            VerticalAlignment="Center"
+            />
+                <ContentPresenter 
+            Content="{Binding Name, Mode=OneTime}" 
+            Margin="2,0"
+            />
+            </StackPanel>
+        </HierarchicalDataTemplate>
     </Application.Resources>
 </Application>

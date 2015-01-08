@@ -18,6 +18,5 @@ namespace SaintX.Interfaces
      public interface IHost
     {
         event EventHandler onStageChanged;
-        event EventHandler onSizeChanged;
     }
 }

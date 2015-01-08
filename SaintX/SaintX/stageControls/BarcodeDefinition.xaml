@@ -1,25 +1,33 @@
-﻿<bb:BaseUserControl x:Class="SaintX.stageControls.BarcodeDefinition"
+﻿<bb:BaseUserControl x:Class="SaintX.StageControls.BarcodeDefinition"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:bb="clr-namespace:SaintX.Navigation"
+             xmlns:wfi = "clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+             xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             xmlns:src="clr-namespace:SaintX.StageControls"       
+             d:DesignHeight="600" d:DesignWidth="1200">
     <Grid>
-
+        <Grid.Resources>
+            <src:BoolColorConverter x:Key="colorConverter"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250*"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="550*"/>
         </Grid.ColumnDefinitions>
-        <Grid Background="LightGreen" Margin="0,20,0,0" IsEnabled="{Binding ElementName=rdbBarcode, Path=IsChecked}">
+        <GroupBox>
+            <Grid Margin="0,0,0,10" IsEnabled="{Binding ElementName=rdbBarcode, Path=IsChecked}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="4*"></RowDefinition>
                 <RowDefinition Height="4*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="6*"></RowDefinition>
+                <RowDefinition Height="1.5*"></RowDefinition>
+                
             </Grid.RowDefinitions>
+            
             <StackPanel Name="approach" Grid.Row="0">
                 <Label Content="设置方式：" FontSize="16"/>
                 <StackPanel Orientation="Horizontal"  Margin="0,10,0,10">
@@ -27,35 +35,74 @@
                     <RadioButton  Content="起始-结束"  x:Name="rdbStartEnd" FontSize="16" Margin="10,0,0,0" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Name="approach1"  Grid.Row="1" Background="LightGreen" Margin="0,10,0,10" IsEnabled="{Binding ElementName=rdbStartCount, Path=IsChecked}">
+            <StackPanel Name="approach1"  Grid.Row="1" Background="{Binding ElementName=rdbStartCount,Path=IsChecked,Converter={StaticResource colorConverter}}" Margin="0,10,0,10" IsEnabled="{Binding ElementName=rdbStartCount, Path=IsChecked}">
                 <Label Content="起始条码-数量" FontSize="16"/>
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <Label Content="起始条码:"/>
-                        <TextBox Name="txtStartBarcodeApproach1" Width="160"/>
+                        <TextBox Name="txtStartBarcodeApproach1" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,10">
                         <Label Content="数量:    "/>
-                        <TextBox Name="txtCount" Width="160"/>
+                        <TextBox Name="txtCount" Width="120"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Name="approach2" Grid.Row="2" Background="LightYellow" Margin="0,10,0,10" IsEnabled="{Binding ElementName=rdbStartEnd, Path=IsChecked}">
+            <StackPanel Name="approach2" Grid.Row="2" Background="{Binding ElementName=rdbStartEnd,Path=IsChecked,Converter={StaticResource colorConverter}}" Margin="0,10,0,10" IsEnabled="{Binding ElementName=rdbStartEnd, Path=IsChecked}">
                 <Label Content="起始条码-结束条码" FontSize="16"/>
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <Label Content="起始条码:"/>
-                        <TextBox Name="txtStartBarcodeApproach2" Width="160"/>
+                        <TextBox Name="txtStartBarcodeApproach2" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,10">
                         <Label Content="结束条码:"/>
-                        <TextBox Name="txtEndBarcode" Width="160"/>
+                        <TextBox Name="txtEndBarcode" Width="120"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
             <Grid Grid.Row="3">
-                <Button Name="btnBarcodeOk" Content="设置" FontSize="16" Width="120" />
+                <StackPanel>
+                    <Label Content="实验:"/>
+                    <TreeView x:Name="tree"    ItemContainerStyle="{StaticResource TreeViewItemStyle}"
+                        ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}"
+                        HorizontalAlignment="Left"  VerticalAlignment="Top" Width="180" Margin="5,0,10,0"/>
+                </StackPanel>
+                
+            </Grid>
+            <Grid Grid.Row="4">
+                <Button Name="btnBarcodeOk" Content="设置" FontSize="16" Margin="0,5,0,5" Width="120" />
             </Grid>
         </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <StackPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    <Label Margin="0,4,0,4" FontFamily="SimSun">实验信息：</Label>
+                    <wfi:WindowsFormsHost>
+                        <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" EditMode="EditProgrammatically"/>
+                    </wfi:WindowsFormsHost>
+                </StackPanel>
+                <GroupBox Grid.Row="2" Grid.Column="2" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="1" Grid.Column="0"   HorizontalAlignment="Stretch" Margin="0,0,0,10"  Name="txtInfo" VerticalAlignment="Stretch" MaxLines="4" TabIndex="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  />
+                        <Label Content="信息:"  Height="34" HorizontalAlignment="Left" Name="label6" VerticalAlignment="Top" Width="50" Margin="0,0,0,0" />
+                        <Button Content="下一步" Grid.Column="1"  Height="36"  VerticalAlignment="Bottom" Margin="20,0,0,10" Name="btnNext" Width="100" HorizontalAlignment="Left" Click="btnNext_Click" IsDefault="True" TabIndex="5" Grid.Row="1"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
     </Grid>
 </bb:BaseUserControl>

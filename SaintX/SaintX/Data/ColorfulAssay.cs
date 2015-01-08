@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace SaintX.Data
 {
     [Serializable]
-    class ColorfulAssay
+    public class ColorfulAssay
     {
         Color _color;
         string _name;
@@ -37,6 +37,11 @@ namespace SaintX.Data
             {
                 _name = value;
             }
+        }
+
+        public override string ToString()
+        {
+            return _name;
         }
 
         public ColorfulAssay(string name, Color color)

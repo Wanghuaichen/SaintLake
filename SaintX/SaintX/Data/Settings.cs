@@ -16,6 +16,8 @@ namespace SaintX.Data
         public List<Reagent> reagents;
         public MixParam mixParam;
         public int waitTimeSeconds;
+        public int maxSampleCount;
+        public int startGrid = 1;
         public ProjectSettings() 
         {
 

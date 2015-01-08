@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyAssay" xml:space="preserve">
+    <value>无</value>
+  </data>
   <data name="FileNameArgumentError" xml:space="preserve">
     <value>文件参数错误！</value>
   </data>
