@@ -7,27 +7,16 @@ using System.Text;
 namespace SaintX.Data
 {
     
-    class ProjectSettings
+    class Protocol
     {
-        /* 项目 溶液1 溶液2 溶液3 溶液4 PCR增强剂 PCRmix 内标 混匀      等待 
-           内容 体积  体积  体积  体积   体积     体积  体积  转速&时间 时间
-        */
-        public string name;
-        public List<Reagent> reagents;
-        public MixParam mixParam;
-        public int waitTimeSeconds;
-        public int maxSampleCount;
-        public int startGrid = 1;
-        public ProjectSettings() 
-        {
 
-        }
     }
-    
-    class Reagent
+    class StepDefinition
     {
-        public string label;
-        public double volume;
+        public string Description { get; set; }
+        public string SourceLabware { get; set; }
+        public string DestLabware { get; set; }
+        public double Volume { get; set; }
     }
 
     class MixParam

@@ -26,7 +26,7 @@ namespace SaintX.Utility
             int colNum = (GlobalVars.Instanse.SampleCount + 15) / 16;
             for (int j = 0; j < colNum; j++)
                 strs.Add("");
-            int gridStartPos = SettingsManager.Instance.ProjectSettings.startGrid;
+            int gridStartPos = SettingsManager.Instance.ProjectSettings.StartGrid;
             for (int i = 0; i < colNum; i++)
             {
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();

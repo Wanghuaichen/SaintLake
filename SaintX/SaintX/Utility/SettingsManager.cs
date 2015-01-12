@@ -13,8 +13,9 @@ namespace SaintX.Utility
     class SettingsManager
     {
         static SettingsManager _settingsManager = null;
-        ProjectSettings _projectSettings = null;
+        Protocol _protocol = null;
         ObservableCollection<ColorfulAssay> _assays = null;
+        private Utility.ProjectSettings _projectSettings;
         static public SettingsManager Instance
         {
             get
@@ -37,12 +38,12 @@ namespace SaintX.Utility
             string projectSettingsXml = FolderHelper.GetProjectSettingsXml();
             if(File.Exists(projectSettingsXml))
             {
-                _projectSettings = SerializationHelper.Deserialize<ProjectSettings>(projectSettingsXml);
+                _protocol = SerializationHelper.Deserialize<Protocol>(projectSettingsXml);
             }
             
             #if DEBUG
             _assays = GetDummyAssays();
-            _projectSettings = new ProjectSettings();
+            _protocol = new Protocol();
             #endif
         }
 
@@ -55,6 +56,18 @@ namespace SaintX.Utility
             set
             {
                 _assays = value;
+            }
+        }
+
+        public Protocol Protocol
+        {
+            get
+            {
+                return _protocol;
+            }
+            set
+            {
+                _protocol = value;
             }
         }
 

@@ -33,7 +33,7 @@ namespace SaintX.StageControls
  
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {
-            int maxSampleCount = SettingsManager.Instance.ProjectSettings.maxSampleCount;
+            int maxSampleCount = SettingsManager.Instance.ProjectSettings.MaxSampleCount;
             #region check sampleCnt valid
             int smpCnt;
             ResultIsOk = int.TryParse(txtSampleCount.Text, out smpCnt);

@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{39B34E33-046F-4336-8440-8FD9955BCEF9}</ProjectGuid>
+    <ProjectGuid>{BDFFA3D6-3C3F-49F2-BBF0-B4990E53F985}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SaintX</RootNamespace>
-    <AssemblyName>SaintX</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,13 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\lib\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -53,34 +47,13 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\ColorfulAssay.cs" />
-    <Compile Include="Data\GlobalVars.cs" />
-    <Compile Include="Data\SampleInfo.cs" />
-    <Compile Include="Data\Settings.cs" />
-    <Compile Include="Data\PanelViewModel.cs" />
-    <Compile Include="Utility\Helper.cs" />
-    <Compile Include="Utility\ProjectSettings.cs" />
-    <Compile Include="Utility\SettingsManager.cs" />
-    <Compile Include="Navigation\Interfaces.cs" />
-    <Compile Include="Navigation\NavigationImpl.cs" />
-    <Compile Include="stageControls\AssayDefinition.xaml.cs">
-      <DependentUpon>AssayDefinition.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="stageControls\BarcodeDefinition.xaml.cs">
-      <DependentUpon>BarcodeDefinition.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Utility\FolderHelper.cs" />
-    <Compile Include="Utility\SerializationHelper.cs" />
-    <Compile Include="Utility\VirtualToggleButton.cs" />
-    <Compile Include="viewModel\StepViewModel.cs" />
-    <Compile Include="viewModel\viewModelbase.cs" />
+    <Compile Include="WidthConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,14 +66,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="stageControls\AssayDefinition.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="stageControls\BarcodeDefinition.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
