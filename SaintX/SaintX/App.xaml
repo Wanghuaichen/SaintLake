@@ -56,7 +56,7 @@
                     <TextBlock Text="{Binding Path= Name}" Foreground="DarkBlue"  Height="20" Width="70"/>
                     <Image  Source="{Binding Path =Image}"
                             Stretch="Fill"
-                            Width="80" Height="70" />
+                            Width="100" Height="80" />
                 </StackPanel>
 
                 <Border.Background>

@@ -39,6 +39,7 @@
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -65,6 +66,10 @@
     <Compile Include="Data\SampleInfo.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\PanelViewModel.cs" />
+    <Compile Include="stageControls\Protocol.xaml.cs">
+      <DependentUpon>Protocol.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\EVOScriptReader.cs" />
     <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\ProjectSettings.cs" />
     <Compile Include="Utility\SettingsManager.cs" />
@@ -98,6 +103,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="stageControls\BarcodeDefinition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="stageControls\Protocol.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
