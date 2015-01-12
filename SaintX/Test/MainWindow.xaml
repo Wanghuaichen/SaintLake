@@ -36,7 +36,7 @@
         <ListView  Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
             <ListView.Template>
                 <ControlTemplate>
-                    <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="5">
+                    <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >
                             <ItemsPresenter />
                         </ScrollViewer>
