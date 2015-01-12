@@ -12,9 +12,15 @@ namespace Test
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            double width = 30;
+            try
+            {
+                width = (double)value;
+            }
+            catch(Exception)
+            {
 
-            int width = 0;
-            int.TryParse(value.ToString(), out width);
+            }
             width = Math.Max(width, 120);
             return width / 6;
         }

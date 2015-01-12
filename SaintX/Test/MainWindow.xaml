@@ -3,12 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Test"
         Title="MainWindow" Height="350" Width="525">
-    <Window.Resources>
-        <local:WidthConverter x:Key="widthConverter"/>
-    </Window.Resources>
+
     <Grid>
-      
-        <ListView  Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}">
+        <Grid.Resources>
+            <local:WidthConverter x:Key="widthConverter"/>
+            <Style x:Key="TwoLineListViewItem"
+    TargetType="ListViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                            <Border Name="BD_Collector" CornerRadius="5" Background="LightBlue"
+                                    Width= "{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"  Height="50" Margin="5">
+                                <StackPanel>
+                                    <Label Content="{Binding}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
+                                    <Label Content="{Binding}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="BD_Collector" Property="Background" Value="LightGreen" />
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="BD_Collector" Property="Background" Value="Red" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+
+        <ListView  Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
             <ListView.Template>
                 <ControlTemplate>
                     <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="5">
@@ -23,30 +48,7 @@
                     <WrapPanel IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border Name="BD_Collector" CornerRadius="5" Background="LightBlue" Width="{Binding ElementName= LV_Test, Path=ActualWidth, Converter={StaticResource widthConverter}}" Height="50" Margin="5">
-                                    <StackPanel>
-                                        <Label Content="{Binding}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
-                                        <Label Content="{Binding}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
-                                    </StackPanel>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="BD_Collector" Property="Background" Value="LightGreen" />
-                                    </Trigger>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter TargetName="BD_Collector" Property="Background" Value="Red" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
+           
         </ListView>
     </Grid>
 </Window>
