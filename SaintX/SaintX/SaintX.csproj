@@ -66,19 +66,19 @@
     <Compile Include="Data\SampleInfo.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\PanelViewModel.cs" />
-    <Compile Include="stageControls\Protocol.xaml.cs">
-      <DependentUpon>Protocol.xaml</DependentUpon>
+    <Compile Include="StageControls\StepMonitor.xaml.cs">
+      <DependentUpon>StepMonitor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\EVOScriptReader.cs" />
     <Compile Include="Utility\Helper.cs" />
-    <Compile Include="Data\ProjectSettings.cs" />
+    <Compile Include="Data\PhysicalSettings.cs" />
     <Compile Include="Utility\SettingsManager.cs" />
     <Compile Include="Navigation\Interfaces.cs" />
     <Compile Include="Navigation\NavigationImpl.cs" />
-    <Compile Include="stageControls\AssayDefinition.xaml.cs">
+    <Compile Include="StageControls\AssayDefinition.xaml.cs">
       <DependentUpon>AssayDefinition.xaml</DependentUpon>
     </Compile>
-    <Compile Include="stageControls\BarcodeDefinition.xaml.cs">
+    <Compile Include="StageControls\BarcodeDefinition.xaml.cs">
       <DependentUpon>BarcodeDefinition.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\FolderHelper.cs" />
@@ -98,15 +98,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="stageControls\AssayDefinition.xaml">
+    <Page Include="StageControls\AssayDefinition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="stageControls\BarcodeDefinition.xaml">
+    <Page Include="StageControls\BarcodeDefinition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="stageControls\Protocol.xaml">
+    <Page Include="StageControls\StepMonitor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

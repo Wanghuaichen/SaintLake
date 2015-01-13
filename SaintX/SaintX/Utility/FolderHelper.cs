@@ -49,9 +49,9 @@ namespace SaintX.Utility
             return GetExeParentFolder() + "Images\\";
         }
 
-        internal static string GetProjectSettingsXml()
+        internal static string GetProtocolDefinitionXml()
         {
-            return GetDataFolder() + "projectSettings.xml";
+            return GetDataFolder() + "protocol1.xml";
         }
     }
 

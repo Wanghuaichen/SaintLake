@@ -15,7 +15,7 @@ namespace SaintX.Utility
         static SettingsManager _settingsManager = null;
         Protocol _protocol = null;
         ObservableCollection<ColorfulAssay> _assays = null;
-        private Utility.ProjectSettings _projectSettings = new ProjectSettings();
+        private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
         static public SettingsManager Instance
         {
             get
@@ -35,16 +35,18 @@ namespace SaintX.Utility
             {
                 _assays = SerializationHelper.Deserialize<ObservableCollection<ColorfulAssay>>(assayXml);
             }
-            string projectSettingsXml = FolderHelper.GetProjectSettingsXml();
+
+#if DEBUG
+            _assays = GetDummyAssays();
+            string protocolCSV = FolderHelper.GetDataFolder() + "Protocol 1.csv";
+            _protocol = Protocol.CreateFromCSVFile(protocolCSV);
+#else
+            string protocolXml = FolderHelper.GetProtocolDefinitionXml();
             if(File.Exists(projectSettingsXml))
             {
                 _protocol = SerializationHelper.Deserialize<Protocol>(projectSettingsXml);
             }
-            
-            #if DEBUG
-            _assays = GetDummyAssays();
-            _protocol = new Protocol();
-            #endif
+#endif       
         }
 
         public ObservableCollection<ColorfulAssay> Assays
@@ -71,15 +73,15 @@ namespace SaintX.Utility
             }
         }
 
-        public ProjectSettings ProjectSettings
+        public PhysicalSettings PhysicalSettings
         {
             get
             {
-                return _projectSettings;
+                return _physicalSettings;
             }
             set
             {
-                _projectSettings = value;
+                _physicalSettings = value;
             }
         }
 

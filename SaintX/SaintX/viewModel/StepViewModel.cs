@@ -21,7 +21,7 @@ namespace SaintX
             BitmapImage tick = new BitmapImage(new Uri(sDataFolder + "genScript.jpg"));
             stepDescs.Add(new StepDesc("样品定义", scan, Stage.AssayDef));
             stepDescs.Add(new StepDesc("条码设置", dissolve, Stage.BarcodeDef));
-            stepDescs.Add(new StepDesc("执行实验", tick, Stage.GenerateScript));
+            stepDescs.Add(new StepDesc("运行实验", tick, Stage.StepMonitor));
         }
 
       
@@ -44,7 +44,7 @@ namespace SaintX
     {
         AssayDef = 0,
         BarcodeDef = 1,
-        GenerateScript
+        StepMonitor
     };
 
     class StepDesc
