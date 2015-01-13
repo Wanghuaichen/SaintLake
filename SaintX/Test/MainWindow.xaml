@@ -5,8 +5,16 @@
         Title="MainWindow" Height="350" Width="525">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
         <Grid.Resources>
             <local:WidthConverter x:Key="widthConverter"/>
+            <Style x:Key="mockHeader" TargetType="TextBox">
+                <Setter Property="Width"  Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
+                <Setter Property="Margin" Value="5,0,0,5"/>
+            </Style>
             <Style x:Key="TwoLineListViewItem"
     TargetType="ListViewItem">
                 <Setter Property="Template">
@@ -32,13 +40,27 @@
                 </Setter>
             </Style>
         </Grid.Resources>
-
-        <ListView  Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
+        <TextBox Name="test" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
+        <ListView Grid.Row="1" Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
             <ListView.Template>
                 <ControlTemplate>
                     <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >
-                            <ItemsPresenter />
+                            <StackPanel>
+                                <ListView Name="lstviewResult" FontSize="14" FontFamily="SimSun"  Grid.RowSpan="2">
+                                    <ListView.View>
+                                        <GridView x:Name="gridView1">
+                                            <GridViewColumn Header="项目名" Width="{Binding ElementName=test, Path=Width}" ></GridViewColumn>
+                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
+                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
+                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
+                                            <GridViewColumn Header="样品数量" Width="100"></GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <ItemsPresenter />
+                            </StackPanel>
+                            
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
