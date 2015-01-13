@@ -15,7 +15,7 @@ namespace SaintX.Utility
         static SettingsManager _settingsManager = null;
         Protocol _protocol = null;
         ObservableCollection<ColorfulAssay> _assays = null;
-        private Utility.ProjectSettings _projectSettings;
+        private Utility.ProjectSettings _projectSettings = new ProjectSettings();
         static public SettingsManager Instance
         {
             get

@@ -71,7 +71,7 @@
     </Compile>
     <Compile Include="Utility\EVOScriptReader.cs" />
     <Compile Include="Utility\Helper.cs" />
-    <Compile Include="Utility\ProjectSettings.cs" />
+    <Compile Include="Data\ProjectSettings.cs" />
     <Compile Include="Utility\SettingsManager.cs" />
     <Compile Include="Navigation\Interfaces.cs" />
     <Compile Include="Navigation\NavigationImpl.cs" />
