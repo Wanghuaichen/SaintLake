@@ -18,15 +18,15 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="1" Grid.ColumnSpan="2">
-            <Grid >
+            <Grid Name="timeInfo">
                 <Label Content="总用时：" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <Label Content="当前步骤用时：" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="122,15,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="122,46,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="122,15,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="{Binding Path=TotalUsed}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="122,46,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="{Binding Path=CurrentStepUsed}"  VerticalAlignment="Top"/>
                 <Label Content="预计剩余时间：" HorizontalAlignment="Left" Margin="300,10,0,0" VerticalAlignment="Top"/>
-                <Label Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="300,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.344,0.109"/>
-                <TextBlock HorizontalAlignment="Left" Margin="431,15,0,0" TextWrapping="Wrap" Text="" Name="txtRemainingTime" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="430,46,0,0" TextWrapping="Wrap" Text="" Name="txtRemianingTimeThisStep" VerticalAlignment="Top"/>
+                <Label Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="300,41,0,0" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="431,15,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="430,46,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Top"/>
                 <Button Content="开始"  Name="btnStart" HorizontalAlignment="Right" Width="100" Margin="0,32,0.2,9.6" RenderTransformOrigin="0.492,0.775"/>
             </Grid>
         </GroupBox>

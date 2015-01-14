@@ -1,4 +1,5 @@
 ﻿using SaintX.Navigation;
+using SaintX.StageControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +27,11 @@ namespace SaintX
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            this.Closed += MainWindow_Closed;
             lstSteps.DataContext = stepViewModel.StepsModel;
         }
 
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            foreach (var userControl in stageUserControls)
-               userControlHost.Children.Add(userControl);
-            NavigateTo(Stage.AssayDef);
-        }
+        
 
         #region commands
         private void CommandHelp_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -66,6 +63,19 @@ namespace SaintX
                 else
                     NavigateTo(stage2Go);
             }
+        }
+
+
+        void MainWindow_Closed(object sender, EventArgs e)
+        {
+            Pipeserver.Close();
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var userControl in stageUserControls)
+                userControlHost.Children.Add(userControl);
+            NavigateTo(Stage.AssayDef);
         }
         #endregion
 
