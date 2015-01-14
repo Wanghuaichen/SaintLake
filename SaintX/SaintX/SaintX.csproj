@@ -70,7 +70,7 @@
     <Compile Include="Data\SampleInfo.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\PanelViewModel.cs" />
-    <Compile Include="Data\TimeEstimation.cs" />
+    <Compile Include="Utility\TimeEstimation.cs" />
     <Compile Include="StageControls\StepMonitor.xaml.cs">
       <DependentUpon>StepMonitor.xaml</DependentUpon>
     </Compile>

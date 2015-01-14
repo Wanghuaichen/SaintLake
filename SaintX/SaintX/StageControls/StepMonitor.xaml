@@ -25,9 +25,9 @@
                 <TextBlock HorizontalAlignment="Left" Margin="122,46,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="{Binding Path=CurrentStepUsed}"  VerticalAlignment="Top"/>
                 <Label Content="预计剩余时间：" HorizontalAlignment="Left" Margin="300,10,0,0" VerticalAlignment="Top"/>
                 <Label Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="300,41,0,0" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="431,15,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="430,46,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Top"/>
-                <Button Content="开始"  Name="btnStart" HorizontalAlignment="Right" Width="100" Margin="0,32,0.2,9.6" RenderTransformOrigin="0.492,0.775"/>
+                <TextBlock HorizontalAlignment="Left" Margin="440,15,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="440,46,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Top"/>
+                <Button Content="开始"  Name="btnStart" HorizontalAlignment="Right" Width="100" Height="32" Margin="0,32,0.2,9.6"  Click="btnStart_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox  Grid.Column="1">
@@ -57,6 +57,18 @@
                             <GridViewColumn Header="重复次数" Width="100" DisplayMemberBinding="{Binding Path=RepeatTimes}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
+                    <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsWorking}" Value="True">
+                                        <Setter Property="Background" Value="LightYellow"  />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsFinished}" Value="True">
+                                        <Setter Property="Background" Value="LightGreen"  />
+                                    </DataTrigger>
+                            </Style.Triggers>
+                            </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </StackPanel>
         </GroupBox>

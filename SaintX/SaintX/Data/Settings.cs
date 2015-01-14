@@ -66,4 +66,20 @@ namespace SaintX.Data
             LineNumber = no;
         }
     }
+
+    class StepDefinitionWithProgressInfo : StepDefinition
+    {
+        public bool IsWorking { get; set; }
+        public bool IsFinished { get; set; }
+        public StepDefinitionWithProgressInfo(StepDefinition stepDef)
+        {
+            Description = stepDef.Description;
+            SourceLabware = stepDef.SourceLabware;
+            Volume = stepDef.Volume;
+            DestLabware = stepDef.DestLabware;
+            RepeatTimes = stepDef.RepeatTimes;
+            LineNumber = stepDef.LineNumber;
+        }
+
+    }
 }

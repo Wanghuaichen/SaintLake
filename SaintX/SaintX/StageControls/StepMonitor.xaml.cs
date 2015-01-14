@@ -2,6 +2,7 @@
 using SaintX.Navigation;
 using SaintX.Utility;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 
@@ -17,15 +18,24 @@ namespace SaintX.StageControls
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
-            InitProtocolListView();
+            InitStepsInfo();
+            
             CreateNamedPipeServer();
         }
 
-        private void InitProtocolListView()
+        private void InitStepsInfo()
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
             timeEstimation = new TimeEstimation(stepsDef);
-            lvProtocol.ItemsSource = stepsDef;
+            List<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new List<StepDefinitionWithProgressInfo>();
+            foreach(var stepDef in stepsDef)
+            {
+                var stepDefEx = new StepDefinitionWithProgressInfo(stepDef);
+                stepDefEx.IsFinished = true;//test only
+                stepsDefWithProgressInfo.Add(stepDefEx);
+            }
+            timeInfo.DataContext = timeEstimation;
+            lvProtocol.ItemsSource = stepsDefWithProgressInfo;
         }
 
         #region namedpipe
@@ -60,6 +70,7 @@ namespace SaintX.StageControls
                 string startOrFinish = strs[0];
                 int nStep = int.Parse(strs[1]);
                 int nTimes = int.Parse(strs[2]);
+                ChangeBackGroudColor(nStep);
                 if(startOrFinish.ToLower().Contains("s"))
                 {
                     timeEstimation.StartMajorStep(nStep);
@@ -75,10 +86,16 @@ namespace SaintX.StageControls
             }
         }
 
-        private void ChangeProgress(int nStep, int nTimes)
+        private void ChangeBackGroudColor(int nStep)
         {
             
         }
+        
         #endregion}
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
+            timeEstimation.StartMajorStep(1);
+        }
     }
 }
