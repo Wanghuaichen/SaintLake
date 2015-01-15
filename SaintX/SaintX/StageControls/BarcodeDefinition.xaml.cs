@@ -65,7 +65,7 @@ namespace SaintX.StageControls
                 int endBarCodeNum = startBarCodeNum + barCodeCount - 1;
 
                 int barCode = startBarCodeNum;
-                int sampleCount = GlobalVars.Instanse.SampleInfos.SampleCount;
+                int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
                 int sampleAssignedBarcodeCount = 1;
                 bool isDone = false;
                 for (int col = 0; col < 20; ++col)
@@ -74,7 +74,7 @@ namespace SaintX.StageControls
                     {
                         if (sampleAssignedBarcodeCount <= sampleCount)
                         {
-                            SampleInfo sampleInfo = GlobalVars.Instanse.SampleInfos[col, row];
+                            SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[col, row];
                             if (sampleInfo != null)
                             {
                                 if (barCode <= endBarCodeNum)

@@ -19,11 +19,10 @@ namespace SaintX.Utility
         static public void InitDataGridView(DataGridView dataGridView)
         {
             //dataGridView.Columns.Add(new System.Windows.Forms.DataGridViewColumn());
-            dataGridView.AllowUserToAddRows = false;
             dataGridView.Columns.Clear();
             List<string> strs = new List<string>();
 
-            int colNum = (GlobalVars.Instanse.SampleCount + 15) / 16;
+            int colNum = (GlobalVars.Instance.SampleCount + 15) / 16;
             for (int j = 0; j < colNum; j++)
                 strs.Add("");
             int gridStartPos = SettingsManager.Instance.PhysicalSettings.StartGrid;
@@ -44,7 +43,7 @@ namespace SaintX.Utility
 
         static public void UpdateDataGridView(DataGridView dataGridView)
         {
-            foreach( KeyValuePair<CellPosition, SampleInfo> pair in GlobalVars.Instanse.SampleInfos)
+            foreach( KeyValuePair<CellPosition, SampleInfo> pair in GlobalVars.Instance.SampleInfos)
             {
                 CellPosition cellPos = pair.Key;
                 SampleInfo sampleInfo = pair.Value;

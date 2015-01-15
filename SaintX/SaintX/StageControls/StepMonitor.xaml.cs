@@ -3,6 +3,7 @@ using SaintX.Navigation;
 using SaintX.Utility;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 
@@ -15,23 +16,56 @@ namespace SaintX.StageControls
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         TimeEstimation timeEstimation = null;
+
+        ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
+
+
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
             InitStepsInfo();
-            
+            this.Loaded += StepMonitor_Loaded;
+         
+        }
+
+        void StepMonitor_Loaded(object sender, RoutedEventArgs e)
+        {
             CreateNamedPipeServer();
+            CalculateShoppingList();
+        }
+
+        private void CalculateShoppingList()
+        {
+            var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
+           
+            List<ReagentShopplist> shoppingList = new List<ReagentShopplist>();
+            Dictionary<string,double> reagent_vol = new Dictionary<string,double>();
+
+            foreach(StepDefinition thisStepDef in stepsDef)
+            {
+                if (thisStepDef.Volume == "")
+                    continue;
+                int repeatTimes = int.Parse(thisStepDef.RepeatTimes);
+                double vol =  double.Parse(thisStepDef.Volume);
+                if (reagent_vol.ContainsKey(thisStepDef.SourceLabware))
+                    reagent_vol[thisStepDef.SourceLabware] += vol * repeatTimes * GlobalVars.Instance.SampleCount / 1000.0;
+                else
+                    reagent_vol.Add(thisStepDef.SourceLabware, vol * repeatTimes * GlobalVars.Instance.SampleCount / 1000.0);
+            }
+            foreach(KeyValuePair<string,double> pair in reagent_vol)
+            {
+                shoppingList.Add(new ReagentShopplist(pair));
+            }
+            lvShoppingList.ItemsSource = shoppingList;
         }
 
         private void InitStepsInfo()
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
             timeEstimation = new TimeEstimation(stepsDef);
-            List<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new List<StepDefinitionWithProgressInfo>();
             foreach(var stepDef in stepsDef)
             {
                 var stepDefEx = new StepDefinitionWithProgressInfo(stepDef);
-                stepDefEx.IsFinished = true;//test only
                 stepsDefWithProgressInfo.Add(stepDefEx);
             }
             timeInfo.DataContext = timeEstimation;
@@ -96,6 +130,19 @@ namespace SaintX.StageControls
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             timeEstimation.StartMajorStep(1);
+        }
+    }
+
+    class ReagentShopplist
+    {
+        public string Reagent{get;set;}
+        public double Volume{get;set;}
+        
+        public ReagentShopplist(KeyValuePair<string, double> pair)
+        {
+            // TODO: Complete member initialization
+            Reagent = pair.Key;
+            Volume = pair.Value;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SaintX.Data
             SampleInfos = new SampleInfos();
         }
         
-        static public GlobalVars Instanse
+        static public GlobalVars Instance
         {
             get
             {

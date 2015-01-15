@@ -33,11 +33,11 @@
         <GroupBox  Grid.Column="1">
             <StackPanel>
                 <Label Content="采购清单：" Grid.Column="1" HorizontalAlignment="Left" Margin="9.8,4,0,0" VerticalAlignment="Top"/>
-                <ListView Name="lstViewShoppingList" Margin="5,5,10,5" FontSize="14" FontFamily="SimSun">
+                <ListView Name="lvShoppingList" Margin="5,5,10,5" FontSize="14" FontFamily="SimSun">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="试剂名" Width="70" DisplayMemberBinding="{Binding Path= AssayName}"></GridViewColumn>
-                            <GridViewColumn Header="试剂体积" Width="100" DisplayMemberBinding="{Binding Path=ReagentVolume}"></GridViewColumn>
+                            <GridViewColumn Header="试剂名" Width="120" DisplayMemberBinding="{Binding Path= Reagent}"></GridViewColumn>
+                            <GridViewColumn Header="体积（ml）" Width="100" DisplayMemberBinding="{Binding Path=Volume}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -47,25 +47,27 @@
             <StackPanel Grid.Row="0" Grid.Column="0">
                 <Label Content="实验流程：" Margin="4,4,4,4"/>
                 <ListView Name="lvProtocol" FontSize="14" FontFamily="SimSun" Margin="0,0,0,0" Grid.RowSpan="2">
-                    <ListView.View>
+                    <ListView.View >
                         <GridView>
                             <GridViewColumn Header="行" Width="30" DisplayMemberBinding="{Binding Path=LineNumber}"></GridViewColumn>
-                            <GridViewColumn Header="步骤描述" Width="160" DisplayMemberBinding="{Binding Path=Description }"></GridViewColumn>
-                            <GridViewColumn Header="源Label" Width="100" DisplayMemberBinding="{Binding Path=SourceLabware}"></GridViewColumn>
-                            <GridViewColumn Header="体积" Width="100" DisplayMemberBinding="{Binding Path=Volume}"></GridViewColumn>
-                            <GridViewColumn Header="目标Label" Width="100" DisplayMemberBinding="{Binding Path=DestLabware}"></GridViewColumn>
-                            <GridViewColumn Header="重复次数" Width="100" DisplayMemberBinding="{Binding Path=RepeatTimes}"></GridViewColumn>
+                            <GridViewColumn Header="步骤描述" Width="200" DisplayMemberBinding="{Binding Path=Description }"></GridViewColumn>
+                            <GridViewColumn Header="源Label" Width="120" DisplayMemberBinding="{Binding Path=SourceLabware}"></GridViewColumn>
+                            <GridViewColumn  Header="体积（μL）" Width="120" DisplayMemberBinding="{Binding Path=Volume}"></GridViewColumn>
+                            <GridViewColumn Header="目标Label" Width="120" DisplayMemberBinding="{Binding Path=DestLabware}"></GridViewColumn>
+                            <GridViewColumn Header="重复次数" Width="120" DisplayMemberBinding="{Binding Path=RepeatTimes}"></GridViewColumn>
+                            <GridViewColumn Header="液体类别" Width="120" DisplayMemberBinding="{Binding Path=LiquidClass}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsWorking}" Value="True">
-                                        <Setter Property="Background" Value="LightYellow"  />
+                                <DataTrigger Binding="{Binding Path=IsFinished}" Value="True">
+                                    <Setter Property="Background" Value="LightGreen"  />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsWorking}" Value="True">
+                                        <Setter Property="Background" Value="Yellow"  />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=IsFinished}" Value="True">
-                                        <Setter Property="Background" Value="LightGreen"  />
-                                    </DataTrigger>
+                                   
                             </Style.Triggers>
                             </Style>
                     </ListView.ItemContainerStyle>

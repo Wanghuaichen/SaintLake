@@ -18,9 +18,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
-        <GroupBox Grid.Column="0" Grid.RowSpan="3" Margin="0,0,0,10">
+        <GroupBox Grid.Column="0" Grid.RowSpan="2" Margin="0,0,0,0">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Label FontFamily="SimSun" Margin="0,4,0,4">实验名：</Label>
                 <ListBox  ItemsSource="{Binding}" ItemTemplate="{StaticResource ThickBorderListBox}"  
@@ -28,13 +27,23 @@
                           Margin="6,0,0,0" Name="lstAssays"  Width="150" TabIndex="8" />
             </StackPanel>
         </GroupBox>
-        <GroupBox Grid.Column="2" Grid.Row="1">
-            <Grid >
-                <Label Content="样品数量：" Height="36" HorizontalAlignment="Left" Margin="0,18.4,0,0" Name="label5" VerticalAlignment="Top" Width="80" />
-                <TextBox Text="100"  Height="36" HorizontalAlignment="Left" Margin="92,18,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
-                <Button Content="设置" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Name="btnSetSampleCnt"  Click="btnSetSampleCnt_Click" TabIndex="3" Margin="198.4,17.6,0,0" />
-                </Grid>
+
+        <GroupBox Grid.Column="2" Grid.RowSpan="1">
+            <StackPanel>
+                <Label Margin="0,4,0,4" FontFamily="SimSun">实验信息：</Label>
+                <wfi:WindowsFormsHost>
+                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" SelectionChanged="dataGridView_SelectionChanged" EditMode="EditProgrammatically"/>
+                </wfi:WindowsFormsHost>
+                <GroupBox Grid.Column="2" Grid.Row="1">
+                    <Grid >
+                        <Label Content="样品数量：" Height="36" HorizontalAlignment="Left" Margin="0,18.4,0,0" Name="label5" VerticalAlignment="Top" Width="80" />
+                        <TextBox Text="100"  Height="36" HorizontalAlignment="Left" Margin="92,18,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
+                        <Button Content="设置" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Name="btnSetSampleCnt"  Click="btnSetSampleCnt_Click" TabIndex="3" Margin="198.4,17.6,0,0" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
         </GroupBox>
+        
         <GroupBox Grid.Row="2" Grid.Column="2" >
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -50,13 +59,6 @@
                 <Button Content="下一步" Grid.Column="1"  Height="36"  VerticalAlignment="Bottom" Margin="20,0,0,5" Name="btnNext" Width="100" HorizontalAlignment="Left" Click="btnNext_Click" IsDefault="True" TabIndex="5" Grid.Row="1"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="2">
-            <StackPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                <Label Margin="0,4,0,4" FontFamily="SimSun">实验信息：</Label>
-                <wfi:WindowsFormsHost>
-                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" SelectionChanged="dataGridView_SelectionChanged" EditMode="EditProgrammatically"/>
-                </wfi:WindowsFormsHost>
-            </StackPanel>
-        </GroupBox>
+      
     </Grid>
 </bb:BaseUserControl>
