@@ -40,27 +40,26 @@
                 </Setter>
             </Style>
         </Grid.Resources>
-        <TextBox Name="test" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
+        <TextBox Name="test" Visibility="Collapsed" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
         <ListView Grid.Row="1" Name="LV_Test" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
             <ListView.Template>
                 <ControlTemplate>
                     <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >
-                            <StackPanel>
-                                <ListView Name="lstviewResult" FontSize="14" FontFamily="SimSun"  Grid.RowSpan="2">
-                                    <ListView.View>
-                                        <GridView x:Name="gridView1">
-                                            <GridViewColumn Header="项目名" Width="{Binding ElementName=test, Path=Width}" ></GridViewColumn>
-                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
-                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
-                                            <GridViewColumn Header="样品数量" Width="{Binding ElementName=test, Path=Width}"></GridViewColumn>
-                                            <GridViewColumn Header="样品数量" Width="100"></GridViewColumn>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                                <ItemsPresenter />
-                            </StackPanel>
-                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path= Name1}" FontSize="14" Margin="5"  TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                    <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                    <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                    <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                    <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                </StackPanel>
+                                <ItemsPresenter Grid.Row="1" />
+                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
