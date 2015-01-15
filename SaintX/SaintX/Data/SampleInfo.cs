@@ -18,7 +18,13 @@ namespace SaintX.Data
                 allSampleInfos[cellPos] = cellInfosThisLine[i];
             }
         }
-
+        public int SampleCount
+        {
+            get
+            {
+                return this.allSampleInfos.Count;
+            }
+        }
         public bool Contains(int r, int c)
         {
             return allSampleInfos.ContainsKey(new CellPosition(r, c));
@@ -35,7 +41,15 @@ namespace SaintX.Data
         {
             get
             {
-                return allSampleInfos[new CellPosition(r, c)];
+                try
+                {
+                    return allSampleInfos[new CellPosition(r, c)];
+                }
+                catch(Exception)
+                {
+                    // Catch all exceptions and return null
+                    return null;
+                }
             }
             set
             {

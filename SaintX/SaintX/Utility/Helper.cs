@@ -51,6 +51,7 @@ namespace SaintX.Utility
                 var cell = dataGridView.Rows[cellPos.rowIndex].Cells[cellPos.colIndex];
                 cell.Value = sampleInfo.colorfulAssay.Name;
                 cell.Style.BackColor = Convert2SystemDrawingColor(sampleInfo.colorfulAssay.Color);
+                cell.ToolTipText = sampleInfo.barcode;
             }
         }
 

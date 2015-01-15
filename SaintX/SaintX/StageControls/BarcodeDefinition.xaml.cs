@@ -53,6 +53,61 @@ namespace SaintX.StageControls
         {
             NotifyFinished();
         }
+
+        private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
+        {
+            if(rdbStartCount.IsChecked.Value)
+            {
+                string startBarCode = txtStartBarcodeApproach1.Text;
+                // The bar code is assumed to be an integer
+                int startBarCodeNum = int.Parse(startBarCode);
+                int barCodeCount = int.Parse(txtCount.Text);
+                int endBarCodeNum = startBarCodeNum + barCodeCount - 1;
+
+                int barCode = startBarCodeNum;
+                int sampleCount = GlobalVars.Instanse.SampleInfos.SampleCount;
+                int sampleAssignedBarcodeCount = 1;
+                bool isDone = false;
+                for (int col = 0; col < 20; ++col)
+                {
+                    for (int row = 0; row < 16; ++row)
+                    {
+                        if (sampleAssignedBarcodeCount <= sampleCount)
+                        {
+                            SampleInfo sampleInfo = GlobalVars.Instanse.SampleInfos[col, row];
+                            if (sampleInfo != null)
+                            {
+                                if (barCode <= endBarCodeNum)
+                                {
+                                    sampleInfo.barcode = barCode++.ToString();
+                                    ++sampleAssignedBarcodeCount;
+                                }
+                                else
+                                {
+                                    // All avaliable barcodes have been used
+                                    isDone = true;
+                                    break;     
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isDone = true;
+                            break;   // All samples have been assigned barcode
+                        }
+                    }
+
+                    if (isDone)
+                        break;
+                }
+            }
+            else
+            {
+
+            }
+            
+            Helper.UpdateDataGridView(dataGridView);
+        }
     }
 
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]

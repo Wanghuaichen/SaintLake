@@ -17,7 +17,8 @@ namespace SaintX.StageControls
     public partial class AssayDefinition : BaseUserControl
     {
         ObservableCollection<ColorfulAssay> _assays;
-        public AssayDefinition(Stage stage, BaseHost host):base(stage,host)
+        public AssayDefinition(Stage stage, BaseHost host)
+            : base(stage, host)
         {
             InitializeComponent();
             _assays = SettingsManager.Instance.Assays;
@@ -30,7 +31,7 @@ namespace SaintX.StageControls
             System.Windows.Forms.Application.EnableVisualStyles();
             Helper.InitDataGridView(dataGridView);
         }
- 
+
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {
             int maxSampleCount = SettingsManager.Instance.PhysicalSettings.MaxSampleCount;
@@ -75,7 +76,7 @@ namespace SaintX.StageControls
         }
 
         #region datagridview
-       
+
 
         void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
@@ -100,7 +101,7 @@ namespace SaintX.StageControls
                 GlobalVars.Instanse.SampleInfos[curCellPos] = new SampleInfo(_assays[lstAssays.SelectedIndex], "");
             }
         }
-       
+
         private bool IsCellOfOutRange(int rowIndex, int columnIndex)
         {
             int sampleCount = int.Parse(txtSampleCount.Text);
