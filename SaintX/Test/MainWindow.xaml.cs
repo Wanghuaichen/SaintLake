@@ -27,8 +27,6 @@ namespace Test
             IList<int> values = new List<int>();        
             for (int i = 0; i < 100;++i )  values.Add(i);
                  LV_Test.ItemsSource = values;
-
-            
         }
     }
 

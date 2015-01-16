@@ -16,22 +16,29 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class BarcodeDefinition : BaseUserControl
     {
+        SampleInfos _sampleInfos = null;
         ObservableCollection<ColorfulAssay> _assays;
         PanelViewModel panelVM;
+
+        public SampleInfos SampleInfos
+        {
+            get { return this._sampleInfos; }
+        }
         public BarcodeDefinition(Stage stage, BaseHost host)
             : base(stage, host)
         {
             InitializeComponent();
             _assays = SettingsManager.Instance.Assays;
+            _sampleInfos = GlobalVars.Instance.SampleInfos;
             this.Loaded += BarcodeDefinition_Loaded;
-            
+
+            this.DataContext = this;
         }
 
         void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             InitTreeview(_assays.Select(x => x.Name).ToList());
-            Helper.InitDataGridView(dataGridView);
-            
+            //Helper.InitDataGridView(dataGridView);
         }
 
         protected override void onStageChanged(object sender, EventArgs e)
@@ -39,7 +46,7 @@ namespace SaintX.StageControls
             base.onStageChanged(sender, e);
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
-            Helper.UpdateDataGridView(dataGridView);
+            //Helper.UpdateDataGridView(dataGridView);
         }
 
         private void InitTreeview(List<string> assays)
@@ -88,7 +95,7 @@ namespace SaintX.StageControls
                         {
                             if (barCode <= endBarCodeNum)
                             {
-                                sampleInfo.barcode = barCode++.ToString();
+                                sampleInfo.Barcode = barCode++.ToString();
                                 ++sampleAssignedBarcodeCount;
                             }
                             else
@@ -110,7 +117,7 @@ namespace SaintX.StageControls
                     break;
             }
             
-            Helper.UpdateDataGridView(dataGridView);
+            //Helper.UpdateDataGridView(dataGridView);
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
@@ -8,8 +9,9 @@ using System.Xml.Serialization;
 namespace SaintX.Data
 {
     [Serializable]
-    public class ColorfulAssay
+    public class ColorfulAssay : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
         Color _color;
         string _name;
         [XmlAttribute("AssayColor")]
@@ -23,6 +25,7 @@ namespace SaintX.Data
             set
             {
                 _color = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Color"));
             }
         }
 
@@ -36,6 +39,7 @@ namespace SaintX.Data
             set
             {
                 _name = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
             }
         }
 
@@ -53,6 +57,5 @@ namespace SaintX.Data
         public ColorfulAssay()
         {
         }
-
     }
 }

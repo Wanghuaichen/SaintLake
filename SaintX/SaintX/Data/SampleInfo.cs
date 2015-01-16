@@ -1,15 +1,20 @@
 ﻿using SaintX.Properties;
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
 namespace SaintX.Data
 {
-    class SampleInfos:IEnumerable
+    public class SampleInfos:IEnumerable, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         Dictionary<CellPosition, SampleInfo> allSampleInfos = new Dictionary<CellPosition, SampleInfo>();
+
         public void SetLine(int lineIndex, List<SampleInfo> cellInfosThisLine, int startIndex = 0)
         {
             for (int i = 0; i < cellInfosThisLine.Count; i++)
@@ -24,6 +29,11 @@ namespace SaintX.Data
             {
                 return this.allSampleInfos.Count;
             }
+        }
+
+        public ObservableCollection<SampleInfo> SampleInfoList
+        {
+            get { return new ObservableCollection<SampleInfo>(this.allSampleInfos.Values); }
         }
         public bool Contains(int r, int c)
         {
@@ -54,6 +64,7 @@ namespace SaintX.Data
             set
             {
                 allSampleInfos[new CellPosition(c, r)] = value;
+                this.PropertyChanged(this, new PropertyChangedEventArgs("SampleInfoList"));
             }
         }
        
@@ -66,21 +77,20 @@ namespace SaintX.Data
             set
             {
                 allSampleInfos[cellPos] = value;
+                this.PropertyChanged(this, new PropertyChangedEventArgs("SampleInfoList"));
             }
         }
 
         public bool AlreadyHasInfo()
         {
             var list = allSampleInfos.Values.ToList();
-            return list.Exists(x => IsMeanfulAssay(x.colorfulAssay.Name));
+            return list.Exists(x => IsMeanfulAssay(x.ColorfulAssay.Name));
         }
 
         private bool IsMeanfulAssay(string s)
         {
             return s != "" && s != Resources.EmptyAssay;
         }
-
-
 
         public IEnumerator GetEnumerator()
         {
@@ -89,14 +99,44 @@ namespace SaintX.Data
         }
     }
 
-    public class SampleInfo
+    public class SampleInfo : INotifyPropertyChanged
     {
-        public ColorfulAssay colorfulAssay;
-        public string barcode;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private ColorfulAssay _colorfulAssay;
+        private string _barcode;
+
+        public ColorfulAssay ColorfulAssay
+        {
+            get
+            {
+                return _colorfulAssay;
+            }
+            set
+            {
+                _colorfulAssay = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("ColorfulAssay"));
+            }
+        }
+
+        public string Barcode
+        {
+            get
+            {
+                return _barcode;
+            }
+
+            set
+            {
+                _barcode = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Barcode"));
+            }
+        }
+
         public SampleInfo(ColorfulAssay colorfulAssay, string barcode)
         {
-            this.barcode = barcode;
-            this.colorfulAssay = colorfulAssay;
+            this.Barcode = barcode;
+            this.ColorfulAssay = colorfulAssay;
         }
     }
 

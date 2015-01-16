@@ -7,11 +7,13 @@
              xmlns:wfi = "clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
              xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" 
              mc:Ignorable="d" 
-             xmlns:src="clr-namespace:SaintX.StageControls"       
+             xmlns:src="clr-namespace:SaintX.StageControls"
+             xmlns:utility="clr-namespace:SaintX.Utility"
              d:DesignHeight="600" d:DesignWidth="1200">
     <Grid>
         <Grid.Resources>
             <src:BoolColorConverter x:Key="colorConverter"/>
+            <utility:ColorConverter x:Key="backgroundColorConverter"/>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
@@ -25,7 +27,6 @@
                 <RowDefinition Height="4*"></RowDefinition>
                 <RowDefinition Height="6*"></RowDefinition>
                 <RowDefinition Height="1.5*"></RowDefinition>
-                
             </Grid.RowDefinitions>
             
             <StackPanel Name="approach" Grid.Row="0">
@@ -61,8 +62,8 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <Grid Grid.Row="3">
-                <StackPanel>
+                <Grid Grid.Row="3">
+                    <StackPanel>
                     <Label Content="实验:"/>
                     <TreeView x:Name="tree"    ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                         ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}"
@@ -82,10 +83,74 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <StackPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    <StackPanel.Resources>
+                        <utility:WidthConverter x:Key="widthConverter"/>
+                        <Style x:Key="mockHeader" TargetType="TextBox">
+                            <Setter Property="Width"  Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
+                            <Setter Property="Margin" Value="5,0,0,5"/>
+                        </Style>
+                        <Style x:Key="TwoLineListViewItem" TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border Name="BD_Collector" CornerRadius="5" BorderBrush="DarkSlateBlue" BorderThickness="2"
+                                                Width= "{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"  
+                                                Height="50" Margin="5">
+                                            <StackPanel>
+                                                <Label Content="{Binding Path=ColorfulAssay.Name}" Background="{Binding Path=ColorfulAssay.Color, Converter={StaticResource backgroundColorConverter}}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
+                                                <Label Content="{Binding Path=Barcode}" Background="Yellow" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="13" />
+                                            </StackPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="BD_Collector" Property="Background" Value="LightGreen" />
+                                            </Trigger>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter TargetName="BD_Collector" Property="Background" Value="Red" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
                     <Label Margin="0,4,0,4" FontFamily="SimSun">实验信息：</Label>
-                    <wfi:WindowsFormsHost>
+                    <!--<wfi:WindowsFormsHost>
                         <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" EditMode="EditProgrammatically"/>
-                    </wfi:WindowsFormsHost>
+                    </wfi:WindowsFormsHost>-->
+                    <TextBox Name="test" Visibility="Collapsed" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=ActualWidth, Converter={StaticResource widthConverter}}"/>
+                    <ListView Name="lv_samples" ItemsSource="{Binding Path=SampleInfos.SampleInfoList}" SelectionMode="Multiple" Background="{x:Null}" ItemContainerStyle="{StaticResource TwoLineListViewItem}">
+                        <ListView.Template>
+                            <ControlTemplate>
+                                <Border CornerRadius="10" BorderBrush="RoyalBlue" BorderThickness="1">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal">
+                                                <!--<TextBlock Text="{Binding Path= Name1}" FontSize="14" Margin="5"  TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>-->
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                                <TextBlock Text="样品名" FontSize="14" Margin="5" TextAlignment="Center" Width="{Binding ElementName=test, Path=Width}"/>
+                                            </StackPanel>
+                                            <ItemsPresenter Grid.Row="1" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </ControlTemplate>
+                        </ListView.Template>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+
+                    </ListView>
                 </StackPanel>
                 <GroupBox Grid.Row="2" Grid.Column="2" >
                     <Grid>

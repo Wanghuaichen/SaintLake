@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Media;
+using System.Windows.Data;
 
 namespace SaintX.Utility
 {
@@ -48,12 +49,53 @@ namespace SaintX.Utility
                 CellPosition cellPos = pair.Key;
                 SampleInfo sampleInfo = pair.Value;
                 var cell = dataGridView.Rows[cellPos.rowIndex].Cells[cellPos.colIndex];
-                cell.Value = sampleInfo.colorfulAssay.Name;
-                cell.Style.BackColor = Convert2SystemDrawingColor(sampleInfo.colorfulAssay.Color);
-                cell.ToolTipText = sampleInfo.barcode;
+                cell.Value = sampleInfo.ColorfulAssay.Name;
+                cell.Style.BackColor = Convert2SystemDrawingColor(sampleInfo.ColorfulAssay.Color);
+                cell.ToolTipText = sampleInfo.Barcode;
             }
         }
 
         #endregion
+    }
+
+    [ValueConversion(typeof(Int32), typeof(Int32))]
+    class WidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            double width = 30;
+            try
+            {
+                width = (double)value;
+            }
+            catch (Exception)
+            {
+
+            }
+            width = Math.Max(width, 120);
+            return width / 6;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
+    public class ColorConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return new SolidColorBrush((Color)value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            //throw new NotImplementedException();
+            SolidColorBrush solidColorBrush = (SolidColorBrush)value;
+            return solidColorBrush.Color;
+        }
     }
 }
