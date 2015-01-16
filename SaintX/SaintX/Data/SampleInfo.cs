@@ -27,7 +27,7 @@ namespace SaintX.Data
         }
         public bool Contains(int r, int c)
         {
-            return allSampleInfos.ContainsKey(new CellPosition(r, c));
+            return allSampleInfos.ContainsKey(new CellPosition(c, r));
         }
         public List<SampleInfo> GetLine(int lineIndex)
         {
@@ -43,7 +43,7 @@ namespace SaintX.Data
             {
                 try
                 {
-                    return allSampleInfos[new CellPosition(r, c)];
+                    return allSampleInfos[new CellPosition(c, r)];
                 }
                 catch(Exception)
                 {
@@ -53,7 +53,7 @@ namespace SaintX.Data
             }
             set
             {
-                allSampleInfos[new CellPosition(r, c)] = value;
+                allSampleInfos[new CellPosition(c, r)] = value;
             }
         }
        

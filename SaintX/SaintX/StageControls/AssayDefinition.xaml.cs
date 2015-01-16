@@ -70,8 +70,58 @@ namespace SaintX.StageControls
             txtInfo.Foreground = new SolidColorBrush(color);
         }
 
+        private bool CheckSettings()
+        {
+            int count = 0;
+            bool sequent = true;
+            int sampleCount = GlobalVars.Instance.SampleCount;
+            int colNum = (sampleCount +15) / 16;
+            List<int> rowCounts = new List<int>();
+            for (int i = 0; i < colNum - 1; i++)
+                rowCounts.Add(16);
+            int remainCnt = sampleCount % 16;
+            if ( remainCnt == 0)
+                rowCounts.Add(16);
+            else
+                rowCounts.Add(remainCnt);
+
+
+            for (int c = 0; c < colNum; c++)
+            {
+                for (int r = 0; r < rowCounts[c]; r++)
+                {
+                    if (GlobalVars.Instance.SampleInfos.Contains(r,c))
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        if (count < sampleCount)
+                            sequent = false;
+                    }
+                }
+            }
+
+            if (!sequent)
+            {
+                SetInfo("样品没有全部设置", Colors.Red);
+                return false;
+            }
+
+            if (count != sampleCount)
+            {
+                SetInfo(string.Format("样品总数为：{0}，有{1}个已被设置,请确保二者相等。", sampleCount, count), Colors.Red);
+                return false;
+            }
+            return true;
+
+        }
+
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
+            bool bvalid = CheckSettings();
+            if (!bvalid)
+                return;
             NotifyFinished();
         }
 

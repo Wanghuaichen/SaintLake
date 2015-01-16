@@ -37,7 +37,7 @@
                 <GroupBox Grid.Column="2" Grid.Row="1">
                     <Grid >
                         <Label Content="样品数量：" Height="36" HorizontalAlignment="Left" Margin="0,18.4,0,0" Name="label5" VerticalAlignment="Top" Width="80" />
-                        <TextBox Text="100"  Height="36" HorizontalAlignment="Left" Margin="92,18,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
+                        <TextBox Text="16"  Height="36" HorizontalAlignment="Left" Margin="92,18,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
                         <Button Content="设置" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Name="btnSetSampleCnt"  Click="btnSetSampleCnt_Click" TabIndex="3" Margin="198.4,17.6,0,0" />
                     </Grid>
                 </GroupBox>
