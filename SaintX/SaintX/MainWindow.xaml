@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel >
             <Label Content="步骤指示：" Width="100"/>
-            <Image Source="/SaintX;component/Images/guidePost.png" Height="100" Width="100" Margin="50,0"/>
+            <Image Source="/SaintX;component/Images/guidePost2.png" Height="100" Width="100" Margin="50,0"/>
         </StackPanel>
         <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp">
             <ListBox.ItemsPanel>
