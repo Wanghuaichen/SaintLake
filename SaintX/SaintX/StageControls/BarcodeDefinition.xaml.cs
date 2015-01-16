@@ -83,7 +83,7 @@ namespace SaintX.StageControls
                 {
                     if (sampleAssignedBarcodeCount <= sampleCount)
                     {
-                        SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[col, row];
+                        SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[row, col];
                         if (sampleInfo != null)
                         {
                             if (barCode <= endBarCodeNum)
