@@ -56,54 +56,58 @@ namespace SaintX.StageControls
 
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
+            int startBarCodeNum = 0;
+            int endBarCodeNum = 0;
+
+            // The bar code is assumed to be an integer
             if(rdbStartCount.IsChecked.Value)
             {
-                string startBarCode = txtStartBarcodeApproach1.Text;
-                // The bar code is assumed to be an integer
-                int startBarCodeNum = int.Parse(startBarCode);
+                startBarCodeNum = int.Parse(txtStartBarcodeApproach1.Text);
                 int barCodeCount = int.Parse(txtCount.Text);
-                int endBarCodeNum = startBarCodeNum + barCodeCount - 1;
-
-                int barCode = startBarCodeNum;
-                int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
-                int sampleAssignedBarcodeCount = 1;
-                bool isDone = false;
-                for (int col = 0; col < 20; ++col)
-                {
-                    for (int row = 0; row < 16; ++row)
-                    {
-                        if (sampleAssignedBarcodeCount <= sampleCount)
-                        {
-                            SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[col, row];
-                            if (sampleInfo != null)
-                            {
-                                if (barCode <= endBarCodeNum)
-                                {
-                                    sampleInfo.barcode = barCode++.ToString();
-                                    ++sampleAssignedBarcodeCount;
-                                }
-                                else
-                                {
-                                    // All avaliable barcodes have been used
-                                    isDone = true;
-                                    break;     
-                                }
-                            }
-                        }
-                        else
-                        {
-                            isDone = true;
-                            break;   // All samples have been assigned barcode
-                        }
-                    }
-
-                    if (isDone)
-                        break;
-                }
+                endBarCodeNum = startBarCodeNum + barCodeCount - 1;
             }
             else
             {
+                startBarCodeNum = int.Parse(txtStartBarcodeApproach2.Text);
+                endBarCodeNum = int.Parse(txtEndBarcode.Text);
+            }
 
+            // Assign barcode to samples
+            int barCode = startBarCodeNum;
+            int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
+            int sampleAssignedBarcodeCount = 1;
+            bool isDone = false;
+            for (int col = 0; col < 10; ++col)
+            {
+                for (int row = 0; row < 16; ++row)
+                {
+                    if (sampleAssignedBarcodeCount <= sampleCount)
+                    {
+                        SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[col, row];
+                        if (sampleInfo != null)
+                        {
+                            if (barCode <= endBarCodeNum)
+                            {
+                                sampleInfo.barcode = barCode++.ToString();
+                                ++sampleAssignedBarcodeCount;
+                            }
+                            else
+                            {
+                                // All avaliable barcodes have been used
+                                isDone = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        isDone = true;
+                        break;   // All samples have been assigned barcode
+                    }
+                }
+
+                if (isDone)
+                    break;
             }
             
             Helper.UpdateDataGridView(dataGridView);
