@@ -29,7 +29,7 @@ namespace SaintX.StageControls
         void AssayDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.EnableVisualStyles();
-            Helper.InitDataGridView(dataGridView);
+            Helper.InitDataGridView(dataGridView, CurStage );
         }
 
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)

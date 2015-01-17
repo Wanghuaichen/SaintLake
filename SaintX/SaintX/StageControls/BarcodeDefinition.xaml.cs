@@ -31,14 +31,15 @@ namespace SaintX.StageControls
             _assays = SettingsManager.Instance.Assays;
             _sampleInfos = GlobalVars.Instance.SampleInfos;
             this.Loaded += BarcodeDefinition_Loaded;
-
+            dataGridView.CellPainting += dataGridView_CellPainting;
             this.DataContext = this;
         }
 
+     
         void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             InitTreeview(_assays.Select(x => x.Name).ToList());
-            //Helper.InitDataGridView(dataGridView);
+            Helper.InitDataGridView(dataGridView,CurStage);
         }
 
         protected override void onStageChanged(object sender, EventArgs e)
@@ -46,8 +47,10 @@ namespace SaintX.StageControls
             base.onStageChanged(sender, e);
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
-            //Helper.UpdateDataGridView(dataGridView);
+            Helper.UpdateDataGridView(dataGridView,CurStage);
         }
+
+        
 
         private void InitTreeview(List<string> assays)
         {
@@ -60,6 +63,56 @@ namespace SaintX.StageControls
         {
             NotifyFinished();
         }
+
+        #region datagridview
+        void dataGridView_CellPainting(object sender, System.Windows.Forms.DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex < 0)
+                return;
+            if (e.RowIndex == 0)
+                return;
+            
+            {
+                System.Drawing.Rectangle newRect = new System.Drawing.Rectangle(e.CellBounds.X + 1,
+                    e.CellBounds.Y + 1, e.CellBounds.Width - 4,
+                    e.CellBounds.Height - 4);
+
+                using (
+                    System.Drawing.Brush gridBrush = new System.Drawing.SolidBrush(this.dataGridView.GridColor),
+                    backColorBrush = new System.Drawing.SolidBrush(e.CellStyle.BackColor))
+                {
+                    using (System.Drawing.Pen gridLinePen = new System.Drawing.Pen(gridBrush))
+                    {
+                        // Erase the cell.
+                        e.Graphics.FillRectangle(backColorBrush, e.CellBounds);
+
+                        // Draw the grid lines (only the right and bottom lines;
+                        // DataGridView takes care of the others).
+                        e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left,
+                            e.CellBounds.Bottom - 1, e.CellBounds.Right - 1,
+                            e.CellBounds.Bottom - 1);
+                        e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1,
+                            e.CellBounds.Top, e.CellBounds.Right - 1,
+                            e.CellBounds.Bottom);
+
+                        // Draw the inset highlight box.
+                        //e.Graphics.DrawRectangle(System.Drawing.Pens.Blue, newRect);
+
+                         //Draw the text content of the cell, ignoring alignment.
+                        if (e.Value != null)
+                        {
+                            e.Graphics.DrawString((String)e.Value, e.CellStyle.Font,
+                                System.Drawing.Brushes.Black, e.CellBounds.X + 2,
+                                e.CellBounds.Y + 2, System.Drawing.StringFormat.GenericDefault);
+                        }
+                        e.Handled = true;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
 
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
@@ -116,8 +169,7 @@ namespace SaintX.StageControls
                 if (isDone)
                     break;
             }
-            
-            //Helper.UpdateDataGridView(dataGridView);
+            Helper.UpdateDataGridView(dataGridView,CurStage);
         }
     }
 

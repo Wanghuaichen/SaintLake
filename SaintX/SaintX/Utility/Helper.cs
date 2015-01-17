@@ -17,7 +17,7 @@ namespace SaintX.Utility
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        static public void InitDataGridView(DataGridView dataGridView)
+        static public void InitDataGridView(DataGridView dataGridView, Stage stage)
         {
             //dataGridView.Columns.Add(new System.Windows.Forms.DataGridViewColumn());
             dataGridView.Columns.Clear();
@@ -34,7 +34,7 @@ namespace SaintX.Utility
                 dataGridView.Columns.Add(column);
                 dataGridView.Columns[i].SortMode = DataGridViewColumnSortMode.Programmatic;
             }
-            dataGridView.RowHeadersWidth = 80;
+            dataGridView.RowHeadersWidth = stage == Stage.AssayDef ? 80 : 120;
             for (int i = 0; i < 16; i++)
             {
                 dataGridView.Rows.Add(strs.ToArray());
@@ -42,16 +42,18 @@ namespace SaintX.Utility
             }
         }
 
-        static public void UpdateDataGridView(DataGridView dataGridView)
+        static public void UpdateDataGridView(DataGridView dataGridView,Stage curStage)
         {
             foreach( KeyValuePair<CellPosition, SampleInfo> pair in GlobalVars.Instance.SampleInfos)
             {
                 CellPosition cellPos = pair.Key;
                 SampleInfo sampleInfo = pair.Value;
                 var cell = dataGridView.Rows[cellPos.rowIndex].Cells[cellPos.colIndex];
-                cell.Value = sampleInfo.ColorfulAssay.Name;
+                if (curStage == Stage.BarcodeDef)
+                    cell.Value = string.Format("{0} [{1}]", sampleInfo.ColorfulAssay.Name, sampleInfo.Barcode);
+                else
+                    cell.Value = sampleInfo.ColorfulAssay.Name;
                 cell.Style.BackColor = Convert2SystemDrawingColor(sampleInfo.ColorfulAssay.Color);
-                cell.ToolTipText = sampleInfo.Barcode;
             }
         }
 
@@ -73,6 +75,7 @@ namespace SaintX.Utility
 
             }
             width = Math.Max(width, 120);
+            width -= 80;
             return width / 6;
         }
 
