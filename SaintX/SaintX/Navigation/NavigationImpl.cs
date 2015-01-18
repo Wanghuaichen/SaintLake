@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace SaintX.Navigation
 {
@@ -55,6 +56,7 @@ namespace SaintX.Navigation
         public event EventHandler onStageChanged;
         protected bool preventUI = false;
         protected Stage farthestStage = Stage.AssayDef;
+        private ListBox lstSteps = null;
         protected List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
         public BaseHost()
         {
@@ -90,6 +92,36 @@ namespace SaintX.Navigation
         {
             if (onStageChanged != null)
                 onStageChanged(this, new Navigate2Args(stage));
+            ListBox lstBox = GetListBox();
+            if (lstBox == null)
+                return;
+
+            lstBox.SelectedIndex = (int)stage;
+
+        }
+
+        private ListBox GetListBox()
+        {
+            List<ListBox> lstBoxes = GetChildObjects<ListBox>(this, typeof(ListBox));
+            return lstBoxes.First();
+        }
+
+        private List<T> GetChildObjects<T>(DependencyObject obj, Type typename) where T : FrameworkElement
+        {
+            DependencyObject child = null;
+            List<T> childList = new List<T>();
+
+            for (int i = 0; i <= VisualTreeHelper.GetChildrenCount(obj) - 1; i++)
+            {
+                child = VisualTreeHelper.GetChild(obj, i);
+
+                if (child is T && (((T)child).GetType() == typename))
+                {
+                    childList.Add((T)child);
+                }
+                childList.AddRange(GetChildObjects<T>(child, typename));
+            }
+            return childList;
         }
     }
 
