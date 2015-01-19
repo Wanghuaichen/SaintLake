@@ -58,6 +58,8 @@ namespace SaintX.StageControls
             }
             GlobalVars.Instance.SampleCount = smpCnt;
             GlobalVars.Instance.SampleInfos.Clear();
+            lstAssays.SelectedIndex = -1;
+            Helper.InitDataGridView(dataGridView, CurStage);
         }
 
         void SetInfo(string s, Color color)

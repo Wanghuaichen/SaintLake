@@ -34,11 +34,11 @@
                 <wfi:WindowsFormsHost>
                     <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" SelectionChanged="dataGridView_SelectionChanged" EditMode="EditProgrammatically" AllowUserToResizeColumns="False" AllowUserToResizeRows="False"/>
                 </wfi:WindowsFormsHost>
-                <GroupBox Grid.Column="2" Grid.Row="1">
+                <GroupBox Height="50">
                     <Grid >
-                        <Label Content="样品数量：" Height="36" HorizontalAlignment="Left" Margin="0,18.4,0,0" Name="label5" VerticalAlignment="Top" Width="80" />
-                        <TextBox Text="16"  Height="36" HorizontalAlignment="Left" Margin="92,18,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
-                        <Button Content="设置" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Name="btnSetSampleCnt"  Click="btnSetSampleCnt_Click" TabIndex="3" Margin="198.4,17.6,0,0" />
+                        <Label Content="样品数量：" Height="36" HorizontalAlignment="Left" Margin="0,5,0,0" Name="label5" VerticalAlignment="Top" Width="80" />
+                        <TextBox Text="16"  Height="36" HorizontalAlignment="Left" Margin="92,5,0,0" Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
+                        <Button Content="设置" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Name="btnSetSampleCnt"  Click="btnSetSampleCnt_Click" TabIndex="3" Margin="198.4,5,0,0" />
                     </Grid>
                 </GroupBox>
             </StackPanel>
@@ -54,7 +54,7 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="1" Grid.Column="0"   HorizontalAlignment="Stretch" Margin="0,0,0,5"  Name="txtInfo" VerticalAlignment="Stretch" MaxLines="4" TabIndex="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  />
+                <TextBox Grid.Row="1" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Stretch" Margin="0,0,0,5"  Name="txtInfo" VerticalAlignment="Stretch" MaxLines="4" TabIndex="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  />
                 <Label Content="信息:"  Height="34" HorizontalAlignment="Left" Name="label6" VerticalAlignment="Top" Width="50" Margin="0,0,0,0" />
                 <Button Content="下一步" Grid.Column="1"  Height="36"  VerticalAlignment="Bottom" Margin="20,0,0,5" Name="btnNext" Width="100" HorizontalAlignment="Left" Click="btnNext_Click" IsDefault="True" TabIndex="5" Grid.Row="1"/>
             </Grid>

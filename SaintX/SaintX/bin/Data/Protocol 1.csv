@@ -1,18 +1,17 @@
-描述,源Label,体积,目标Label,重复次数
-加试剂1,reagents_1,300,reaction1,1
-加样品,sample_1,200,reaction1,1
-震荡60s,,,,1
-加试剂2,reagents_2,100,reaction1,2
-震荡60s,,,,1
-磁性分离600s,,,,1
-去废液1,reaction1,600,waste1,1
-加试剂3,reagents_3,400,reaction1,1
-震荡60s,,,,1
-加试剂4,reagents_4,200,reaction1,1
-震荡60s,,,,1
-磁性分离300s,,,,1
-去废液2,reaction1,600,waste2,1
-加PCRMix,PCRMixtube,50,reaction1,1
-震荡60s,,,,1
-转移PCRmix,reaction1,50,PCRPlate,1
-
+??	?Label	??	??Label	????	????	??????	????	????	????
+???1	reagents_1	300	reaction1	1	200	12	reagent1	1-8	*
+???	sample_1	200	reaction1	1	200	12	sample	*	*
+??60s				1					
+???2	reagents_2	100	reaction1	2	50	12	reagent2	1-8	*
+??60s				1					
+????600s				1					
+???1	reaction1	600	waste1	1	200	12	sample	*	1-8
+???3	reagents_3	400	reaction1	1	200	12	reagent3	1-8	*
+??60s				1					
+???4	reagents_4	200	reaction1	1	200	12	reagent4	1-8	*
+??60s				1					
+????300s				1					
+???2	reaction1	600	waste2	1	200	12	sample	*	1-8
+?PCRMix	PCRMixtube	50	reaction1	1	200	12	PCRMix	1-2	*
+??60s				1					
+??PCRmix	reaction1	50	PCRPlate	1	200	12	sample	*	*

@@ -44,6 +44,19 @@ namespace SaintX.Data
         }
     }
 
+    enum StepDefCol
+    {
+        Description = 0,
+        SourceLabware = 1,
+        Volume = 2,
+        DestLabware = 3,
+        RepeatTimes = 4,
+        TipType = 5,
+        ReuseTimes = 6,
+        AspiratePosition = 7,
+        DispensePosition = 8
+    }
+
     class StepDefinition
     {
         public string Description { get; set; }
@@ -51,18 +64,27 @@ namespace SaintX.Data
         public string DestLabware { get; set; }
         public string Volume { get; set; }
         public string RepeatTimes { get; set; }
+        public string TipType { get; set; }
+        public int ReuseTimes { get; set; }
+        public string AspirateConstrain { get; set; }
+        public string DispenseConstrain { get; set; }
         public int LineNumber { get; set; }
+
         public StepDefinition()
         {
 
         }
         public StepDefinition(string[] lines,int no)
         {
-            Description = lines[0];
-            SourceLabware = lines[1];
-            Volume = lines[2];
-            DestLabware = lines[3];
-            RepeatTimes = lines[4];
+            Description = lines[(int)StepDefCol.Description];
+            SourceLabware = lines[(int)StepDefCol.SourceLabware];
+            Volume = lines[(int)StepDefCol.Volume];
+            DestLabware = lines[(int)StepDefCol.DestLabware];
+            RepeatTimes = lines[(int)StepDefCol.RepeatTimes];
+            TipType = lines[(int)StepDefCol.TipType];
+            ReuseTimes = int.Parse(lines[(int)StepDefCol.ReuseTimes]);
+            AspirateConstrain = lines[(int)StepDefCol.AspiratePosition];
+            DispenseConstrain = lines[(int)StepDefCol.DispensePosition];
             LineNumber = no;
         }
     }

@@ -8,7 +8,7 @@
     </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="130"/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -19,7 +19,7 @@
             <Label Content="步骤指示：" Width="100"/>
             <Image Source="/SaintX;component/Images/guidePost2.png" Height="100" Width="100" Margin="50,0"/>
         </StackPanel>
-        <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp">
+        <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp" BorderBrush="LightGray">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True"/>
