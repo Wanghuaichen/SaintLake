@@ -26,6 +26,10 @@ namespace SaintX.Data
                 root.Children.Add(firstLevel);
             }
             root.Initialize();
+
+            // Default all the assays are checked
+            root.IsChecked = true;
+
             return root;
         }
 

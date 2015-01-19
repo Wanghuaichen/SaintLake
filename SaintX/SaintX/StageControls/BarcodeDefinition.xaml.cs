@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace SaintX.StageControls
@@ -50,8 +51,6 @@ namespace SaintX.StageControls
             Helper.UpdateDataGridView(dataGridView,CurStage);
         }
 
-        
-
         private void InitTreeview(List<string> assays)
         {
             panelVM = PanelViewModel.CreateViewModel(assays);
@@ -77,9 +76,8 @@ namespace SaintX.StageControls
                     e.CellBounds.Y + 1, e.CellBounds.Width - 4,
                     e.CellBounds.Height - 4);
 
-                using (
-                    System.Drawing.Brush gridBrush = new System.Drawing.SolidBrush(this.dataGridView.GridColor),
-                    backColorBrush = new System.Drawing.SolidBrush(e.CellStyle.BackColor))
+                using (System.Drawing.Brush gridBrush = new System.Drawing.SolidBrush(this.dataGridView.GridColor),
+                       backColorBrush = new System.Drawing.SolidBrush(e.CellStyle.BackColor))
                 {
                     using (System.Drawing.Pen gridLinePen = new System.Drawing.Pen(gridBrush))
                     {
@@ -113,9 +111,16 @@ namespace SaintX.StageControls
 
         #endregion
 
-
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
+            // Might be a bit lengthy operation
+            this.Cursor = System.Windows.Input.Cursors.Wait;
+
+            // Clear all the barcode assignment of samples
+            foreach (SampleInfo si in GlobalVars.Instance.SampleInfos.SampleInfoList)
+                si.Barcode = string.Empty;
+            Helper.UpdateDataGridView(dataGridView, Stage.BarcodeDef);
+
             int startBarCodeNum = 0;
             int endBarCodeNum = 0;
 
@@ -132,12 +137,25 @@ namespace SaintX.StageControls
                 endBarCodeNum = int.Parse(txtEndBarcode.Text);
             }
 
+            // Assays need to assign barcode
+            PanelViewModel root_PVM = ((ObservableCollection<PanelViewModel>)tree.ItemsSource)[0];
+            List<PanelViewModel> checked_PVMs = root_PVM.Children.FindAll(pvm => pvm.IsChecked.Value);
+            List<string> checked_assays = new List<string>();
+            foreach (var pvm in checked_PVMs)
+                checked_assays.Add(pvm.Name);
+
+            if (checked_assays.Count == 0)
+            {
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
+                return;
+            }
+                
             // Assign barcode to samples
             int barCode = startBarCodeNum;
             int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
             int sampleAssignedBarcodeCount = 1;
             bool isDone = false;
-            for (int col = 0; col < 10; ++col)
+            for (int col = 0; col < 6; ++col)
             {
                 for (int row = 0; row < 16; ++row)
                 {
@@ -148,8 +166,11 @@ namespace SaintX.StageControls
                         {
                             if (barCode <= endBarCodeNum)
                             {
-                                sampleInfo.Barcode = barCode++.ToString();
-                                ++sampleAssignedBarcodeCount;
+                                if(checked_assays.Contains(sampleInfo.ColorfulAssay.Name))
+                                {
+                                    sampleInfo.Barcode = barCode++.ToString();
+                                    ++sampleAssignedBarcodeCount;
+                                }
                             }
                             else
                             {
@@ -169,7 +190,9 @@ namespace SaintX.StageControls
                 if (isDone)
                     break;
             }
+
             Helper.UpdateDataGridView(dataGridView,CurStage);
+            this.Cursor = System.Windows.Input.Cursors.Arrow;
         }
     }
 

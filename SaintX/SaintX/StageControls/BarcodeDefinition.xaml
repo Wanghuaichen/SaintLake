@@ -84,7 +84,7 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <wfi:WindowsFormsHost>
-                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False"  EditMode="EditProgrammatically"/>
+                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" EditMode="EditProgrammatically" AllowUserToResizeRows="False" AllowUserToResizeColumns="False"/>
                 </wfi:WindowsFormsHost>
                 <GroupBox Grid.Row="2" Grid.Column="2" >
                     <Grid>

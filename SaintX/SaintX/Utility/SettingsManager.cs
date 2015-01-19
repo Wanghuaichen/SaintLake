@@ -42,9 +42,9 @@ namespace SaintX.Utility
             _protocol = Protocol.CreateFromCSVFile(protocolCSV);
 #else
             string protocolXml = FolderHelper.GetProtocolDefinitionXml();
-            if(File.Exists(projectSettingsXml))
+            if (File.Exists(protocolXml))
             {
-                _protocol = SerializationHelper.Deserialize<Protocol>(projectSettingsXml);
+                _protocol = SerializationHelper.Deserialize<Protocol>(protocolXml);
             }
 #endif       
         }

@@ -32,7 +32,7 @@
             <StackPanel>
                 <Label Margin="0,4,0,4" FontFamily="SimSun">实验信息：</Label>
                 <wfi:WindowsFormsHost>
-                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" SelectionChanged="dataGridView_SelectionChanged" EditMode="EditProgrammatically"/>
+                    <wf:DataGridView x:Name="dataGridView" AllowUserToAddRows="False" SelectionChanged="dataGridView_SelectionChanged" EditMode="EditProgrammatically" AllowUserToResizeColumns="False" AllowUserToResizeRows="False"/>
                 </wfi:WindowsFormsHost>
                 <GroupBox Grid.Column="2" Grid.Row="1">
                     <Grid >
