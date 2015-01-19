@@ -23,7 +23,7 @@ namespace SaintX.Data
         }
         static public Protocol  CreateFromCSVFile(string csvFile)
         {
-            int commaCnt = 4;
+            int commaCnt = 9;
             FileInfo fileInfo = new FileInfo(csvFile);
             string name = fileInfo.Name;
             string[] strLines = File.ReadAllLines(csvFile);
@@ -76,16 +76,19 @@ namespace SaintX.Data
         }
         public StepDefinition(string[] lines,int no)
         {
+            LineNumber = no;
             Description = lines[(int)StepDefCol.Description];
             SourceLabware = lines[(int)StepDefCol.SourceLabware];
             Volume = lines[(int)StepDefCol.Volume];
-            DestLabware = lines[(int)StepDefCol.DestLabware];
             RepeatTimes = lines[(int)StepDefCol.RepeatTimes];
+            if (Volume == "")
+                return;
+            DestLabware = lines[(int)StepDefCol.DestLabware];
             TipType = lines[(int)StepDefCol.TipType];
             ReuseTimes = int.Parse(lines[(int)StepDefCol.ReuseTimes]);
             AspirateConstrain = lines[(int)StepDefCol.AspiratePosition];
             DispenseConstrain = lines[(int)StepDefCol.DispensePosition];
-            LineNumber = no;
+          
         }
     }
 

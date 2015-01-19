@@ -48,7 +48,8 @@ namespace SaintX
 
 
         #region event
-        private void lstSteps_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void lstSteps_PreviewMouseLeftButtonUp(object sender, 
+            MouseButtonEventArgs e)
         {
             if (preventUI)
                 return;
