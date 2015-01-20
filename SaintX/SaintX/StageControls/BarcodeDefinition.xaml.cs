@@ -20,6 +20,7 @@ namespace SaintX.StageControls
         SampleInfos _sampleInfos = null;
         ObservableCollection<ColorfulAssay> _assays;
         PanelViewModel panelVM;
+        bool bCouldRunSetBarcode = false;
 
         public SampleInfos SampleInfos
         {
@@ -108,7 +109,6 @@ namespace SaintX.StageControls
                 }
             }
         }
-
         #endregion
 
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
@@ -194,6 +194,115 @@ namespace SaintX.StageControls
             Helper.UpdateDataGridView(dataGridView,CurStage);
             this.Cursor = System.Windows.Input.Cursors.Arrow;
         }
+
+        private void SetInfo(string s, Color color)
+        {
+            if (txtInfo == null)
+                return;
+
+            txtInfo.Background = new SolidColorBrush(Colors.White);
+            txtInfo.Text = s;
+            txtInfo.Foreground = new SolidColorBrush(color);
+        }
+
+        private void ClearInfo()
+        {
+            if (txtInfo == null)
+                return;
+
+            txtInfo.Background = new SolidColorBrush(Colors.White);
+            txtInfo.Text = string.Empty;
+        }
+
+        #region Barcode assignment validation
+        private void ValidateBarcodeSettingApproach1()
+        {
+            if (txtStartBarcodeApproach1 == null || txtCount == null)
+                return;
+
+            int startBarcode = -1, barcodeCnt = -1;
+            if(!int.TryParse(txtStartBarcodeApproach1.Text, out startBarcode) || startBarcode <= 0 ||
+               !int.TryParse(txtCount.Text, out barcodeCnt) || barcodeCnt <= 0)
+            {
+                SetInfo("起始条码的数值和数量的数值都必须是大于0的整数", Colors.Red);
+                btnBarcodeOk.IsEnabled = false;
+            }
+            else
+            {
+                btnBarcodeOk.IsEnabled = true;
+                ClearInfo();
+            }
+        }
+
+        private void ValidateBarcodeSettingApproach2()
+        {
+            if (txtStartBarcodeApproach2 == null || txtEndBarcode == null)
+                return;
+
+            int startBarcode = -1, endBarcode = -1;
+            if(!int.TryParse(txtStartBarcodeApproach2.Text, out startBarcode) || startBarcode <= 0 ||
+               !int.TryParse(txtEndBarcode.Text, out endBarcode) || endBarcode <= 0)
+            {
+                SetInfo("起始条码的数值和结束条码的数值都必须是大于0的整数", Colors.Red);
+                btnBarcodeOk.IsEnabled = false;
+            }
+            else
+            {
+                if(endBarcode <= startBarcode)
+                {
+                    SetInfo("结束条码的数值必须大于起始条码的数值", Colors.Red);
+                    btnBarcodeOk.IsEnabled = false;
+                }
+                else
+                {
+                    btnBarcodeOk.IsEnabled = true;
+                    ClearInfo();
+                }
+            }
+        }
+
+        private void txtStartBarcodeApproach1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(rdbStartCount.IsChecked.Value)
+            {
+                ValidateBarcodeSettingApproach1();
+            }
+        }
+
+        private void txtCount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (rdbStartCount.IsChecked.Value)
+            {
+                ValidateBarcodeSettingApproach1();
+            }
+        }
+
+        private void txtStartBarcodeApproach2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(rdbStartEnd.IsChecked.Value)
+            {
+                ValidateBarcodeSettingApproach2();
+            }
+        }
+
+        private void txtEndBarcode_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (rdbStartEnd.IsChecked.Value)
+            {
+                ValidateBarcodeSettingApproach2();
+            }
+        }
+
+        private void rdbStartCount_Checked(object sender, RoutedEventArgs e)
+        {
+            ValidateBarcodeSettingApproach1();
+        }
+
+        private void rdbStartEnd_Checked(object sender, RoutedEventArgs e)
+        {
+            ValidateBarcodeSettingApproach2();
+        }
+        #endregion
     }
 
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
