@@ -20,7 +20,6 @@ namespace SaintX.StageControls
         SampleInfos _sampleInfos = null;
         ObservableCollection<ColorfulAssay> _assays;
         PanelViewModel panelVM;
-        bool bCouldRunSetBarcode = false;
 
         public SampleInfos SampleInfos
         {
@@ -37,7 +36,6 @@ namespace SaintX.StageControls
             this.DataContext = this;
         }
 
-     
         void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             InitTreeview(_assays.Select(x => x.Name).ToList());
@@ -47,6 +45,7 @@ namespace SaintX.StageControls
         protected override void onStageChanged(object sender, EventArgs e)
         {
             base.onStageChanged(sender, e);
+            Helper.InitDataGridView(dataGridView, CurStage);
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
             Helper.UpdateDataGridView(dataGridView,CurStage);
