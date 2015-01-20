@@ -14,8 +14,8 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="1" Grid.ColumnSpan="2">
             <Grid >
@@ -51,14 +51,14 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="当前步骤用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left"  Grid.Row="0" Margin="120,0,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="{Binding Path=CurrentStepUsed}"  VerticalAlignment="Top"/>
-                    <Label Grid.Row="1" Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Top"/>
-                    <Label Grid.Row="2" Content ="总用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-                    <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="{Binding Path=TotalUsed}" VerticalAlignment="Top"/>
-                    <Label Grid.Row="3" Content="预计剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-                    <TextBlock Grid.Row="3" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Top"/>
+                    <Label Grid.Row="0" Content="当前步骤用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Left"  Grid.Row="0" Margin="140,0,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="{Binding Path=CurrentStepUsed}"  VerticalAlignment="Center"/>
+                    <Label Grid.Row="1" Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Center"/>
+                    <Label Grid.Row="2" Content ="总用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="{Binding Path=TotalUsed}" VerticalAlignment="Center"/>
+                    <Label Grid.Row="3" Content="预计剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>
         </GroupBox>
@@ -74,9 +74,7 @@
                             <GridViewColumn  Header="体积（μL）" Width="120" DisplayMemberBinding="{Binding Path=Volume}"></GridViewColumn>
                             <GridViewColumn Header="目标Label" Width="120" DisplayMemberBinding="{Binding Path=DestLabware}"></GridViewColumn>
                             <GridViewColumn Header="重复次数" Width="120" DisplayMemberBinding="{Binding Path=RepeatTimes}"></GridViewColumn>
-                            <GridViewColumn Header="液体类别" Width="120" DisplayMemberBinding="{Binding Path=LiquidClass}"></GridViewColumn>
                             <GridViewColumn Header="枪头类型" Width="120" DisplayMemberBinding="{Binding Path=TipType}"></GridViewColumn>
-                            <GridViewColumn Header="重用次数" Width="120" DisplayMemberBinding="{Binding Path=ReuseTimes}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>

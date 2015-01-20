@@ -53,8 +53,9 @@ namespace SaintX.Data
         RepeatTimes = 4,
         TipType = 5,
         ReuseTimes = 6,
-        AspiratePosition = 7,
-        DispensePosition = 8
+        LiquidClass = 7,
+        AspiratePosition = 8,
+        DispensePosition = 9
     }
 
     class StepDefinition
@@ -65,15 +66,17 @@ namespace SaintX.Data
         public string Volume { get; set; }
         public string RepeatTimes { get; set; }
         public string TipType { get; set; }
-        public int ReuseTimes { get; set; }
+        public string ReuseTimes { get; set; }
         public string AspirateConstrain { get; set; }
         public string DispenseConstrain { get; set; }
+        public string LiquidClass { get; set; }
         public int LineNumber { get; set; }
 
         public StepDefinition()
         {
 
         }
+
         public StepDefinition(string[] lines,int no)
         {
             LineNumber = no;
@@ -83,12 +86,12 @@ namespace SaintX.Data
             RepeatTimes = lines[(int)StepDefCol.RepeatTimes];
             if (Volume == "")
                 return;
+            LiquidClass = lines[(int)StepDefCol.LiquidClass];
             DestLabware = lines[(int)StepDefCol.DestLabware];
             TipType = lines[(int)StepDefCol.TipType];
-            ReuseTimes = int.Parse(lines[(int)StepDefCol.ReuseTimes]);
+            ReuseTimes = lines[(int)StepDefCol.ReuseTimes];
             AspirateConstrain = lines[(int)StepDefCol.AspiratePosition];
             DispenseConstrain = lines[(int)StepDefCol.DispensePosition];
-          
         }
     }
 
@@ -103,6 +106,8 @@ namespace SaintX.Data
             Volume = stepDef.Volume;
             DestLabware = stepDef.DestLabware;
             RepeatTimes = stepDef.RepeatTimes;
+            ReuseTimes = stepDef.ReuseTimes;
+            TipType = stepDef.TipType;
             LineNumber = stepDef.LineNumber;
         }
 

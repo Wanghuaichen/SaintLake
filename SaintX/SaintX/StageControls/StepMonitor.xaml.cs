@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -147,10 +148,14 @@ namespace SaintX.StageControls
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
             List<string> scripts = new List<string>();
+            string totalCntFile = FolderHelper.GetOutputFolder() + "stepsCnt.txt";
+            File.WriteAllText(totalCntFile, stepsDef.Count.ToString());
+
             for(int i = 0; i < stepsDef.Count; i++)
             {
                 var stepDef = stepsDef[i];
-                scripts.AddRange(GenerateScriptsThisStep(stepDef, i + 1));
+                string curStepFile = FolderHelper.GetOutputFolder() + string.Format("Steps\\{0}.txt",i+1);
+                File.WriteAllLines(curStepFile, GenerateScriptsThisStep(stepDef, i + 1));
             }
         }
 
@@ -159,48 +164,32 @@ namespace SaintX.StageControls
             List<string> scripts = new List<string>();
             int smpCnt = GlobalVars.Instance.SampleCount;
             double volume = double.Parse(stepDef.Volume);
+            if (volume == 0)
+                return new List<string>() { "Reserved"};
             int tipCountLiha = int.Parse(ConfigurationManager.AppSettings["tipCount"]);
             int aspConstrainTipCnt = GetConstrainTipCnt(stepDef.AspirateConstrain);
-            int maxAspTipCntOnce = Math.Min(tipCountLiha, aspConstrainTipCnt);
-            int totalTimes = (smpCnt + maxAspTipCntOnce - 1) / maxAspTipCntOnce;
-            scripts.Add(string.Format("C;{0}",stepDef.Description));
-            for (int pipettingDiffSampleRounds = 0; pipettingDiffSampleRounds < totalTimes; pipettingDiffSampleRounds++)
-            {
-                int thisTimeCnt = Math.Min(smpCnt - pipettingDiffSampleRounds * maxAspTipCntOnce, maxAspTipCntOnce);
-                int startWellID = pipettingDiffSampleRounds * maxAspTipCntOnce + 1;
-                List<int> sourceWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.AspirateConstrain);
-                List<int> dstWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.DispenseConstrain);
-                scripts.AddRange(GenerateScriptsSameSample(sourceWellIDs, dstWellIDs, stepDef));
-            }
             
+            // Source labware: Trough 100ml, labeled 'T2', use wells 1 - 8
+            // Destination labware: 96 Well Microplate, labeled 'MTP96-2', use wells 1 - 96
+            // Liquid class 'Water'
+            // DiTi Reuse = 2 (use 2 times), Multi-dispense = max. 5
+            // Pipetting direction 0 = left to right
+            // No wells to be excluded
+            //   R;T2;;Trough 100ml;1;8;MTP96-2;;96 Well Microplate;1;96;100;Water;2;5;0
+            string aspWellsUse = stepDef.AspirateConstrain.Replace('-',';');
+            string liquidClass = stepDef.LiquidClass;
+            string dispenseWellsUse = IsFixedPostion(stepDef.DispenseConstrain) ? stepDef.DispenseConstrain.Replace('-',';') 
+                : string.Format("1;{0}",GlobalVars.Instance.SampleCount);
+            scripts.Add(string.Format("C;{0}", stepDef.Description));
+            string reagentCommand = string.Format("R;{0};;;{1};{2};;;{3};{4};{5};{6};5;0",
+                stepDef.SourceLabware,
+                aspWellsUse,
+                stepDef.DestLabware,
+                dispenseWellsUse,
+                stepDef.Volume,
+                stepDef.LiquidClass,stepDef.RepeatTimes);
+            scripts.Add(reagentCommand);
             return scripts;
-        }
-
-        private IEnumerable<string> GenerateScriptsSameSample(List<int> sourceWellIDs, 
-            List<int> dstWellIDs, StepDefinition stepDef)
-        {
-            List<string> strs = new List<string>();
-            double maxVolumePerTip = int.Parse(stepDef.TipType) * 0.9;
-            double volumeThisStep = double.Parse(stepDef.Volume);
-            int nTotalTimes = (int)Math.Ceiling(volumeThisStep / maxVolumePerTip);
-            int curTimes = 0;
-            for(int i = 0; i< nTotalTimes; i++)
-            {
-                double volume = volumeThisStep - maxVolumePerTip * i;
-                volume = Math.Min(volume, maxVolumePerTip);
-                for(int j = 0; j< sourceWellIDs.Count; j++)
-                {
-                    strs.Add("A");
-                    strs.Add("D");
-                }
-                curTimes++;
-                if (curTimes > stepDef.ReuseTimes)
-                {
-                    curTimes = 0;
-                    strs.Add("W;");
-                }
-            }
-            return strs;
         }
 
         private List<int> GetWellIDs(int firstWellID, int cnt, string wellConstrain)
