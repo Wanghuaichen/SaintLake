@@ -14,7 +14,7 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="1" Grid.ColumnSpan="2">

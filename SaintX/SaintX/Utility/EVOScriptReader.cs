@@ -9,24 +9,24 @@ namespace SaintX.Utility
 {
     class EVOScriptReader
     {
-        static List<string> labwares = null;
-        static public List<string> Labwares
+        static Dictionary<string, LabwareLayoutInfo> labwareInfos = null;
+        static public Dictionary<string, LabwareLayoutInfo> LabwareInfos
         {
             get
             {
-                if (labwares == null)
+                if (labwareInfos == null)
                     Read();
-                return labwares;
+                return labwareInfos;
             }
         }
 
-        static public void Read()
+        private static void Read()
         {
             string sScriptFile = ConfigurationManager.AppSettings["scriptFile"];
             List<string> sGridDescriptions = new List<string>();
             List<string> sContents = File.ReadAllLines(sScriptFile).ToList();
             sGridDescriptions = sContents.Where(s => s.Contains("998")).ToList();
-            labwares = ParseAll(sGridDescriptions).Select(x => x.Value.label).ToList();
+            labwareInfos = ParseAll(sGridDescriptions);
         }
 
         static private Dictionary<string, LabwareLayoutInfo> ParseAll(List<string> sGridDescriptions)

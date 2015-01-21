@@ -66,45 +66,50 @@ namespace SaintX.StageControls
         #region datagridview
         void dataGridView_CellPainting(object sender, System.Windows.Forms.DataGridViewCellPaintingEventArgs e)
         {
+            
             if (e.ColumnIndex < 0)
                 return;
             if (e.RowIndex == 0)
                 return;
-            
+            //use default painting for first selected cell.
+            if( dataGridView.SelectedCells.Count > 0)
             {
-                System.Drawing.Rectangle newRect = new System.Drawing.Rectangle(e.CellBounds.X + 1,
-                    e.CellBounds.Y + 1, e.CellBounds.Width - 4,
-                    e.CellBounds.Height - 4);
+                var selectedCell = dataGridView.SelectedCells[0];
+                if (selectedCell.RowIndex == e.RowIndex && selectedCell.ColumnIndex == e.ColumnIndex)
+                    return;
+            }
+            System.Drawing.Rectangle newRect = new System.Drawing.Rectangle(e.CellBounds.X + 1,
+                e.CellBounds.Y + 1, e.CellBounds.Width - 4,
+                e.CellBounds.Height - 4);
 
-                using (System.Drawing.Brush gridBrush = new System.Drawing.SolidBrush(this.dataGridView.GridColor),
-                       backColorBrush = new System.Drawing.SolidBrush(e.CellStyle.BackColor))
+            using (System.Drawing.Brush gridBrush = new System.Drawing.SolidBrush(this.dataGridView.GridColor),
+                    backColorBrush = new System.Drawing.SolidBrush(e.CellStyle.BackColor))
+            {
+                using (System.Drawing.Pen gridLinePen = new System.Drawing.Pen(gridBrush))
                 {
-                    using (System.Drawing.Pen gridLinePen = new System.Drawing.Pen(gridBrush))
+                    // Erase the cell.
+                    e.Graphics.FillRectangle(backColorBrush, e.CellBounds);
+
+                    // Draw the grid lines (only the right and bottom lines;
+                    // DataGridView takes care of the others).
+                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left,
+                        e.CellBounds.Bottom - 1, e.CellBounds.Right - 1,
+                        e.CellBounds.Bottom - 1);
+                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1,
+                        e.CellBounds.Top, e.CellBounds.Right - 1,
+                        e.CellBounds.Bottom);
+
+                    // Draw the inset highlight box.
+                        
+
+                        //Draw the text content of the cell, ignoring alignment.
+                    if (e.Value != null)
                     {
-                        // Erase the cell.
-                        e.Graphics.FillRectangle(backColorBrush, e.CellBounds);
-
-                        // Draw the grid lines (only the right and bottom lines;
-                        // DataGridView takes care of the others).
-                        e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left,
-                            e.CellBounds.Bottom - 1, e.CellBounds.Right - 1,
-                            e.CellBounds.Bottom - 1);
-                        e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1,
-                            e.CellBounds.Top, e.CellBounds.Right - 1,
-                            e.CellBounds.Bottom);
-
-                        // Draw the inset highlight box.
-                        //e.Graphics.DrawRectangle(System.Drawing.Pens.Blue, newRect);
-
-                         //Draw the text content of the cell, ignoring alignment.
-                        if (e.Value != null)
-                        {
-                            e.Graphics.DrawString((String)e.Value, e.CellStyle.Font,
-                                System.Drawing.Brushes.Black, e.CellBounds.X + 2,
-                                e.CellBounds.Y + 2, System.Drawing.StringFormat.GenericDefault);
-                        }
-                        e.Handled = true;
+                        e.Graphics.DrawString((String)e.Value, e.CellStyle.Font,
+                            System.Drawing.Brushes.Black, e.CellBounds.X + 2,
+                            e.CellBounds.Y + 2, System.Drawing.StringFormat.GenericDefault);
                     }
+                    e.Handled = true;
                 }
             }
         }

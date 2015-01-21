@@ -9,6 +9,8 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using System.Linq;
+using System.Collections;
 
 namespace SaintX.StageControls
 {
@@ -71,7 +73,15 @@ namespace SaintX.StageControls
                 var stepDefEx = new StepDefinitionWithProgressInfo(stepDef);
                 stepsDefWithProgressInfo.Add(stepDefEx);
             }
-            timeInfo.DataContext = timeEstimation;
+            
+            #region set "--:--:--" for times
+            string defaultTime = "--:--:--";
+            txtTimeUsedThisStep.Text = defaultTime;
+            txtTimeUsed.Text = defaultTime;
+            txtRemainingTime.Text = defaultTime;
+            txtRemianingTimeThisStep.Text = defaultTime;
+            #endregion
+
             lvProtocol.ItemsSource = stepsDefWithProgressInfo;
         }
 
@@ -107,8 +117,9 @@ namespace SaintX.StageControls
                 string startOrFinish = strs[0];
                 int nStep = int.Parse(strs[1]);
                 int nTimes = int.Parse(strs[2]);
-                ChangeBackGroudColor(nStep);
-                if(startOrFinish.ToLower().Contains("s"))
+                bool isStart = startOrFinish.ToLower().Contains("s");
+                ChangeBackGroudColor(nStep,isStart);
+                if(isStart)
                 {
                     timeEstimation.StartMajorStep(nStep);
                 }
@@ -123,25 +134,49 @@ namespace SaintX.StageControls
             }
         }
 
-        private void ChangeBackGroudColor(int nStep)
+        private void ChangeBackGroudColor(int nStep,bool isStart)
         {
-            
+            foreach(var thisStepWithProgressInfo in stepsDefWithProgressInfo)
+            {
+                if (isStart)
+                {
+                    thisStepWithProgressInfo.IsWorking = thisStepWithProgressInfo.LineNumber == nStep;
+                    thisStepWithProgressInfo.IsFinished = thisStepWithProgressInfo.LineNumber < nStep;
+                }
+                else
+                {
+                    thisStepWithProgressInfo.IsWorking = false;
+                    thisStepWithProgressInfo.IsFinished = thisStepWithProgressInfo.LineNumber <= nStep;
+                }
+            }
         }
         
-        #endregion}
+        #endregion
+   
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             string errMsg = "";
+            
             bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, errMsg);
             if(!bAllExist)
             {
                 SetInfo(errMsg, Colors.Red);
                 return;
             }
-            GenerateScripts();
+            try
+            {
+                GenerateScripts();
+            }
+            catch(Exception ex)
+            {
+                SetInfo(ex.Message, Colors.Red);
+                return;
+            }
+            
             timeEstimation.StartMajorStep(1);
-            btnStart.IsEnabled = true;
+            btnStart.IsEnabled = false;
+            timeInfo.DataContext = timeEstimation;
         }
 
         private void GenerateScripts()
@@ -151,10 +186,16 @@ namespace SaintX.StageControls
             string totalCntFile = FolderHelper.GetOutputFolder() + "stepsCnt.txt";
             File.WriteAllText(totalCntFile, stepsDef.Count.ToString());
 
+            string stepsFolder = FolderHelper.GetOutputFolder() + "Steps\\";
+            if (!Directory.Exists(stepsFolder))
+            {
+                Directory.CreateDirectory(stepsFolder);
+            }
             for(int i = 0; i < stepsDef.Count; i++)
             {
                 var stepDef = stepsDef[i];
-                string curStepFile = FolderHelper.GetOutputFolder() + string.Format("Steps\\{0}.txt",i+1);
+
+                string curStepFile = string.Format("{0}\\{1}.txt", stepsFolder,i + 1);
                 File.WriteAllLines(curStepFile, GenerateScriptsThisStep(stepDef, i + 1));
             }
         }
@@ -163,11 +204,8 @@ namespace SaintX.StageControls
         {
             List<string> scripts = new List<string>();
             int smpCnt = GlobalVars.Instance.SampleCount;
-            double volume = double.Parse(stepDef.Volume);
-            if (volume == 0)
+            if (stepDef.Volume == "" || stepDef.Volume.Trim() == "0")
                 return new List<string>() { "Reserved"};
-            int tipCountLiha = int.Parse(ConfigurationManager.AppSettings["tipCount"]);
-            int aspConstrainTipCnt = GetConstrainTipCnt(stepDef.AspirateConstrain);
             
             // Source labware: Trough 100ml, labeled 'T2', use wells 1 - 8
             // Destination labware: 96 Well Microplate, labeled 'MTP96-2', use wells 1 - 96
@@ -176,10 +214,12 @@ namespace SaintX.StageControls
             // Pipetting direction 0 = left to right
             // No wells to be excluded
             //   R;T2;;Trough 100ml;1;8;MTP96-2;;96 Well Microplate;1;96;100;Water;2;5;0
-            string aspWellsUse = stepDef.AspirateConstrain.Replace('-',';');
             string liquidClass = stepDef.LiquidClass;
-            string dispenseWellsUse = IsFixedPostion(stepDef.DispenseConstrain) ? stepDef.DispenseConstrain.Replace('-',';') 
-                : string.Format("1;{0}",GlobalVars.Instance.SampleCount);
+            string adaptiveWell = string.Format("1;{0}",GlobalVars.Instance.SampleCount);
+            string aspWellsUse = IsFixedPostion(stepDef.AspirateConstrain) ? stepDef.AspirateConstrain.Replace('-',';') 
+                : adaptiveWell;
+            string dispenseWellsUse = IsFixedPostion(stepDef.DispenseConstrain) ? stepDef.DispenseConstrain.Replace('-',';')
+                : adaptiveWell;
             scripts.Add(string.Format("C;{0}", stepDef.Description));
             string reagentCommand = string.Format("R;{0};;;{1};{2};;;{3};{4};{5};{6};5;0",
                 stepDef.SourceLabware,
@@ -190,37 +230,6 @@ namespace SaintX.StageControls
                 stepDef.LiquidClass,stepDef.RepeatTimes);
             scripts.Add(reagentCommand);
             return scripts;
-        }
-
-        private List<int> GetWellIDs(int firstWellID, int cnt, string wellConstrain)
-        {
-            List<int> wellIDs = new List<int>();
-            int maxAllowedWellCnt = 96;
-            if (IsFixedPostion(wellConstrain))
-            {
-                string[] strs = wellConstrain.Split('-');
-                int start = int.Parse(strs[0]);
-                int end = int.Parse(strs[1]);
-                maxAllowedWellCnt = end - start + 1;
-            }
-            for(int i = 0; i< cnt; i++)
-            {
-                int tmpID = firstWellID + i;
-                while (tmpID > maxAllowedWellCnt)
-                    tmpID -= maxAllowedWellCnt;
-                wellIDs.Add(tmpID);
-            }
-            return wellIDs;
-        }
-
-
-
-        private int GetConstrainTipCnt(string tipConstrain)
-        {
-            string[] strs = tipConstrain.Split('-');
-            int start = int.Parse(strs[0]);
-            int end = int.Parse(strs[1]);
-            return end - start + 1;
         }
 
         private bool IsFixedPostion(string pipettingPosition )
@@ -234,9 +243,28 @@ namespace SaintX.StageControls
             txtInfo.Foreground = new SolidColorBrush(color);
         }
 
-        private bool CheckLabwares(List<StepDefinition> list, string errMsg)
+        private bool CheckLabwares(List<StepDefinition> stepsDef, string errMsg)
         {
-            throw new NotImplementedException();
+#if DEBUG
+            return true;
+#else
+            var labels = EVOScriptReader.LabwareInfos.Keys.ToList();
+            foreach(var thisStepDef in stepsDef)
+            {
+
+                string[] srcAndDst = new string[] { thisStepDef.SourceLabware, thisStepDef.DestLabware };
+
+                foreach(string labwareLabelShouldExist in srcAndDst)
+                {
+                    if (!labels.Contains(labwareLabelShouldExist))
+                    {
+                        errMsg = string.Format("无法在Script中找到名为：{0}的器件。", thisStepDef.SourceLabware);
+                        return false;
+                    }
+                }
+            }
+            return true;
+#endif
         }
 
        
