@@ -120,9 +120,28 @@ namespace SaintX.StageControls
             // Might be a bit lengthy operation
             this.Cursor = System.Windows.Input.Cursors.Wait;
 
-            // Clear all the barcode assignment of samples
+            // Assays need to assign barcode
+            PanelViewModel root_PVM = ((ObservableCollection<PanelViewModel>)tree.ItemsSource)[0];
+            List<PanelViewModel> checked_PVMs = root_PVM.Children.FindAll(pvm => pvm.IsChecked.Value);
+            List<string> checked_assays = new List<string>();
+            foreach (var pvm in checked_PVMs)
+                checked_assays.Add(pvm.Name);
+
+            if (checked_assays.Count == 0)
+            {
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
+                return;
+            }
+
+            // Clear all the barcode of samples that need to be reassigned and collect the already used barcode
+            List<string> used_barcodes = new List<string>();
             foreach (SampleInfo si in GlobalVars.Instance.SampleInfos.SampleInfoList)
-                si.Barcode = string.Empty;
+            {
+                if (checked_assays.Contains(si.ColorfulAssay.Name))
+                    si.Barcode = string.Empty;
+                else
+                    used_barcodes.Add(si.Barcode);
+            }
             Helper.UpdateDataGridView(dataGridView, Stage.BarcodeDef);
 
             int startBarCodeNum = 0;
@@ -141,19 +160,6 @@ namespace SaintX.StageControls
                 endBarCodeNum = int.Parse(txtEndBarcode.Text);
             }
 
-            // Assays need to assign barcode
-            PanelViewModel root_PVM = ((ObservableCollection<PanelViewModel>)tree.ItemsSource)[0];
-            List<PanelViewModel> checked_PVMs = root_PVM.Children.FindAll(pvm => pvm.IsChecked.Value);
-            List<string> checked_assays = new List<string>();
-            foreach (var pvm in checked_PVMs)
-                checked_assays.Add(pvm.Name);
-
-            if (checked_assays.Count == 0)
-            {
-                this.Cursor = System.Windows.Input.Cursors.Arrow;
-                return;
-            }
-                
             // Assign barcode to samples
             int barCode = startBarCodeNum;
             int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
@@ -172,8 +178,17 @@ namespace SaintX.StageControls
                             {
                                 if(checked_assays.Contains(sampleInfo.ColorfulAssay.Name))
                                 {
-                                    sampleInfo.Barcode = barCode++.ToString();
-                                    ++sampleAssignedBarcodeCount;
+                                    if(used_barcodes.Contains(barCode.ToString()))
+                                    {
+                                        SetInfo(string.Format("条码[{0}]已经被分配给其他样品，请选择其他条码。", barCode), Colors.Red);
+                                        isDone = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        sampleInfo.Barcode = barCode++.ToString();
+                                        ++sampleAssignedBarcodeCount;
+                                    }
                                 }
                             }
                             else
