@@ -12,7 +12,7 @@ namespace SaintX.Data
 
         public GlobalVars()
         {
-            SampleInfos = new SampleInfos();
+            SampleLayoutInfos = new SampleLayoutInfos();
         }
         
         static public GlobalVars Instance
@@ -39,7 +39,7 @@ namespace SaintX.Data
             }
         }
 
-        public SampleInfos SampleInfos { get; set; }
+        public SampleLayoutInfos SampleLayoutInfos { get; set; }
 
     }
     

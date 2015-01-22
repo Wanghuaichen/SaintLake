@@ -17,11 +17,11 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class BarcodeDefinition : BaseUserControl
     {
-        SampleInfos _sampleInfos = null;
+        SampleLayoutInfos _sampleInfos = null;
         ObservableCollection<ColorfulAssay> _assays;
         PanelViewModel panelVM;
 
-        public SampleInfos SampleInfos
+        public SampleLayoutInfos SampleInfos
         {
             get { return this._sampleInfos; }
         }
@@ -30,7 +30,7 @@ namespace SaintX.StageControls
         {
             InitializeComponent();
             _assays = SettingsManager.Instance.Assays;
-            _sampleInfos = GlobalVars.Instance.SampleInfos;
+            _sampleInfos = GlobalVars.Instance.SampleLayoutInfos;
             this.Loaded += BarcodeDefinition_Loaded;
             dataGridView.CellPainting += dataGridView_CellPainting;
             this.DataContext = this;
@@ -118,8 +118,6 @@ namespace SaintX.StageControls
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
             // Might be a bit lengthy operation
-            this.Cursor = System.Windows.Input.Cursors.Wait;
-
             // Assays need to assign barcode
             PanelViewModel root_PVM = ((ObservableCollection<PanelViewModel>)tree.ItemsSource)[0];
             List<PanelViewModel> checked_PVMs = root_PVM.Children.FindAll(pvm => pvm.IsChecked.Value);
@@ -133,85 +131,61 @@ namespace SaintX.StageControls
                 return;
             }
 
-            // Clear all the barcode of samples that need to be reassigned and collect the already used barcode
-            List<string> used_barcodes = new List<string>();
-            foreach (SampleInfo si in GlobalVars.Instance.SampleInfos.SampleInfoList)
-            {
-                if (checked_assays.Contains(si.ColorfulAssay.Name))
-                    si.Barcode = string.Empty;
-                else
-                    used_barcodes.Add(si.Barcode);
-            }
-            Helper.UpdateDataGridView(dataGridView, Stage.BarcodeDef);
+            int startCol = dataGridView.SelectedCells[0].ColumnIndex;
+            int startRow = dataGridView.SelectedCells[0].RowIndex;
+            int startSampleID = GetID(new CellPosition(startCol, startRow));
+            GlobalVars.Instance.SampleLayoutInfos.Sort();
 
-            int startBarCodeNum = 0;
-            int endBarCodeNum = 0;
 
-            // The bar code is assumed to be an integer
-            if(rdbStartCount.IsChecked.Value)
+            int startBarcodeNum = 0;
+            int endBarcodeNum = 0;
+            GetStartEndBarcode(ref startBarcodeNum, ref endBarcodeNum);
+            int totalBarcodeCnt = endBarcodeNum - startBarcodeNum + 1;
+            int usedBarcodeCnt = 0;
+            int curBarcodeNum = startBarcodeNum;
+            foreach(KeyValuePair<CellPosition,SampleInfo> pair in GlobalVars.Instance.SampleLayoutInfos)
             {
-                startBarCodeNum = int.Parse(txtStartBarcodeApproach1.Text);
-                int barCodeCount = int.Parse(txtCount.Text);
-                endBarCodeNum = startBarCodeNum + barCodeCount - 1;
-            }
-            else
-            {
-                startBarCodeNum = int.Parse(txtStartBarcodeApproach2.Text);
-                endBarCodeNum = int.Parse(txtEndBarcode.Text);
-            }
-
-            // Assign barcode to samples
-            int barCode = startBarCodeNum;
-            int sampleCount = GlobalVars.Instance.SampleInfos.SampleCount;
-            int sampleAssignedBarcodeCount = 1;
-            bool isDone = false;
-            for (int col = 0; col < 6; ++col)
-            {
-                for (int row = 0; row < 16; ++row)
-                {
-                    if (sampleAssignedBarcodeCount <= sampleCount)
-                    {
-                        SampleInfo sampleInfo = GlobalVars.Instance.SampleInfos[row, col];
-                        if (sampleInfo != null)
-                        {
-                            if (barCode <= endBarCodeNum)
-                            {
-                                if(checked_assays.Contains(sampleInfo.ColorfulAssay.Name))
-                                {
-                                    if(used_barcodes.Contains(barCode.ToString()))
-                                    {
-                                        SetInfo(string.Format("条码[{0}]已经被分配给其他样品，请选择其他条码。", barCode), Colors.Red);
-                                        isDone = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        sampleInfo.Barcode = barCode++.ToString();
-                                        ++sampleAssignedBarcodeCount;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // All avaliable barcodes have been used
-                                isDone = true;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isDone = true;
-                        break;   // All samples have been assigned barcode
-                    }
-                }
-
-                if (isDone)
+                if (usedBarcodeCnt > totalBarcodeCnt)
                     break;
+                int tempID = GetID(pair.Key);
+                if (tempID < startSampleID)
+                    continue;
+                if (!checked_assays.Contains(pair.Value.ColorfulAssay.Name))
+                    continue;
+                pair.Value.Barcode = curBarcodeNum.ToString();
+                curBarcodeNum++;
+                usedBarcodeCnt++;
             }
 
             Helper.UpdateDataGridView(dataGridView,CurStage);
-            this.Cursor = System.Windows.Input.Cursors.Arrow;
+           
+        }
+
+        private void GetStartEndBarcode(ref int startBarcodeNum, ref int endBarcodeNum)
+        {
+            // The bar code is assumed to be an integer
+            if (rdbStartCount.IsChecked.Value)
+            {
+                startBarcodeNum = int.Parse(txtStartBarcodeApproach1.Text);
+                int barCodeCount = int.Parse(txtCount.Text);
+                endBarcodeNum = startBarcodeNum + barCodeCount - 1;
+            }
+            else
+            {
+                startBarcodeNum = int.Parse(txtStartBarcodeApproach2.Text);
+                endBarcodeNum = int.Parse(txtEndBarcode.Text);
+            }
+
+        }
+
+        private bool HasDuplicatedBarcode()
+        {
+            return false;
+        }
+
+        private int GetID(CellPosition cellPosition)
+        {
+            return cellPosition.colIndex * 16 + cellPosition.rowIndex + 1;
         }
 
         private void SetInfo(string s, Color color)

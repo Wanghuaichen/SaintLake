@@ -48,7 +48,7 @@ namespace SaintX.StageControls
             #endregion
 
 
-            if (GlobalVars.Instance.SampleInfos.AlreadyHasInfo())
+            if (GlobalVars.Instance.SampleLayoutInfos.AlreadyHasInfo())
             {
                 var result = System.Windows.Forms.MessageBox.Show
                     ("已经设置过一些样品,您确定要继续？\r\n点击‘Yes’将会清空设置信息！", "警告",
@@ -57,7 +57,7 @@ namespace SaintX.StageControls
                     return;
             }
             GlobalVars.Instance.SampleCount = smpCnt;
-            GlobalVars.Instance.SampleInfos.Clear();
+            GlobalVars.Instance.SampleLayoutInfos.Clear();
             lstAssays.SelectedIndex = -1;
             Helper.InitDataGridView(dataGridView, CurStage);
         }
@@ -92,7 +92,7 @@ namespace SaintX.StageControls
             {
                 for (int r = 0; r < rowCounts[c]; r++)
                 {
-                    if (GlobalVars.Instance.SampleInfos.Contains(r,c))
+                    if (GlobalVars.Instance.SampleLayoutInfos.Contains(r,c))
                     {
                         count++;
                     }
@@ -150,7 +150,7 @@ namespace SaintX.StageControls
                 cell.Style.BackColor = Helper.Convert2SystemDrawingColor(color);
                 cell.Value = assayName;
                 CellPosition curCellPos = new CellPosition(cell.ColumnIndex, cell.RowIndex);
-                GlobalVars.Instance.SampleInfos[curCellPos] = new SampleInfo(_assays[lstAssays.SelectedIndex], "");
+                GlobalVars.Instance.SampleLayoutInfos[curCellPos] = new SampleInfo(_assays[lstAssays.SelectedIndex], "");
             }
         }
 

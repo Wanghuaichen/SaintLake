@@ -10,7 +10,7 @@ namespace ROIReader
 {
     class Program
     {
-        static string version = "0.01";
+        static string version = "0.02";
         static void Main(string[] args)
         {
             Console.WriteLine(version);
@@ -36,11 +36,12 @@ namespace ROIReader
                 int wellCntInBatch = int.Parse(ConfigurationManager.AppSettings["wellsPerTime"]);
                 List<double> vals = ascFile.GetBatch(batchNum, wellCntInBatch);
                 Helper.WriteValue(vals.Select(x => x.ToString()).ToList());
-                bool bRemoveSmallest = bool.Parse(ConfigurationManager.AppSettings["removeSmallest"]);
+                double threshold = double.Parse(ConfigurationManager.AppSettings["threshold"]);
 
-                if (bRemoveSmallest)
-                    vals.Remove(vals.Min());
-                double avg = vals.Average();
+                vals = vals.Where(x => x > threshold).ToList();
+                double avg = 0;
+                if(vals.Count > 0)
+                    avg = vals.Average();
                 Helper.WriteAvg(Math.Round(avg,4));
             }
             catch(Exception ex)
@@ -62,9 +63,9 @@ namespace ROIReader
             List<string> strs = new List<string>();
             strs = File.ReadAllLines(file).ToList();
             strs = strs.Where(x => x != "").ToList();
-            if(strs.Count != 9)
+            if(strs.Count < 9)
             {
-                throw new Exception("lines in the file != 9");
+                throw new Exception("lines in the file must be bigger than 9");
             }
             strs.RemoveAt(0);
             for(int row = 0; row < 8; row++)

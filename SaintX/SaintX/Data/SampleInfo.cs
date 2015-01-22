@@ -9,43 +9,50 @@ using System.Text;
 
 namespace SaintX.Data
 {
-    public class SampleInfos:IEnumerable, INotifyPropertyChanged
+    public class SampleLayoutInfos:IEnumerable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        Dictionary<CellPosition, SampleInfo> allSampleInfos = new Dictionary<CellPosition, SampleInfo>();
+        Dictionary<CellPosition, SampleInfo> allSampleLayoutInfos = new Dictionary<CellPosition, SampleInfo>();
 
         public void SetLine(int lineIndex, List<SampleInfo> cellInfosThisLine, int startIndex = 0)
         {
             for (int i = 0; i < cellInfosThisLine.Count; i++)
             {
                 CellPosition cellPos = new CellPosition(lineIndex, i + startIndex);
-                allSampleInfos[cellPos] = cellInfosThisLine[i];
+                allSampleLayoutInfos[cellPos] = cellInfosThisLine[i];
             }
         }
+
+        public void Sort()
+        {
+            allSampleLayoutInfos = allSampleLayoutInfos.OrderBy(x => x.Key.colIndex * 16 + x.Key.rowIndex).ToDictionary(x => x.Key, x => x.Value);
+        }
+
+
         public int SampleCount
         {
             get
             {
-                return this.allSampleInfos.Count;
+                return this.allSampleLayoutInfos.Count;
             }
         }
 
         public ObservableCollection<SampleInfo> SampleInfoList
         {
-            get { return new ObservableCollection<SampleInfo>(this.allSampleInfos.Values); }
+            get { return new ObservableCollection<SampleInfo>(this.allSampleLayoutInfos.Values); }
         }
         public bool Contains(int r, int c)
         {
-            return allSampleInfos.ContainsKey(new CellPosition(c, r));
+            return allSampleLayoutInfos.ContainsKey(new CellPosition(c, r));
         }
         public List<SampleInfo> GetLine(int lineIndex)
         {
-            return allSampleInfos.Where(x => x.Key.colIndex == lineIndex).Select(x => x.Value).ToList();
+            return allSampleLayoutInfos.Where(x => x.Key.colIndex == lineIndex).Select(x => x.Value).ToList();
         }
         public void Clear()
         {
-            allSampleInfos.Clear();
+            allSampleLayoutInfos.Clear();
         }
         public SampleInfo this[int r, int c]
         {
@@ -53,7 +60,7 @@ namespace SaintX.Data
             {
                 try
                 {
-                    return allSampleInfos[new CellPosition(c, r)];
+                    return allSampleLayoutInfos[new CellPosition(c, r)];
                 }
                 catch(Exception)
                 {
@@ -63,7 +70,7 @@ namespace SaintX.Data
             }
             set
             {
-                allSampleInfos[new CellPosition(c, r)] = value;
+                allSampleLayoutInfos[new CellPosition(c, r)] = value;
                 this.PropertyChanged(this, new PropertyChangedEventArgs("SampleInfoList"));
             }
         }
@@ -72,18 +79,18 @@ namespace SaintX.Data
         {
             get
             {
-                return allSampleInfos[cellPos];
+                return allSampleLayoutInfos[cellPos];
             }
             set
             {
-                allSampleInfos[cellPos] = value;
+                allSampleLayoutInfos[cellPos] = value;
                 this.PropertyChanged(this, new PropertyChangedEventArgs("SampleInfoList"));
             }
         }
 
         public bool AlreadyHasInfo()
         {
-            var list = allSampleInfos.Values.ToList();
+            var list = allSampleLayoutInfos.Values.ToList();
             return list.Exists(x => IsMeanfulAssay(x.ColorfulAssay.Name));
         }
 
@@ -94,7 +101,7 @@ namespace SaintX.Data
 
         public IEnumerator GetEnumerator()
         {
-            foreach (var pair in allSampleInfos)
+            foreach (var pair in allSampleLayoutInfos)
                 yield return pair;
         }
     }
