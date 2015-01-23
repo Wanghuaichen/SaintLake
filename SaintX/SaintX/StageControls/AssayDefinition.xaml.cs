@@ -35,6 +35,7 @@ namespace SaintX.StageControls
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {
             int maxSampleCount = SettingsManager.Instance.PhysicalSettings.MaxSampleCount;
+            lstAssays.SelectedIndex = -1;
             #region check sampleCnt valid
             int smpCnt;
             ResultIsOk = int.TryParse(txtSampleCount.Text, out smpCnt);
@@ -60,6 +61,7 @@ namespace SaintX.StageControls
             GlobalVars.Instance.SampleLayoutInfos.Clear();
             lstAssays.SelectedIndex = -1;
             Helper.InitDataGridView(dataGridView, CurStage);
+            Helper.UpdateDataGridView(dataGridView, CurStage);
         }
 
         void SetInfo(string s, Color color)
