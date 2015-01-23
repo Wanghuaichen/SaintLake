@@ -20,6 +20,7 @@ namespace SaintX.StageControls
         SampleLayoutInfos _sampleInfos = null;
         ObservableCollection<ColorfulAssay> _assays;
         PanelViewModel panelVM;
+        
 
         public SampleLayoutInfos SampleInfos
         {
@@ -115,6 +116,7 @@ namespace SaintX.StageControls
         }
         #endregion
 
+        #region barcode setting
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
             // Might be a bit lengthy operation
@@ -137,18 +139,16 @@ namespace SaintX.StageControls
             GlobalVars.Instance.SampleLayoutInfos.Sort();
 
 
-            int startBarcodeNum = 0;
-            int endBarcodeNum = 0;
-            GetStartEndBarcode(ref startBarcodeNum, ref endBarcodeNum);
-            int totalBarcodeCnt = endBarcodeNum - startBarcodeNum + 1;
+            int totalBarcodeCnt = 0;
             int usedBarcodeCnt = 0;
-            int curBarcodeNum = startBarcodeNum;
+            int curBarcodeNum = 0;
+            GetBarcodeSetting(ref totalBarcodeCnt, ref curBarcodeNum);
+            
             foreach(KeyValuePair<CellPosition,SampleInfo> pair in GlobalVars.Instance.SampleLayoutInfos)
             {
-                if (usedBarcodeCnt > totalBarcodeCnt)
+                if (usedBarcodeCnt == totalBarcodeCnt)
                     break;
-                int tempID = GetID(pair.Key);
-                if (tempID < startSampleID)
+                if (GetID(pair.Key) < startSampleID)
                     continue;
                 if (!checked_assays.Contains(pair.Value.ColorfulAssay.Name))
                     continue;
@@ -161,9 +161,10 @@ namespace SaintX.StageControls
            
         }
 
-        private void GetStartEndBarcode(ref int startBarcodeNum, ref int endBarcodeNum)
+        private void GetBarcodeSetting(ref int totalBarcodeCnt, ref int curBarcodeNum)
         {
-            // The bar code is assumed to be an integer
+            int startBarcodeNum = 0;
+            int endBarcodeNum = 0;
             if (rdbStartCount.IsChecked.Value)
             {
                 startBarcodeNum = int.Parse(txtStartBarcodeApproach1.Text);
@@ -175,9 +176,18 @@ namespace SaintX.StageControls
                 startBarcodeNum = int.Parse(txtStartBarcodeApproach2.Text);
                 endBarcodeNum = int.Parse(txtEndBarcode.Text);
             }
+            totalBarcodeCnt = startBarcodeNum - endBarcodeNum + 1;
+            curBarcodeNum = startBarcodeNum;
 
+            //write log
+            var selectedCell = dataGridView.SelectedCells[0];
+            CellPosition curCell = new CellPosition(selectedCell.RowIndex, selectedCell.ColumnIndex);
+            log.InfoFormat("Start barcode num = {0}, count = {1}, position = {2}", 
+                startBarcodeNum, 
+                totalBarcodeCnt, 
+                Helper.GetCellPositionDescription(curCell));
         }
-
+    
         private bool HasDuplicatedBarcode()
         {
             return false;
@@ -187,6 +197,8 @@ namespace SaintX.StageControls
         {
             return cellPosition.colIndex * 16 + cellPosition.rowIndex + 1;
         }
+
+        #endregion
 
         private void SetInfo(string s, Color color)
         {

@@ -96,7 +96,7 @@ namespace SaintX.Data
 
         private bool IsMeanfulAssay(string s)
         {
-            return s != "" && s != Resources.EmptyAssay;
+            return s != "" && s != stringRes.EmptyAssay;
         }
 
         public IEnumerator GetEnumerator()

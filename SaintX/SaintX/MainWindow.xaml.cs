@@ -23,9 +23,11 @@ namespace SaintX
     public partial class MainWindow : BaseHost
     {
         StepViewModel stepViewModel = new StepViewModel();
+        
         public MainWindow():base()
         {
             InitializeComponent();
+            log.Info("Main window created.");
             this.Loaded += MainWindow_Loaded;
             this.Closed += MainWindow_Closed;
             lstSteps.DataContext = stepViewModel.StepsModel;
@@ -36,8 +38,8 @@ namespace SaintX
         #region commands
         private void CommandHelp_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //Help help = new Help();
-            //help.ShowDialog();
+            HelpForm helpForm = new HelpForm();
+            helpForm.ShowDialog();
         }
 
         private void CommandHelp_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -62,7 +64,10 @@ namespace SaintX
                     e.Handled = true;
                 }
                 else
+                {
                     NavigateTo(stage2Go);
+                    
+                }
             }
         }
 
@@ -70,6 +75,7 @@ namespace SaintX
         void MainWindow_Closed(object sender, EventArgs e)
         {
             Pipeserver.Close();
+            log.Info("Main window closed.");
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)

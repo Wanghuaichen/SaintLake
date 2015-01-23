@@ -19,9 +19,7 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class StepMonitor : BaseUserControl
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         TimeEstimation timeEstimation = null;
-
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
 
 

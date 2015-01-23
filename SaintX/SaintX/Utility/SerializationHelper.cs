@@ -21,7 +21,7 @@ namespace SaintX.Utility
         {
             if (string.IsNullOrEmpty(xmlFileName))
             {
-                throw new ArgumentException(Resources.FileNameArgumentError, "xmlFileName");
+                throw new ArgumentException(stringRes.FileNameArgumentError, "xmlFileName");
             }
 
          
@@ -54,12 +54,12 @@ namespace SaintX.Utility
         {
             if (string.IsNullOrEmpty(xmlFileName))
             {
-                throw new ArgumentException(Resources.FileNameArgumentError, "xmlFileName");
+                throw new ArgumentException(stringRes.FileNameArgumentError, "xmlFileName");
             }
 
             if (!File.Exists(xmlFileName))
             {
-                string errorMessage = string.Format(Resources.FileNotExistsError, xmlFileName);
+                string errorMessage = string.Format(stringRes.FileNotExistsError, xmlFileName);
                 throw new ArgumentException(errorMessage, "xmlFileName");
             }
 

@@ -58,6 +58,7 @@ namespace SaintX.Navigation
         protected Stage farthestStage = Stage.AssayDef;
         private ListBox lstSteps = null;
         protected List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
+        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public BaseHost()
         {
             AddSteps();
@@ -90,6 +91,7 @@ namespace SaintX.Navigation
 
         protected void NavigateTo(Stage stage)
         {
+            log.InfoFormat("Navigate to {0}", stage);
             if (onStageChanged != null)
                 onStageChanged(this, new Navigate2Args(stage));
             ListBox lstBox = GetListBox();
@@ -129,6 +131,7 @@ namespace SaintX.Navigation
     {
         private Stage _stage;
         bool resultIsOk = false;
+        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public BaseUserControl(Stage stage, BaseHost host)
         {
             _stage = stage;
