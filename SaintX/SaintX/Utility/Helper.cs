@@ -16,11 +16,7 @@ namespace SaintX.Utility
         {
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
-        static public string GetCellPositionDescription(CellPosition cellPosition)
-        {
-            int gridStartPos = SettingsManager.Instance.PhysicalSettings.StartGrid;
-            return string.Format("条{0}-行{1}", gridStartPos + cellPosition.colIndex, cellPosition.rowIndex + 1);
-        }
+      
         static public void InitDataGridView(DataGridView dataGridView, Stage stage)
         {
             //dataGridView.Columns.Add(new System.Windows.Forms.DataGridViewColumn());

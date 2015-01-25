@@ -71,15 +71,7 @@ namespace SaintX.StageControls
                 var stepDefEx = new StepDefinitionWithProgressInfo(stepDef);
                 stepsDefWithProgressInfo.Add(stepDefEx);
             }
-            
-            #region set "--:--:--" for times
-            string defaultTime = "--:--:--";
-            txtTimeUsedThisStep.Text = defaultTime;
-            txtTimeUsed.Text = defaultTime;
-            txtRemainingTime.Text = defaultTime;
-            txtRemianingTimeThisStep.Text = defaultTime;
-            #endregion
-
+            timeInfo.DataContext = timeEstimation;
             lvProtocol.ItemsSource = stepsDefWithProgressInfo;
         }
 
@@ -104,7 +96,7 @@ namespace SaintX.StageControls
             }
             string[] strs = sCommand.Split(';');
             log.Info(sCommand);
-            if (strs.Length < 2)
+            if (strs.Length < 3)
             {
                 log.Error("Incorrect message");
                 return;
@@ -156,7 +148,7 @@ namespace SaintX.StageControls
         {
             string errMsg = "";
             
-            bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, errMsg);
+            bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, ref errMsg);
             if(!bAllExist)
             {
                 SetInfo(errMsg, Colors.Red);
@@ -164,7 +156,9 @@ namespace SaintX.StageControls
             }
             try
             {
-                GenerateScripts();
+                //GenerateScripts();
+                worklist worklist = new worklist();
+                worklist.GenerateScripts();
             }
             catch(Exception ex)
             {
@@ -174,86 +168,26 @@ namespace SaintX.StageControls
             
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
-            timeInfo.DataContext = timeEstimation;
-        }
-
-        private void GenerateScripts()
-        {
-            var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
-            List<string> scripts = new List<string>();
-            string totalCntFile = FolderHelper.GetOutputFolder() + "stepsCnt.txt";
-            File.WriteAllText(totalCntFile, stepsDef.Count.ToString());
-
-            string stepsFolder = FolderHelper.GetOutputFolder() + "Steps\\";
-            if (!Directory.Exists(stepsFolder))
-            {
-                Directory.CreateDirectory(stepsFolder);
-            }
-            for(int i = 0; i < stepsDef.Count; i++)
-            {
-                var stepDef = stepsDef[i];
-
-                string curStepFile = string.Format("{0}\\{1}.txt", stepsFolder,i + 1);
-                File.WriteAllLines(curStepFile, GenerateScriptsThisStep(stepDef, i + 1));
-            }
-        }
-
-        private List<string> GenerateScriptsThisStep(StepDefinition stepDef, int stepNo)
-        {
-            List<string> scripts = new List<string>();
-            int smpCnt = GlobalVars.Instance.SampleCount;
-            if (stepDef.Volume == "" || stepDef.Volume.Trim() == "0")
-                return new List<string>() { "Reserved"};
             
-            // Source labware: Trough 100ml, labeled 'T2', use wells 1 - 8
-            // Destination labware: 96 Well Microplate, labeled 'MTP96-2', use wells 1 - 96
-            // Liquid class 'Water'
-            // DiTi Reuse = 2 (use 2 times), Multi-dispense = max. 5
-            // Pipetting direction 0 = left to right
-            // No wells to be excluded
-            //   R;T2;;Trough 100ml;1;8;MTP96-2;;96 Well Microplate;1;96;100;Water;2;5;0
-            string liquidClass = stepDef.LiquidClass;
-            string adaptiveWell = string.Format("1;{0}",GlobalVars.Instance.SampleCount);
-            string aspWellsUse = IsFixedPostion(stepDef.AspirateConstrain) ? stepDef.AspirateConstrain.Replace('-',';') 
-                : adaptiveWell;
-            string dispenseWellsUse = IsFixedPostion(stepDef.DispenseConstrain) ? stepDef.DispenseConstrain.Replace('-',';')
-                : adaptiveWell;
-            scripts.Add(string.Format("C;{0}", stepDef.Description));
-            string reagentCommand = string.Format("R;{0};;;{1};{2};;;{3};{4};{5};{6};5;0",
-                stepDef.SourceLabware,
-                aspWellsUse,
-                stepDef.DestLabware,
-                dispenseWellsUse,
-                stepDef.Volume,
-                stepDef.LiquidClass,stepDef.RepeatTimes);
-            scripts.Add(reagentCommand);
-            return scripts;
         }
-
-        private bool IsFixedPostion(string pipettingPosition )
-        {
-            return pipettingPosition != "*";
-        }
-        
         private void SetInfo(string errMsg, Color color)
         {
             txtInfo.Text = errMsg;
             txtInfo.Foreground = new SolidColorBrush(color);
         }
 
-        private bool CheckLabwares(List<StepDefinition> stepsDef, string errMsg)
+        private bool CheckLabwares(List<StepDefinition> stepsDef, ref string errMsg)
         {
-#if DEBUG
-            return true;
-#else
             var labels = EVOScriptReader.LabwareInfos.Keys.ToList();
             foreach(var thisStepDef in stepsDef)
             {
+                if (thisStepDef.Volume == "0" || thisStepDef.Volume == "")
+                    continue;
 
                 string[] srcAndDst = new string[] { thisStepDef.SourceLabware, thisStepDef.DestLabware };
-
                 foreach(string labwareLabelShouldExist in srcAndDst)
                 {
+                    
                     if (!labels.Contains(labwareLabelShouldExist))
                     {
                         errMsg = string.Format("无法在Script中找到名为：{0}的器件。", thisStepDef.SourceLabware);
@@ -262,10 +196,25 @@ namespace SaintX.StageControls
                 }
             }
             return true;
-#endif
         }
+    }
 
-       
+    class PipettingInfo
+    {
+        public string srcLabware;
+        public int srcWellID;
+        public double volume;
+        public string dstLabware;
+        public int dstWellID;
+
+        public PipettingInfo(string srcLabware,int srcWellID, double volume, string dstLabware, int dstWellID)
+        {
+            this.srcLabware = srcLabware;
+            this.srcWellID = srcWellID;
+            this.volume = volume;
+            this.dstLabware = dstLabware;
+            this.dstWellID = dstWellID;
+        }
     }
 
     class ReagentShopplist

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using SaintX.Utility;
 
 namespace SaintX.Data
 {
@@ -30,7 +31,7 @@ namespace SaintX.Data
         }
 
 
-        public int SampleCount
+        public int Count
         {
             get
             {
@@ -54,6 +55,25 @@ namespace SaintX.Data
         {
             allSampleLayoutInfos.Clear();
         }
+
+        public SampleInfo this[int wellIndex]
+        {
+            get
+            {
+                try
+                {
+                    return allSampleLayoutInfos[new CellPosition(wellIndex)];
+                }
+                catch (Exception)
+                {
+                    // Catch all exceptions and return null
+                    return null;
+                }
+            }
+        }
+
+
+
         public SampleInfo this[int r, int c]
         {
             get
@@ -103,6 +123,24 @@ namespace SaintX.Data
         {
             foreach (var pair in allSampleLayoutInfos)
                 yield return pair;
+        }
+
+ 
+
+        public bool AllSet(ref string errMsg)
+        {
+            Sort();
+            int nCount = GlobalVars.Instance.SampleCount;
+            for(int i = 0; i<nCount; i++)
+            {
+                if(GlobalVars.Instance.SampleLayoutInfos[i] == null || GlobalVars.Instance.SampleLayoutInfos[i].Barcode == "")
+                {
+                    CellPosition cellPosition = new CellPosition(i);
+                    errMsg = string.Format("位于{0}处的样品未设置条码！", CellPosition.GetDescription(cellPosition));
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
@@ -155,6 +193,18 @@ namespace SaintX.Data
         {
             colIndex = ix;
             rowIndex = iy;
+        }
+
+        public CellPosition(int wellIndex)
+        {
+            colIndex = wellIndex / 16;
+            rowIndex = wellIndex - 16 * colIndex;
+        }
+
+        static public string GetDescription(CellPosition cellPosition)
+        {
+            int gridStartPos = SettingsManager.Instance.PhysicalSettings.StartGrid;
+            return string.Format("[条{0}行{1}]", gridStartPos + cellPosition.colIndex, cellPosition.rowIndex + 1);
         }
     }
 }

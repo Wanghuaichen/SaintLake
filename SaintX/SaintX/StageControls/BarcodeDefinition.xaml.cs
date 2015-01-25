@@ -61,8 +61,22 @@ namespace SaintX.StageControls
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
+            string errMsg = "";
+            bool allSet = GlobalVars.Instance.SampleLayoutInfos.AllSet(ref errMsg);
+            if (!allSet)
+            {
+                SetInfo(errMsg, Colors.Red);
+                return;
+            }
+
+            bool existDuplicated = CheckHasDuplicatedBarcode();
+            if (existDuplicated)
+                return;
+
             NotifyFinished();
         }
+
+       
 
         #region datagridview
         void dataGridView_CellPainting(object sender, System.Windows.Forms.DataGridViewCellPaintingEventArgs e)
@@ -156,7 +170,7 @@ namespace SaintX.StageControls
                 curBarcodeNum++;
                 usedBarcodeCnt++;
             }
-
+            CheckHasDuplicatedBarcode();
             Helper.UpdateDataGridView(dataGridView,CurStage);
            
         }
@@ -176,7 +190,7 @@ namespace SaintX.StageControls
                 startBarcodeNum = int.Parse(txtStartBarcodeApproach2.Text);
                 endBarcodeNum = int.Parse(txtEndBarcode.Text);
             }
-            totalBarcodeCnt = startBarcodeNum - endBarcodeNum + 1;
+            totalBarcodeCnt = endBarcodeNum - startBarcodeNum +1;
             curBarcodeNum = startBarcodeNum;
 
             //write log
@@ -185,12 +199,38 @@ namespace SaintX.StageControls
             log.InfoFormat("Start barcode num = {0}, count = {1}, position = {2}", 
                 startBarcodeNum, 
                 totalBarcodeCnt, 
-                Helper.GetCellPositionDescription(curCell));
+                 CellPosition.GetDescription(curCell));
         }
     
-        private bool HasDuplicatedBarcode()
+        private bool CheckHasDuplicatedBarcode()
         {
+            for(int i = 0; i< GlobalVars.Instance.SampleLayoutInfos.Count; i++)
+            {
+                string curBarcode = GlobalVars.Instance.SampleLayoutInfos[i].Barcode;
+                if (curBarcode == "")
+                    continue;
+                for(int j = 0; j< i; j++ )
+                {
+                    if(GlobalVars.Instance.SampleLayoutInfos[j].Barcode == curBarcode)
+                    {
+                        ReportDuplicatedError(i,j,curBarcode);
+                        return true;
+                    }
+                }
+            }
             return false;
+        }
+
+        private void ReportDuplicatedError(int firstWellIndex, int secondWellIndex,string barcode)
+        {
+            int firstCellCol = firstWellIndex / 16;
+            int firstCellRow = firstWellIndex - firstCellCol * 16;
+            int secondCellCol = secondWellIndex / 16;
+            int secondCellRow = secondWellIndex - secondCellCol * 16;
+            string firstWellDesc =  CellPosition.GetDescription(new CellPosition(firstCellCol, firstCellRow));
+            string secondWellDesc =  CellPosition.GetDescription(new CellPosition(secondCellCol, secondCellRow));
+            string errMsg = string.Format("位于{0}和{1}两处的条码一样，都为:{2}，请重新设置！",firstWellDesc,secondWellDesc,barcode);
+            SetInfo(errMsg, Colors.Red);
         }
 
         private int GetID(CellPosition cellPosition)
@@ -253,9 +293,9 @@ namespace SaintX.StageControls
             }
             else
             {
-                if(endBarcode <= startBarcode)
+                if(endBarcode < startBarcode)
                 {
-                    SetInfo("结束条码的数值必须大于起始条码的数值", Colors.Red);
+                    SetInfo("结束条码的数值必须大于等于起始条码的数值", Colors.Red);
                     btnBarcodeOk.IsEnabled = false;
                 }
                 else

@@ -56,9 +56,9 @@ namespace SaintX.Data
 
         public void StartMajorStep(int majorStep)
         {
-            timer.Start();
             if(majorStep == 1)
             {
+                timer.Start();
                 _totalRemaining = TimeSpan.FromSeconds(totalMinorSteps * 60);
                 _currentStepRemaining = TimeSpan.FromSeconds(step_MinorStepCnt[1] * 60);
             }
