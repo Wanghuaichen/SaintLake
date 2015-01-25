@@ -58,7 +58,7 @@ namespace SaintX.Data
         DispensePosition = 9
     }
 
-    class StepDefinition
+    class StepDefinition : BindableBase
     {
         public string Description { get; set; }
         public string SourceLabware { get; set; }
@@ -97,8 +97,31 @@ namespace SaintX.Data
 
     class StepDefinitionWithProgressInfo : StepDefinition
     {
-        public bool IsWorking { get; set; }
-        public bool IsFinished { get; set; }
+        private bool _isWorking = false;
+        private bool _isFinished = false;
+
+        public bool IsWorking 
+        {
+            get
+            {
+                return _isWorking;
+            }
+            set
+            {
+                SetProperty(ref _isWorking, value);
+            }
+        }
+        public bool IsFinished 
+        {
+            get
+            {
+                return _isFinished;
+            }
+            set
+            {
+                SetProperty(ref _isFinished, value);
+            }
+        }
         public StepDefinitionWithProgressInfo(StepDefinition stepDef)
         {
             Description = stepDef.Description;
