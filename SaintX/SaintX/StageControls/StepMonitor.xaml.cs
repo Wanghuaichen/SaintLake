@@ -178,7 +178,17 @@ namespace SaintX.StageControls
 
         private bool CheckLabwares(List<StepDefinition> stepsDef, ref string errMsg)
         {
-            var labels = EVOScriptReader.LabwareInfos.Keys.ToList();
+            List<string> labels = null;
+            try
+            {
+                labels = EVOScriptReader.LabwareInfos.Keys.ToList();
+            }
+            catch(Exception ex)
+            {
+                errMsg = ex.Message;
+                return false;
+            }
+
             foreach(var thisStepDef in stepsDef)
             {
                 if (thisStepDef.Volume == "0" || thisStepDef.Volume == "")

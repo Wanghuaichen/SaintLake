@@ -118,8 +118,8 @@ namespace SaintX.StageControls
                 return false;
             }
             return true;
-
         }
+
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
