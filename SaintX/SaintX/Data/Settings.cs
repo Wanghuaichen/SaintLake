@@ -23,7 +23,8 @@ namespace SaintX.Data
         }
         static public Protocol  CreateFromCSVFile(string csvFile)
         {
-            int commaCnt = 9;
+            int commaCnt = 12;
+            char comma = ',';
             FileInfo fileInfo = new FileInfo(csvFile);
             string name = fileInfo.Name;
             string[] strLines = File.ReadAllLines(csvFile);
@@ -32,7 +33,28 @@ namespace SaintX.Data
             for (int i = 1; i < strLines.Length; i++ )
             {
                 string sLine = strLines[i];
-                if (sLine.Count(x => x == ',') != commaCnt)
+                string sPreAction = "";
+                string sPostAction = "";
+                if(sLine.Contains('"'))
+                {
+                    while (sLine.Contains(';'))
+                    {
+                        int qutationMarkPos = sLine.IndexOf('"');
+                        int commaCntBeforeQutationMark = sLine.Substring(0, qutationMarkPos).Count(x => x == comma);
+                        int firstEndPos = sLine.IndexOf(";\"");
+                        string sTemp = sLine.Substring(qutationMarkPos + 1, firstEndPos - qutationMarkPos);
+                        sLine = sLine.Re
+                        if (commaCntBeforeQutationMark == (int)StepDefCol.PreAction)
+                        {
+                            sPreAction = sTemp;
+                        }
+                        else
+                        {
+                            sPostAction = sTemp;
+                        }
+                    }
+                }
+                if (sLine.Count(x => x == comma) != commaCnt)
                 {
                     throw new Exception("CSV文件格式非法！");
                 }
@@ -55,10 +77,13 @@ namespace SaintX.Data
         ReuseTimes = 6,
         LiquidClass = 7,
         AspiratePosition = 8,
-        DispensePosition = 9
+        DispensePosition = 9,
+        PreAction = 10,
+        PostAction = 11,
+        DelaySeconds = 12
     }
 
-    class StepDefinition : BindableBase
+    class StepDefinition :BindableBase
     {
         public string Description { get; set; }
         public string SourceLabware { get; set; }
@@ -71,6 +96,9 @@ namespace SaintX.Data
         public string DispenseConstrain { get; set; }
         public string LiquidClass { get; set; }
         public int LineNumber { get; set; }
+        public string PreAction { get; set; }
+        public string PostAction { get; set; }
+        public string DelaySeconds { get; set; }
 
         public StepDefinition()
         {
@@ -92,6 +120,9 @@ namespace SaintX.Data
             ReuseTimes = lines[(int)StepDefCol.ReuseTimes];
             AspirateConstrain = lines[(int)StepDefCol.AspiratePosition];
             DispenseConstrain = lines[(int)StepDefCol.DispensePosition];
+            PreAction = lines[(int)StepDefCol.PreAction];
+            PostAction = lines[(int)StepDefCol.PostAction];
+            DelaySeconds = lines[(int)StepDefCol.DelaySeconds];
         }
     }
 
