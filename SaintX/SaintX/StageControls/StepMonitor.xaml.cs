@@ -178,6 +178,9 @@ namespace SaintX.StageControls
 
         private bool CheckLabwares(List<StepDefinition> stepsDef, ref string errMsg)
         {
+#if DEBUG
+            return true;
+#endif
             List<string> labels = null;
             try
             {

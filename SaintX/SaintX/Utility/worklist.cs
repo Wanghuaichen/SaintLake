@@ -38,15 +38,15 @@ namespace SaintX.Utility
                 {
                     strsEveryTimes.Add(GetNotifyString(true, stepDef.LineNumber, curTimes + 1));
                     strsEveryTimes.AddRange(strsOneTime);
+                    if (stepDef.DelaySeconds != string.Empty)
+                    {
+                        strsEveryTimes.AddRange(GetDelayStrings(stepDef.DelaySeconds));
+                    }
                     strsEveryTimes.Add(GetNotifyString(false,stepDef.LineNumber, curTimes + 1));
                 }
                 if (stepDef.PostAction != string.Empty)
                     strsEveryTimes.Add(stepDef.PostAction);
-
-                if(stepDef.DelaySeconds != string.Empty)
-                {
-                    strsEveryTimes.AddRange(GetDelayStrings(stepDef.DelaySeconds));
-                }
+              
                 File.WriteAllLines(curStepFile, strsEveryTimes);
             }
         }

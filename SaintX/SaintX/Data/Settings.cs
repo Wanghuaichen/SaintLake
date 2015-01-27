@@ -10,6 +10,7 @@ namespace SaintX.Data
 {
     class Protocol
     {
+        const char comma = ',';
         public string Name { get; set; }
         public List<StepDefinition> StepsDefinition { get; set; }
         public Protocol(string name, List<StepDefinition> definitions)
@@ -24,7 +25,7 @@ namespace SaintX.Data
         static public Protocol  CreateFromCSVFile(string csvFile)
         {
             int commaCnt = 12;
-            char comma = ',';
+            
             FileInfo fileInfo = new FileInfo(csvFile);
             string name = fileInfo.Name;
             string[] strLines = File.ReadAllLines(csvFile);
@@ -35,34 +36,52 @@ namespace SaintX.Data
                 string sLine = strLines[i];
                 string sPreAction = "";
                 string sPostAction = "";
-                if(sLine.Contains('"'))
-                {
-                    while (sLine.Contains(';'))
-                    {
-                        int qutationMarkPos = sLine.IndexOf('"');
-                        int commaCntBeforeQutationMark = sLine.Substring(0, qutationMarkPos).Count(x => x == comma);
-                        int firstEndPos = sLine.IndexOf(";\"");
-                        string sTemp = sLine.Substring(qutationMarkPos + 1, firstEndPos - qutationMarkPos);
-                        sLine = sLine.Re
-                        if (commaCntBeforeQutationMark == (int)StepDefCol.PreAction)
-                        {
-                            sPreAction = sTemp;
-                        }
-                        else
-                        {
-                            sPostAction = sTemp;
-                        }
-                    }
-                }
+                ExtractPrePostActionString(ref sLine, ref sPreAction, ref sPostAction);
                 if (sLine.Count(x => x == comma) != commaCnt)
                 {
                     throw new Exception("CSV文件格式非法！");
                 }
+
                 string[] lineContents = sLine.Split(',');
+                SetPrePostActionString(lineContents, sPreAction, sPostAction);
+               
                 StepDefinition stepDefinition = new StepDefinition(lineContents,i);
                 stepDefinitions.Add(stepDefinition);
             }
             return new Protocol(name, stepDefinitions);
+        }
+
+        private static void SetPrePostActionString(string[] lineContents, string sPreAction, string sPostAction)
+        {
+            if (sPreAction != "")
+                lineContents[(int)StepDefCol.PreAction] = sPreAction;
+
+            if (sPostAction != "")
+                lineContents[(int)StepDefCol.PostAction] = sPostAction;
+        }
+
+        private static void ExtractPrePostActionString(ref string sLine, ref string sPreAction, ref string sPostAction)
+        {
+            if (sLine.Contains('"'))
+            {
+                while (sLine.Contains(';'))
+                {
+                    int qutationMarkPos = sLine.IndexOf('"');
+                    int commaCntBeforeQutationMark = sLine.Substring(0, qutationMarkPos).Count(x => x == comma);
+                    int firstEndPos = sLine.IndexOf(";\"");
+                    string sTemp = sLine.Substring(qutationMarkPos + 1, firstEndPos - qutationMarkPos);
+                    sLine = sLine.Remove(qutationMarkPos, firstEndPos - qutationMarkPos + 2);
+                    if (commaCntBeforeQutationMark == (int)StepDefCol.PreAction)
+                    {
+                        sPreAction = sTemp.Trim('"');
+
+                    }
+                    else
+                    {
+                        sPostAction = sTemp.Trim('"');
+                    }
+                }
+            }
         }
     }
 
@@ -109,20 +128,21 @@ namespace SaintX.Data
         {
             LineNumber = no;
             Description = lines[(int)StepDefCol.Description];
-            SourceLabware = lines[(int)StepDefCol.SourceLabware];
-            Volume = lines[(int)StepDefCol.Volume];
             RepeatTimes = lines[(int)StepDefCol.RepeatTimes];
+            PreAction = lines[(int)StepDefCol.PreAction];
+            PostAction = lines[(int)StepDefCol.PostAction];
+            DelaySeconds = lines[(int)StepDefCol.DelaySeconds];
+            Volume = lines[(int)StepDefCol.Volume];
             if (Volume == "")
                 return;
             LiquidClass = lines[(int)StepDefCol.LiquidClass];
+            SourceLabware = lines[(int)StepDefCol.SourceLabware];
             DestLabware = lines[(int)StepDefCol.DestLabware];
             TipType = lines[(int)StepDefCol.TipType];
             ReuseTimes = lines[(int)StepDefCol.ReuseTimes];
             AspirateConstrain = lines[(int)StepDefCol.AspiratePosition];
             DispenseConstrain = lines[(int)StepDefCol.DispensePosition];
-            PreAction = lines[(int)StepDefCol.PreAction];
-            PostAction = lines[(int)StepDefCol.PostAction];
-            DelaySeconds = lines[(int)StepDefCol.DelaySeconds];
+         
         }
     }
 
