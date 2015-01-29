@@ -1,21 +1,10 @@
-﻿using Saint.TestSetting;
-using System;
-using System.Collections.Generic;
+﻿using Saint.Setting;
+using SaintX.Setting;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ConfigurationTool
 {
@@ -25,15 +14,24 @@ namespace ConfigurationTool
     public partial class MainWindow : Window
     {
         TestSetting testSetting = new TestSetting();
+        bool bLoaded = false;
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
             host.DataContext = testSetting;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            bLoaded = true;
+            UpdateSource();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             testSetting.Assays.Add(new ColorfulAssay("test", Colors.Green));
+            lstPanels.SelectedIndex = 0;
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
@@ -93,11 +91,27 @@ namespace ConfigurationTool
             return sDataFolder + (DNA ? "DNA.xml" : "RNA.xml");
         }
 
+        private string GetProtocolFile()
+        {
+            string sDataFolder = GetDataFolder();
+            bool DNA = (bool)rdbDNA.IsChecked;
+            return sDataFolder + (DNA ? "DNA.csv" : "RNA.csv");
+        }
+
         private void UpdateSource()
         {
+            if (!bLoaded)
+                return;
+            testSetting.Assays.Clear();
+            testSetting.ProtocolFileName = "";
             string sFile = GetTestSettingFile();
             if (File.Exists(sFile))
+            {
                 testSetting = SerializeHelper.Deserialize<TestSetting>(sFile);
+                host.DataContext = testSetting;
+                if (testSetting.Assays.Count > 0)
+                    lstPanels.SelectedIndex = 0;
+            }
         }
 
         private void rdbDNA_Checked(object sender, RoutedEventArgs e)
@@ -108,6 +122,39 @@ namespace ConfigurationTool
         private void rdbRNA_Checked(object sender, RoutedEventArgs e)
         {
             UpdateSource();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            string sProtocolFile = GetProtocolFile();
+            if(!File.Exists(sProtocolFile))
+            {
+                SetInfo(string.Format("位于{0}的文件不存在，请先定义。",sProtocolFile),Colors.Red);
+                return;
+            }
+
+            testSetting.ProtocolFileName = sProtocolFile;
+
+            if(testSetting.Assays.Count == 0)
+            {
+                SetInfo("未定义任何Assay！", Colors.Red);
+                return;
+            }
+            string sFile = GetTestSettingFile();
+            SerializeHelper.Serialize(sFile, testSetting);
+
+            SetInfo("", Colors.Black);
+        }
+
+        private void SetInfo(string text, Color color)
+        {
+            txtInfo.Text = text;
+            txtInfo.Foreground = new SolidColorBrush(color);
+        }
+
+        private void btnCreateProtocol_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

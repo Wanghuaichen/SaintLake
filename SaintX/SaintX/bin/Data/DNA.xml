@@ -2,15 +2,15 @@
 <TestSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Assays>
     <ColorfulAssay
-      Name="HBV">
+      Name="HBV2">
       <Color>
         <A>255</A>
-        <R>255</R>
-        <G>128</G>
+        <R>128</R>
+        <G>255</G>
         <B>0</B>
         <ScA>1</ScA>
-        <ScR>1</ScR>
-        <ScG>0.2158605</ScG>
+        <ScR>0.2158605</ScR>
+        <ScG>1</ScG>
         <ScB>0</ScB>
       </Color>
     </ColorfulAssay>

@@ -8,31 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Saint.TestSetting
+namespace Saint.Setting
 {
     [Serializable]
     public class TestSetting : BindableBase
     {
         private ObservableCollection<ColorfulAssay> assays = new ObservableCollection<ColorfulAssay>();
         private string protocolFileName;
-        private string settingName;
-
-        public string Name
-        {
-            get
-            {
-                return settingName;
-            }
-            set
-            {
-                SetProperty(ref settingName, value);
-            }
-        }
-
-        public override string ToString()
-        {
-            return settingName;
-        }
+       
 
         public ObservableCollection<ColorfulAssay> Assays
         {
