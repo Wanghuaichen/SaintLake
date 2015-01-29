@@ -1,4 +1,5 @@
-﻿using SaintX.Data;
+﻿using Saint.TestSetting;
+using SaintX.Data;
 using SaintX.Navigation;
 using SaintX.Utility;
 using System;
@@ -18,7 +19,7 @@ namespace SaintX.StageControls
     public partial class BarcodeDefinition : BaseUserControl
     {
         SampleLayoutInfos _sampleInfos = null;
-        ObservableCollection<ColorfulAssay> _assays;
+        List<ColorfulAssay> _assays;
         PanelViewModel panelVM;
         
 

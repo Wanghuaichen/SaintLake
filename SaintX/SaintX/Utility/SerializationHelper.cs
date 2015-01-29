@@ -24,24 +24,32 @@ namespace SaintX.Utility
                 throw new ArgumentException(stringRes.FileNameArgumentError, "xmlFileName");
             }
 
-         
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-            string sContent = "";
-            using (var ms = new MemoryStream())
+            try
             {
-                using (var xw = XmlWriter.Create(ms,
-                    new XmlWriterSettings()
-                    {
-                        Encoding = new UTF8Encoding(false),
-                        Indent = true,
-                        NewLineOnAttributes = true,
-                    }))
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+            
+                string sContent = "";
+                using (var ms = new MemoryStream())
                 {
-                    serializer.Serialize(xw, objectGraph);
-                    sContent = Encoding.UTF8.GetString(ms.ToArray());
+                    using (var xw = XmlWriter.Create(ms,
+                        new XmlWriterSettings()
+                        {
+                            Encoding = new UTF8Encoding(false),
+                            Indent = true,
+                            NewLineOnAttributes = true,
+                        }))
+                    {
+                        serializer.Serialize(xw, objectGraph);
+                        sContent = Encoding.UTF8.GetString(ms.ToArray());
+                    }
                 }
+                File.WriteAllText(xmlFileName, sContent);
             }
-            File.WriteAllText(xmlFileName, sContent);
+            catch(Exception ex)
+            {
+                throw new Exception("Failed to serialize the object : " + ex.Message);
+            }
+            
         }
 
         /// <summary>

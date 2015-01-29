@@ -39,9 +39,9 @@ namespace SaintX.Utility
             return GetExeParentFolder() + "Data\\";
         }
 
-        static public string GetAssaysXml()
+        static public string GetAssayGroupSettingXml()
         {
-            return GetDataFolder() + "assays.xml";
+            return GetDataFolder() + "assayGroupSetting.xml";
         }
 
         public static string GetImageFolder()

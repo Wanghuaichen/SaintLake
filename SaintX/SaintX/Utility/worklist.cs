@@ -32,6 +32,7 @@ namespace SaintX.Utility
                 string curStepFile = string.Format("{0}\\{1}.gwl", stepsFolder, i + 1);
                 List<string> strsOneTime = GenerateScriptsThisStep(stepDef, i + 1);
                 List<string> strsEveryTimes = new List<string>();
+                strsEveryTimes.Add(GetTipType(stepDef));
                 if(stepDef.PreAction != string.Empty)
                     strsEveryTimes.Add(stepDef.PreAction);
                 for (int curTimes = 0; curTimes < int.Parse(stepDef.RepeatTimes); curTimes++)
@@ -49,6 +50,13 @@ namespace SaintX.Utility
               
                 File.WriteAllLines(curStepFile, strsEveryTimes);
             }
+        }
+
+        private string GetTipType(StepDefinition stepDef)
+        {
+            if (stepDef.Volume == "")
+                return "C;0";
+            return string.Format("C;{0}", stepDef.TipType);
         }
 
         private List<string> GetDelayStrings(string sDelaySeconds)

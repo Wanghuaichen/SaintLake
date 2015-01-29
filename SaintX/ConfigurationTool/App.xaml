@@ -1,0 +1,140 @@
+﻿<Application x:Class="ConfigurationTool.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:ConfigurationTool"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <src:MyColorConverter x:Key="colorConverter"/>
+        <Style x:Key="NoFocusVisualStyle" TargetType="ListBox">
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="SimSun"/>
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="SimSun"/>
+        </Style>
+
+
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="SimSun" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <!-- Apply this style -->
+        <!--<Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource NoFocusVisualStyle}" />
+        </Style>-->
+        <!-- Color used if item is selected and listbox has focus -->
+        <SolidColorBrush
+                       x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                       Color="Transparent"/>
+        <!-- Color used if item is selected and listbox does not have focus -->
+        <SolidColorBrush
+                       x:Key="{x:Static SystemColors.ControlBrushKey}"
+                       Color="Transparent"/>
+        <!-- Font color used if item is selected and listbox has focus -->
+        <SolidColorBrush
+                       x:Key="{x:Static SystemColors.HighlightTextBrushKey}" 
+                       Color="Black" />
+        <SolidColorBrush
+                       x:Key="selectedBorder" 
+                       Color="Blue" />
+
+        <LinearGradientBrush
+           x:Key="SelectedItemBrush"
+           EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="GreenYellow" Offset="0.15" />
+            <GradientStop Color="LightGreen" Offset="0.85" />
+            <GradientStop Color="CadetBlue" Offset="1" />
+        </LinearGradientBrush>
+        <LinearGradientBrush
+           x:Key="SelectedItemBrush2"
+           EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Green" Offset="0.15" />
+            <GradientStop Color="Blue" Offset="0.85" />
+            <GradientStop Color="CadetBlue" Offset="1" />
+        </LinearGradientBrush>
+
+        <DataTemplate
+           x:Key="eyeCandyListbox"   DataType="Whatever">
+            <Border x:Name="TheBorder" BorderBrush="Gray" BorderThickness="1" Padding="4" CornerRadius="4" Margin="2">
+                <StackPanel>
+                    <TextBlock Text="{Binding}" Width="200"/>
+                </StackPanel>
+
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="AliceBlue" Offset="0.15" />
+                        <GradientStop Color="White" Offset="0.85" />
+                        <GradientStop Color="Lavender" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsSelected}"    Value="True">
+                    <Setter
+                        TargetName="TheBorder"
+                        Property="Background"
+                        Value="{StaticResource SelectedItemBrush}" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+
+        <DataTemplate
+           x:Key="allSelectedListbox"   DataType="Whatever">
+            <Border x:Name="TheBorder" BorderBrush="Gray" BorderThickness="1" Padding="4" CornerRadius="4" Margin="2" Background="{StaticResource SelectedItemBrush}">
+                <StackPanel>
+                    <TextBlock Text="{Binding}" Width="200"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate
+           x:Key="ThickBorderListBox2"   DataType="Whatever">
+            <Border x:Name="TheBorder" BorderBrush="Gray"  BorderThickness="1" Padding="4" CornerRadius="4" Margin="2" >
+                <TextBlock Height="20" FontSize="18" Text="{Binding}" Width="200">
+                </TextBlock>
+
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsSelected}"    Value="True">
+                    <Setter
+                        TargetName="TheBorder"
+                        Property="BorderBrush"
+                        Value="{StaticResource SelectedItemBrush2}" />
+
+                    <Setter
+                        TargetName="TheBorder"
+                        Property="BorderThickness"
+                        Value="3" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <DataTemplate
+           x:Key="ThickBorderListBox"   DataType="Whatever">
+            <Border x:Name="TheBorder" BorderBrush="Gray"  BorderThickness="1" Padding="4" CornerRadius="4" Margin="2" >
+                <TextBlock Height="20" FontSize="18" Text="{Binding Path=Name}" Background="{Binding Path=Color,Converter={StaticResource colorConverter}}" Width="200">
+                </TextBlock>
+
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsSelected}"    Value="True">
+                    <Setter
+                        TargetName="TheBorder"
+                        Property="BorderBrush"
+                        Value="{StaticResource SelectedItemBrush2}" />
+
+                    <Setter
+                        TargetName="TheBorder"
+                        Property="BorderThickness"
+                        Value="3" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+  
+    </Application.Resources>
+</Application>

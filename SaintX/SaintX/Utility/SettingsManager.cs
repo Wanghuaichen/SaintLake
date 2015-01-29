@@ -1,4 +1,5 @@
-﻿using SaintX.Data;
+﻿using Saint.TestSetting;
+using SaintX.Data;
 using SaintX.Utility;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace SaintX.Utility
     {
         static SettingsManager _settingsManager = null;
         Protocol _protocol = null;
-        ObservableCollection<ColorfulAssay> _assays = null;
+        TestSetting testSetting = new TestSetting();
         private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
         static public SettingsManager Instance
         {
@@ -30,34 +31,31 @@ namespace SaintX.Utility
 
         private SettingsManager()
         {
-            string assayXml = FolderHelper.GetAssaysXml();
-            if(File.Exists(assayXml))
+            string assayGroupSettingXml = FolderHelper.GetAssayGroupSettingXml();
+            string protocolCSV =  "Protocol 1.csv";
+            if (File.Exists(assayGroupSettingXml))
             {
-                _assays = SerializationHelper.Deserialize<ObservableCollection<ColorfulAssay>>(assayXml);
+                testSetting = SerializationHelper.Deserialize<TestSetting>(assayGroupSettingXml);
+                protocolCSV = testSetting.ProtocolFileName;
             }
-
-#if DEBUG
-            _assays = GetDummyAssays();
-            string protocolCSV = FolderHelper.GetDataFolder() + "Protocol 1.csv";
-            _protocol = Protocol.CreateFromCSVFile(protocolCSV);
-#else
-            string protocolXml = FolderHelper.GetProtocolDefinitionXml();
-            if (File.Exists(protocolXml))
+            else
             {
-                _protocol = SerializationHelper.Deserialize<Protocol>(protocolXml);
+                testSetting.Assays = GetDummyAssays();
+                testSetting.ProtocolFileName = "Protocol 1.csv";
+                SerializationHelper.Serialize(assayGroupSettingXml, testSetting);
             }
-#endif       
+            _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + protocolCSV);
         }
 
-        public ObservableCollection<ColorfulAssay> Assays
+        public List<ColorfulAssay> Assays
         {
             get 
             {
-                return _assays;
+                return testSetting.Assays.ToList();
             }
             set
             {
-                _assays = value;
+                testSetting.Assays = new ObservableCollection<ColorfulAssay>(value);
             }
         }
 
@@ -91,7 +89,10 @@ namespace SaintX.Utility
             assays.Add(new ColorfulAssay("HBV",Color.FromArgb(255,255,0,0)));
             assays.Add(new ColorfulAssay("HIV",Color.FromArgb(255,0,255,0)));
             assays.Add(new ColorfulAssay("HCV",Color.FromArgb(255,0,0,255)));
-            return new ObservableCollection<ColorfulAssay>(assays);
+            return  new ObservableCollection<ColorfulAssay>(assays);
         }
     }
+
+
+    
 }

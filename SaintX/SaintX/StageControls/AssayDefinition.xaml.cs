@@ -1,4 +1,5 @@
-﻿using SaintX.Data;
+﻿using Saint.TestSetting;
+using SaintX.Data;
 using SaintX.Navigation;
 using SaintX.Utility;
 using System;
@@ -16,7 +17,7 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class AssayDefinition : BaseUserControl
     {
-        ObservableCollection<ColorfulAssay> _assays;
+        List<ColorfulAssay> _assays;
         public AssayDefinition(Stage stage, BaseHost host)
             : base(stage, host)
         {
