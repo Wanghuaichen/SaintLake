@@ -89,7 +89,6 @@
       <DependentUpon>BarcodeDefinition.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\FolderHelper.cs" />
-    <Compile Include="Utility\SerializationHelper.cs" />
     <Compile Include="Utility\VirtualToggleButton.cs" />
     <Compile Include="Utility\worklist.cs" />
     <Compile Include="viewModel\StepViewModel.cs" />

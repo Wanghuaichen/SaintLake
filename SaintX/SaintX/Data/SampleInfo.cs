@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using SaintX.Utility;
-using Saint.TestSetting;
+using Saint.Setting;
 
 namespace SaintX.Data
 {

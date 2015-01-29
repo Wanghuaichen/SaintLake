@@ -1,5 +1,6 @@
-﻿using Saint.TestSetting;
+﻿using Saint.Setting;
 using SaintX.Data;
+using SaintX.Setting;
 using SaintX.Utility;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,14 @@ namespace SaintX.Utility
             string protocolCSV =  "Protocol 1.csv";
             if (File.Exists(assayGroupSettingXml))
             {
-                testSetting = SerializationHelper.Deserialize<TestSetting>(assayGroupSettingXml);
+                testSetting = SerializeHelper.Deserialize<TestSetting>(assayGroupSettingXml);
                 protocolCSV = testSetting.ProtocolFileName;
             }
             else
             {
                 testSetting.Assays = GetDummyAssays();
                 testSetting.ProtocolFileName = "Protocol 1.csv";
-                SerializationHelper.Serialize(assayGroupSettingXml, testSetting);
+                SerializeHelper.Serialize(assayGroupSettingXml, testSetting);
             }
             _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + protocolCSV);
         }

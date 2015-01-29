@@ -1,4 +1,4 @@
-﻿using Saint.TestSetting;
+﻿using Saint.Setting;
 using SaintX.Data;
 using SaintX.Navigation;
 using SaintX.Utility;
