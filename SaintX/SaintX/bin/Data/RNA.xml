@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Assays>
+    <ColorfulAssay
+      Name="HIV">
+      <Color>
+        <A>255</A>
+        <R>255</R>
+        <G>128</G>
+        <B>128</B>
+        <ScA>1</ScA>
+        <ScR>1</ScR>
+        <ScG>0.2158605</ScG>
+        <ScB>0.2158605</ScB>
+      </Color>
+    </ColorfulAssay>
+  </Assays>
+  <ProtocolFileName>C:\projects\SaintLake.git\trunk\SaintX\SaintX\bin\Data\RNA.csv</ProtocolFileName>
+</TestSetting>
