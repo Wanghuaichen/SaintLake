@@ -33,10 +33,10 @@ namespace SaintX.Utility
                 string curSteptxtFile = string.Format("{0}\\{1}.txt", stepsFolder, i + 1);
                 List<string> strsOneTime = GenerateScriptsThisStep(stepDef, i + 1);
                 List<string> strsEveryTimes = new List<string>();
-                File.WriteAllText(curStepGWLFile, GetTipType(stepDef));
+                File.WriteAllText(curSteptxtFile,stepDef.TipType);
                
                 if(stepDef.PreAction != string.Empty)
-                    strsEveryTimes.Add(stepDef.PreAction);
+                    strsEveryTimes.Add("B;" + stepDef.PreAction);
                 for (int curTimes = 0; curTimes < int.Parse(stepDef.RepeatTimes); curTimes++)
                 {
                     strsEveryTimes.Add(GetNotifyString(true, stepDef.LineNumber, curTimes + 1));
@@ -48,7 +48,7 @@ namespace SaintX.Utility
                     strsEveryTimes.Add(GetNotifyString(false,stepDef.LineNumber, curTimes + 1));
                 }
                 if (stepDef.PostAction != string.Empty)
-                    strsEveryTimes.Add(stepDef.PostAction);
+                    strsEveryTimes.Add("B;" + stepDef.PostAction);
               
                 File.WriteAllLines(curStepGWLFile, strsEveryTimes);
             }
@@ -64,8 +64,8 @@ namespace SaintX.Utility
         private List<string> GetDelayStrings(string sDelaySeconds)
         {
             List<string> strs = new List<string>();
-            strs.Add("StartTimer(\"100\");");
-            strs.Add(string.Format("WaitTimer(\"100\",\"{0}\");", sDelaySeconds));
+            strs.Add("B;StartTimer(\"100\");");
+            strs.Add(string.Format("B;WaitTimer(\"100\",\"{0}\");", sDelaySeconds));
             return strs;
         }
 
