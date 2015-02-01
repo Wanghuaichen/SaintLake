@@ -29,10 +29,12 @@ namespace SaintX.Utility
             for (int i = 0; i < stepsDef.Count; i++)
             {
                 var stepDef = stepsDef[i];
-                string curStepFile = string.Format("{0}\\{1}.gwl", stepsFolder, i + 1);
+                string curStepGWLFile = string.Format("{0}\\{1}.gwl", stepsFolder, i + 1);
+                string curSteptxtFile = string.Format("{0}\\{1}.txt", stepsFolder, i + 1);
                 List<string> strsOneTime = GenerateScriptsThisStep(stepDef, i + 1);
                 List<string> strsEveryTimes = new List<string>();
-                strsEveryTimes.Add(GetTipType(stepDef));
+                File.WriteAllText(curStepGWLFile, GetTipType(stepDef));
+               
                 if(stepDef.PreAction != string.Empty)
                     strsEveryTimes.Add(stepDef.PreAction);
                 for (int curTimes = 0; curTimes < int.Parse(stepDef.RepeatTimes); curTimes++)
@@ -48,7 +50,7 @@ namespace SaintX.Utility
                 if (stepDef.PostAction != string.Empty)
                     strsEveryTimes.Add(stepDef.PostAction);
               
-                File.WriteAllLines(curStepFile, strsEveryTimes);
+                File.WriteAllLines(curStepGWLFile, strsEveryTimes);
             }
         }
 
@@ -77,7 +79,7 @@ namespace SaintX.Utility
         {
 
             if (stepDef.Volume == "" || stepDef.Volume.Trim() == "0")
-                return new List<string>() { "C;Reserved" };
+                return new List<string>() {};
 
             //use r command for simplicity
             if (double.Parse(stepDef.TipType) * 0.9 > double.Parse(stepDef.Volume))

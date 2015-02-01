@@ -5,6 +5,7 @@ using SaintX.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,8 +33,9 @@ namespace SaintX.Utility
 
         private SettingsManager()
         {
-            string assayGroupSettingXml = FolderHelper.GetAssayGroupSettingXml();
-            string protocolCSV =  "Protocol 1.csv";
+            string panelType = ConfigurationManager.AppSettings["panelType"];
+            string assayGroupSettingXml = FolderHelper.GetDataFolder() + string.Format("{0}.xml",panelType);
+            string protocolCSV = string.Format("{0}.csv", panelType);
             if (File.Exists(assayGroupSettingXml))
             {
                 testSetting = SerializeHelper.Deserialize<TestSetting>(assayGroupSettingXml);
@@ -42,7 +44,7 @@ namespace SaintX.Utility
             else
             {
                 testSetting.Assays = GetDummyAssays();
-                testSetting.ProtocolFileName = "Protocol 1.csv";
+                testSetting.ProtocolFileName = protocolCSV;
                 SerializeHelper.Serialize(assayGroupSettingXml, testSetting);
             }
             _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + protocolCSV);

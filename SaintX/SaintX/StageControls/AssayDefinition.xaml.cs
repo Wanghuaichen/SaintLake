@@ -30,7 +30,7 @@ namespace SaintX.StageControls
         void AssayDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.EnableVisualStyles();
-            Helper.InitDataGridView(dataGridView, CurStage );
+            DataGridViewHelper.InitDataGridView(dataGridView, CurStage );
         }
 
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
@@ -61,8 +61,8 @@ namespace SaintX.StageControls
             GlobalVars.Instance.SampleCount = smpCnt;
             GlobalVars.Instance.SampleLayoutInfos.Clear();
             lstAssays.SelectedIndex = -1;
-            Helper.InitDataGridView(dataGridView, CurStage);
-            Helper.UpdateDataGridView(dataGridView, CurStage);
+            DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
+            DataGridViewHelper.UpdateDataGridView(dataGridView, CurStage);
         }
 
         void SetInfo(string s, Color color)
@@ -150,7 +150,7 @@ namespace SaintX.StageControls
                 if (IsCellOfOutRange(cell.RowIndex, cell.ColumnIndex))
                     continue;
 
-                cell.Style.BackColor = Helper.Convert2SystemDrawingColor(color);
+                cell.Style.BackColor = DataGridViewHelper.Convert2SystemDrawingColor(color);
                 cell.Value = assayName;
                 CellPosition curCellPos = new CellPosition(cell.ColumnIndex, cell.RowIndex);
                 GlobalVars.Instance.SampleLayoutInfos[curCellPos] = new SampleInfo(_assays[lstAssays.SelectedIndex], "");

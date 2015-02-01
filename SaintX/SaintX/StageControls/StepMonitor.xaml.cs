@@ -168,6 +168,7 @@ namespace SaintX.StageControls
             
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
+            FolderHelper.WriteResult(true);
             
         }
         private void SetInfo(string errMsg, Color color)

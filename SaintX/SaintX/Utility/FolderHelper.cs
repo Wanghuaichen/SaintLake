@@ -16,6 +16,12 @@ namespace SaintX.Utility
             return s + "\\";
         }
 
+        static public void WriteResult(bool bok)
+        {
+            string file = GetOutputFolder() + "result.txt";
+            File.WriteAllText(file, bok.ToString());
+        }
+
         static public string GetExeParentFolder()
         {
             string s = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -37,11 +43,6 @@ namespace SaintX.Utility
         static public string GetDataFolder()
         {
             return GetExeParentFolder() + "Data\\";
-        }
-
-        static public string GetAssayGroupSettingXml()
-        {
-            return GetDataFolder() + "assayGroupSetting.xml";
         }
 
         public static string GetImageFolder()

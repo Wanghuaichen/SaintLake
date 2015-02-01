@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace SaintX.Utility
 {
-    class Helper
+    class DataGridViewHelper
     {
         #region datagrid related
         static public System.Drawing.Color Convert2SystemDrawingColor(Color color)

@@ -1,5 +1,6 @@
 ﻿using SaintX.Navigation;
 using SaintX.StageControls;
+using SaintX.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace SaintX
             this.Loaded += MainWindow_Loaded;
             this.Closed += MainWindow_Closed;
             lstSteps.DataContext = stepViewModel.StepsModel;
+            FolderHelper.WriteResult(false);
         }
 
         

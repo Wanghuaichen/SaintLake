@@ -41,16 +41,16 @@ namespace SaintX.StageControls
         void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
         {
             InitTreeview(_assays.Select(x => x.Name).ToList());
-            Helper.InitDataGridView(dataGridView,CurStage);
+            DataGridViewHelper.InitDataGridView(dataGridView,CurStage);
         }
 
         protected override void onStageChanged(object sender, EventArgs e)
         {
             base.onStageChanged(sender, e);
-            Helper.InitDataGridView(dataGridView, CurStage);
+            DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
-            Helper.UpdateDataGridView(dataGridView,CurStage);
+            DataGridViewHelper.UpdateDataGridView(dataGridView,CurStage);
         }
 
         private void InitTreeview(List<string> assays)
@@ -172,7 +172,7 @@ namespace SaintX.StageControls
                 usedBarcodeCnt++;
             }
             CheckHasDuplicatedBarcode();
-            Helper.UpdateDataGridView(dataGridView,CurStage);
+            DataGridViewHelper.UpdateDataGridView(dataGridView,CurStage);
            
         }
 

@@ -62,26 +62,25 @@ namespace SaintX.Data
 
         private static void ExtractPrePostActionString(ref string sLine, ref string sPreAction, ref string sPostAction)
         {
-            if (sLine.Contains('"'))
+            while (sLine.Contains('['))
             {
-                while (sLine.Contains(';'))
+                int startPos = sLine.IndexOf('[');
+                int commaCntBeforeBraketMark = sLine.Substring(0, startPos).Count(x => x == comma);
+                int firstEndPos = sLine.IndexOf(']');
+                if (firstEndPos == -1)
+                    throw new Exception("[]格式错误！");
+                string sTemp = sLine.Substring(startPos + 1, firstEndPos - startPos - 1);
+                sLine = sLine.Remove(startPos, firstEndPos - startPos);
+                if (commaCntBeforeBraketMark == (int)StepDefCol.PreAction)
                 {
-                    int qutationMarkPos = sLine.IndexOf('"');
-                    int commaCntBeforeQutationMark = sLine.Substring(0, qutationMarkPos).Count(x => x == comma);
-                    int firstEndPos = sLine.IndexOf(";\"");
-                    string sTemp = sLine.Substring(qutationMarkPos + 1, firstEndPos - qutationMarkPos);
-                    sLine = sLine.Remove(qutationMarkPos, firstEndPos - qutationMarkPos + 2);
-                    if (commaCntBeforeQutationMark == (int)StepDefCol.PreAction)
-                    {
-                        sPreAction = sTemp.Trim('"');
-
-                    }
-                    else
-                    {
-                        sPostAction = sTemp.Trim('"');
-                    }
+                    sPreAction = sTemp;
+                }
+                else
+                {
+                    sPostAction = sTemp;
                 }
             }
+           
         }
     }
 
