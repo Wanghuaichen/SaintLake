@@ -167,10 +167,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="prj.ico" />
+    <Resource Include="Images\project.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\project.png" />
+    <Resource Include="prj.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
