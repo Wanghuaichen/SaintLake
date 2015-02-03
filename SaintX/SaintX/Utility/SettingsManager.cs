@@ -33,7 +33,7 @@ namespace SaintX.Utility
 
         private SettingsManager()
         {
-            string panelType = ConfigurationManager.AppSettings["panelType"];
+            string panelType = GlobalVars.Instance.PanelType;
             string assayGroupSettingXml = FolderHelper.GetDataFolder() + string.Format("{0}.xml",panelType);
             string protocolCSV = string.Format("{0}.csv", panelType);
             if (File.Exists(assayGroupSettingXml))

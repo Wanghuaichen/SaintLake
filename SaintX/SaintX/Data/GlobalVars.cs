@@ -9,6 +9,7 @@ namespace SaintX.Data
     {
         private static GlobalVars _instance;
         private int _sampleCnt = 16;
+        private string panelType = "DNA";
 
         public GlobalVars()
         {
@@ -24,6 +25,19 @@ namespace SaintX.Data
                     _instance = new GlobalVars();
                 }
                 return _instance;
+            }
+        }
+
+
+        public string PanelType
+        {
+            get
+            {
+                return panelType;
+            }
+            set
+            {
+                panelType = value;
             }
         }
 

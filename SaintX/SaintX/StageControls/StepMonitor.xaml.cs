@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Linq;
 using System.Collections;
+using System.Diagnostics;
 
 namespace SaintX.StageControls
 {
@@ -165,11 +166,29 @@ namespace SaintX.StageControls
                 SetInfo(ex.Message, Colors.Red);
                 return;
             }
-            
+            FeedWaiter();
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
             FolderHelper.WriteResult(true);
             
+        }
+
+        private void FeedWaiter()
+        {
+            Process[] processlist = Process.GetProcesses();
+            foreach (Process process in processlist)
+            {
+                if (!process.ProcessName.Contains("FeedMe"))
+                    continue;
+                while (true)
+                {
+                    process.Kill();
+                    Thread.Sleep(100);
+                    if (process.HasExited)
+                        break;
+                }
+
+            }
         }
         private void SetInfo(string errMsg, Color color)
         {

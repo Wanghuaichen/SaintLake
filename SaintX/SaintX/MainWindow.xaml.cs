@@ -32,7 +32,6 @@ namespace SaintX
             this.Loaded += MainWindow_Loaded;
             this.Closed += MainWindow_Closed;
             lstSteps.DataContext = stepViewModel.StepsModel;
-            FolderHelper.WriteResult(false);
         }
 
         

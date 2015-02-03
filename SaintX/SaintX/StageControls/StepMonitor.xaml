@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="提示信息："/>
 
-                <Button Grid.Row="1" Grid.Column="1" Content="开始"  Name="btnStart" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" Margin="0,0,0,0" VerticalAlignment="Bottom"/>
+                <Button Grid.Row="1" Grid.Column="1" Content="开始"  Name="btnStart" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" Margin="0,58,0,0" VerticalAlignment="Top"/>
                 <TextBox Grid.Row ="1" Name="txtInfo" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" />
             </Grid>
         </GroupBox>
