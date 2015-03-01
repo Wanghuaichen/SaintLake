@@ -31,7 +31,7 @@ namespace ConfigurationTool
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             testSetting.Assays.Add(new ColorfulAssay("test", Colors.Green));
-            lstPanels.SelectedIndex = 0;
+            lstPanels.SelectedIndex = (lstPanels.Items.Count - 1);
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)

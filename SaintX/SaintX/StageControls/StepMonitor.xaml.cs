@@ -166,10 +166,11 @@ namespace SaintX.StageControls
                 SetInfo(ex.Message, Colors.Red);
                 return;
             }
+            FolderHelper.WriteResult(true);
             FeedWaiter();
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
-            FolderHelper.WriteResult(true);
+            
             
         }
 
