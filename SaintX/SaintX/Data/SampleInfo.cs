@@ -11,7 +11,7 @@ using Saint.Setting;
 
 namespace SaintX.Data
 {
-    public class SampleLayoutInfos:IEnumerable, INotifyPropertyChanged
+    public class SampleLayoutSettings:IEnumerable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -134,7 +134,7 @@ namespace SaintX.Data
             int nCount = GlobalVars.Instance.SampleCount;
             for(int i = 0; i<nCount; i++)
             {
-                if(GlobalVars.Instance.SampleLayoutInfos[i] == null || GlobalVars.Instance.SampleLayoutInfos[i].Barcode == "")
+                if(GlobalVars.Instance.SampleLayoutSettings[i] == null || GlobalVars.Instance.SampleLayoutSettings[i].Barcode == "")
                 {
                     CellPosition cellPosition = new CellPosition(i);
                     errMsg = string.Format("位于{0}处的样品未设置条码！", CellPosition.GetDescription(cellPosition));

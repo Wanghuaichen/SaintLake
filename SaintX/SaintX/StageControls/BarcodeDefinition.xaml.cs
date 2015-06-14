@@ -18,12 +18,12 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class BarcodeDefinition : BaseUserControl
     {
-        SampleLayoutInfos _sampleInfos = null;
+        SampleLayoutSettings _sampleInfos = null;
         List<ColorfulAssay> _assays;
         PanelViewModel panelVM;
         
 
-        public SampleLayoutInfos SampleInfos
+        public SampleLayoutSettings SampleInfos
         {
             get { return this._sampleInfos; }
         }
@@ -31,19 +31,18 @@ namespace SaintX.StageControls
             : base(stage, host)
         {
             InitializeComponent();
-            dataGridView.CellPainting += dataGridView_CellPainting;
-        }
-
-        protected override void Initialize()
-        {
             _assays = SettingsManager.Instance.Assays;
-            _sampleInfos = GlobalVars.Instance.SampleLayoutInfos;
+            _sampleInfos = GlobalVars.Instance.SampleLayoutSettings;
+            this.Loaded += BarcodeDefinition_Loaded;
+            dataGridView.CellPainting += dataGridView_CellPainting;
             this.DataContext = this;
-            InitTreeview(_assays.Select(x => x.Name).ToList());
-            DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
         }
 
-   
+        void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitTreeview(_assays.Select(x => x.Name).ToList());
+            DataGridViewHelper.InitDataGridView(dataGridView,CurStage);
+        }
 
         protected override void onStageChanged(object sender, EventArgs e)
         {
@@ -51,7 +50,6 @@ namespace SaintX.StageControls
             DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
-            Initialize();
             DataGridViewHelper.UpdateDataGridView(dataGridView,CurStage);
         }
 
@@ -65,7 +63,7 @@ namespace SaintX.StageControls
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             string errMsg = "";
-            bool allSet = GlobalVars.Instance.SampleLayoutInfos.AllSet(ref errMsg);
+            bool allSet = GlobalVars.Instance.SampleLayoutSettings.AllSet(ref errMsg);
             if (!allSet)
             {
                 SetInfo(errMsg, Colors.Red);
@@ -153,7 +151,7 @@ namespace SaintX.StageControls
             int startCol = dataGridView.SelectedCells[0].ColumnIndex;
             int startRow = dataGridView.SelectedCells[0].RowIndex;
             int startSampleID = GetID(new CellPosition(startCol, startRow));
-            GlobalVars.Instance.SampleLayoutInfos.Sort();
+            GlobalVars.Instance.SampleLayoutSettings.Sort();
 
 
             int totalBarcodeCnt = 0;
@@ -161,7 +159,7 @@ namespace SaintX.StageControls
             int curBarcodeNum = 0;
             GetBarcodeSetting(ref totalBarcodeCnt, ref curBarcodeNum);
             
-            foreach(KeyValuePair<CellPosition,SampleInfo> pair in GlobalVars.Instance.SampleLayoutInfos)
+            foreach(KeyValuePair<CellPosition,SampleInfo> pair in GlobalVars.Instance.SampleLayoutSettings)
             {
                 if (usedBarcodeCnt == totalBarcodeCnt)
                     break;
@@ -207,14 +205,14 @@ namespace SaintX.StageControls
     
         private bool CheckHasDuplicatedBarcode()
         {
-            for(int i = 0; i< GlobalVars.Instance.SampleLayoutInfos.Count; i++)
+            for(int i = 0; i< GlobalVars.Instance.SampleLayoutSettings.Count; i++)
             {
-                string curBarcode = GlobalVars.Instance.SampleLayoutInfos[i].Barcode;
+                string curBarcode = GlobalVars.Instance.SampleLayoutSettings[i].Barcode;
                 if (curBarcode == "")
                     continue;
                 for(int j = 0; j< i; j++ )
                 {
-                    if(GlobalVars.Instance.SampleLayoutInfos[j].Barcode == curBarcode)
+                    if(GlobalVars.Instance.SampleLayoutSettings[j].Barcode == curBarcode)
                     {
                         ReportDuplicatedError(i,j,curBarcode);
                         return true;

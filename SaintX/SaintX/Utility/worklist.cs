@@ -120,23 +120,93 @@ namespace SaintX.Utility
 
         private List<PipettingInfo> GetPipettingInfos(StepDefinition stepDef)
         {
+            
             int smpCnt = GlobalVars.Instance.SampleCount;
+            Dictionary<string, List<int>> assay_wellIDs = new Dictionary<string,List<int>>();
+            for(int i = 0; i < smpCnt; i++)
+            {
+                string assay = GlobalVars.Instance.SampleLayoutSettings[i].ColorfulAssay.Name;
+                if (assay_wellIDs.ContainsKey(assay))
+                    assay_wellIDs[assay].Add(i+1);
+                else
+                    assay_wellIDs.Add(assay, new List<int>() { i+1 });
+            }
+
+            if(stepDef.SourceLabware.ToLower().Contains("reagent"))
+            {
+                List<PipettingInfo> pipettingInfos = new List<PipettingInfo>();
+                for (int i = 0; i < assay_wellIDs.Keys.Count; i++)
+                {
+                    string assayName = assay_wellIDs.Keys.ElementAt(i);
+                    pipettingInfos.AddRange(GetPipettingInfosCertainAssay(stepDef, assayName, assay_wellIDs[assayName]));
+                }
+                pipettingInfos = pipettingInfos.OrderBy(x => x.srcWellID).ToList();
+                return pipettingInfos;
+            }
+            else
+            {
+                double volume = double.Parse(stepDef.Volume);
+                int tipCountLiha = int.Parse(ConfigurationManager.AppSettings["tipCount"]);
+                int totalTimes = (smpCnt + tipCountLiha - 1) / tipCountLiha;
+
+                int tipUsedTimes = 0;
+                List<PipettingInfo> pipettingInfos = new List<PipettingInfo>();
+                for (int batchTimes = 0; batchTimes < totalTimes; batchTimes++)
+                {
+                    int thisTimeCnt = Math.Min(smpCnt - batchTimes * tipCountLiha, tipCountLiha);
+                    int startWellID = batchTimes * tipCountLiha + 1;
+                    List<int> sourceWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.AspirateConstrain);
+                    List<int> dstWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.DispenseConstrain);
+                    pipettingInfos.AddRange(GetPipettingInfosBatch(sourceWellIDs, dstWellIDs, stepDef));
+                }
+
+                pipettingInfos = pipettingInfos.OrderBy(x => x.srcWellID).ToList();
+                return pipettingInfos;
+            }
+
+
+            //double volume = double.Parse(stepDef.Volume);
+            //int tipCountLiha = int.Parse(ConfigurationManager.AppSettings["tipCount"]);
+            //int totalTimes = (smpCnt + tipCountLiha - 1) / tipCountLiha;
+
+            //int tipUsedTimes = 0;
+            //List<PipettingInfo> pipettingInfos = new List<PipettingInfo>();
+            //for (int batchTimes = 0; batchTimes < totalTimes; batchTimes++)
+            //{
+            //    int thisTimeCnt = Math.Min(smpCnt - batchTimes * tipCountLiha, tipCountLiha);
+            //    int startWellID = batchTimes * tipCountLiha + 1;
+            //    List<int> sourceWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.AspirateConstrain);
+            //    List<int> dstWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.DispenseConstrain);
+            //    pipettingInfos.AddRange(GetPipettingInfosBatch(sourceWellIDs, dstWellIDs, stepDef));
+            //}
+
+            //pipettingInfos = pipettingInfos.OrderBy(x => x.srcWellID).ToList();
+            //return pipettingInfos;
+          
+        }
+
+        private List<PipettingInfo> GetPipettingInfosCertainAssay(StepDefinition stepDef, string assayName, List<int> wellIDs)
+        {
             double volume = double.Parse(stepDef.Volume);
             int tipCountLiha = int.Parse(ConfigurationManager.AppSettings["tipCount"]);
+            int smpCnt = wellIDs.Count;
             int totalTimes = (smpCnt + tipCountLiha - 1) / tipCountLiha;
 
-            int tipUsedTimes = 0;
+            //int tipUsedTimes = 0;
             List<PipettingInfo> pipettingInfos = new List<PipettingInfo>();
+
             for (int batchTimes = 0; batchTimes < totalTimes; batchTimes++)
             {
                 int thisTimeCnt = Math.Min(smpCnt - batchTimes * tipCountLiha, tipCountLiha);
                 int startWellID = batchTimes * tipCountLiha + 1;
                 List<int> sourceWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.AspirateConstrain);
-                List<int> dstWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.DispenseConstrain);
-                pipettingInfos.AddRange(GetPipettingInfosBatch(sourceWellIDs, dstWellIDs, stepDef, ref tipUsedTimes));
+                //List<int> dstWellIDs = GetWellIDs(startWellID, thisTimeCnt, stepDef.DispenseConstrain);
+                List<int>  dstWellIDs = wellIDs.Take(thisTimeCnt).ToList();
+                wellIDs = wellIDs.Skip(thisTimeCnt).ToList();
+                pipettingInfos.AddRange(GetPipettingInfosBatch(sourceWellIDs, dstWellIDs, stepDef, assayName));
             }
 
-            pipettingInfos = pipettingInfos.OrderBy(x => x.srcWellID).ToList();
+            //pipettingInfos = pipettingInfos.OrderBy(x => x.srcWellID).ToList();
             return pipettingInfos;
         }
 
@@ -191,7 +261,9 @@ namespace SaintX.Utility
         }
 
         private List<PipettingInfo> GetPipettingInfosBatch(List<int> sourceWellIDs,
-            List<int> dstWellIDs, StepDefinition stepDef, ref int tipUsedTimes)
+            List<int> dstWellIDs, 
+            StepDefinition stepDef,
+            string assayName = "")
         {
             List<string> strs = new List<string>();
             double tipType = int.Parse(stepDef.TipType);
@@ -199,6 +271,8 @@ namespace SaintX.Utility
             double volumeThisStep = double.Parse(stepDef.Volume);
             int nTotalTimes = (int)Math.Ceiling(volumeThisStep / maxVolumePerTip);
             double finishedVolume = 0;
+
+            string srcLabware = assayName == string.Empty ? stepDef.SourceLabware : assayName + stepDef.SourceLabware.Last();
             List<PipettingInfo> pipettingInfos = new List<PipettingInfo>();
             for (int i = 0; i < nTotalTimes; i++)
             {
@@ -212,7 +286,7 @@ namespace SaintX.Utility
                 finishedVolume += volumeThisTime;
                 for (int j = 0; j < sourceWellIDs.Count; j++)
                 {
-                    pipettingInfos.Add(new PipettingInfo(stepDef.SourceLabware,
+                    pipettingInfos.Add(new PipettingInfo(srcLabware,
                         sourceWellIDs[j],
                         volumeThisTime,
                         stepDef.DestLabware,

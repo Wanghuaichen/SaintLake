@@ -44,7 +44,7 @@ namespace SaintX.Utility
 
         static public void UpdateDataGridView(DataGridView dataGridView,Stage curStage)
         {
-            foreach( KeyValuePair<CellPosition, SampleInfo> pair in GlobalVars.Instance.SampleLayoutInfos)
+            foreach( KeyValuePair<CellPosition, SampleInfo> pair in GlobalVars.Instance.SampleLayoutSettings)
             {
                 CellPosition cellPos = pair.Key;
                 SampleInfo sampleInfo = pair.Value;
