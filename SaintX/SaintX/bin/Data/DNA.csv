@@ -1,17 +1,17 @@
 ﻿描述,源Label,体积,目标Label,重复次数,枪头,重用次数,液体类型,源孔,目标孔,preAction,postAction,Delay
 加试剂1,reagents1,300,reaction1,1,200,12,reagent1,1-4,*,,,
 加样品,sample1,200,reaction1,1,200,12,sample,*,*,,,
-震荡60s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
+震荡60s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
 加试剂2,reagents2,100,reaction1,2,50,12,reagent2,1-4,*,,,
-震荡60s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
+震荡60s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
 磁性分离600s,,,,1,,,,,,,,600
 去废液1,reaction1,600,waste1,1,200,12,sample,*,1-4,,,
 加试剂3,reagents3,400,reaction1,1,200,12,reagent3,1-4,*,,,
-震荡60s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
+震荡60s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
 加试剂4,reagents4,200,reaction1,1,200,12,reagent4,1-4,*,,,
-震荡60s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
-磁性分离300s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,300
+震荡60s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
+磁性分离300s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,300
 去废液2,reaction1,600,waste2,1,200,12,sample,*,1-4,,,
 加PCRMix,PCRMixTube,50,reaction1,1,200,12,PCRMix,1-2,*,,,
-震荡60s,,,,1,,,,,,[Transfer_Rack("7","1",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
+震荡60s,,,,1,,,,,,[Transfer_Rack("7","7",0,0,0,0,0,"","96 Well Microplate","Narrow","","","MP 3Pos","","MP 3Pos","1","(Not defined)","2");],,60
 转移PCRmix,reaction1,50,PCRPlate,1,200,12,sample,*,*,,,
