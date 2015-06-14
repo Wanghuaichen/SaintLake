@@ -55,6 +55,8 @@ namespace SaintX.Data
 
         public SampleLayoutInfos SampleLayoutInfos { get; set; }
 
+
+        public Stage FarthestStage { get; set; }
     }
     
 }

@@ -1,4 +1,5 @@
-﻿using SaintX.Interfaces;
+﻿using SaintX.Data;
+using SaintX.Interfaces;
 using SaintX.StageControls;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace SaintX.Navigation
                 return _stage;
             }
         }
-        public Navigate2Args(Stage stage):base(stage)
+        
+        public Navigate2Args(Stage stage2Go):base(stage2Go)
         {
 
         }
@@ -55,7 +57,8 @@ namespace SaintX.Navigation
     {
         public event EventHandler onStageChanged;
         protected bool preventUI = false;
-        protected Stage farthestStage = Stage.AssayDef;
+        protected Stage farthestStage = Stage.Selection;
+        
         private ListBox lstSteps = null;
         protected List<BaseUserControl> stageUserControls = new List<BaseUserControl>();
         protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -66,6 +69,7 @@ namespace SaintX.Navigation
 
         private void AddSteps()
         {
+            stageUserControls.Add(new ProtocolSelection(Stage.Selection, this));
             stageUserControls.Add(new AssayDefinition(Stage.AssayDef, this));
             stageUserControls.Add(new BarcodeDefinition(Stage.BarcodeDef, this));
             stageUserControls.Add(new StepMonitor(Stage.StepMonitor, this));
@@ -86,6 +90,7 @@ namespace SaintX.Navigation
         {
             Stage finishedStage = ((StageFinishedArgs)e).SourceStage;
             farthestStage = (Stage)(finishedStage + 1);
+            GlobalVars.Instance.FarthestStage = farthestStage;
             NavigateTo(farthestStage);
         }
 
@@ -154,11 +159,19 @@ namespace SaintX.Navigation
             }
         }
 
+        protected virtual void Initialize()
+        {
+
+        }
 
         protected virtual void onStageChanged(object sender, EventArgs e)
         {
             Navigate2Args navigate2Args = (Navigate2Args)e;
+            
             this.Visibility = navigate2Args.DestStage == _stage ? Visibility.Visible : Visibility.Hidden;
+            if(this.Visibility == System.Windows.Visibility.Visible)
+                Initialize();
+            this.IsEnabled = _stage == GlobalVars.Instance.FarthestStage;
         }
 
         public Stage CurStage { get { return _stage; } }

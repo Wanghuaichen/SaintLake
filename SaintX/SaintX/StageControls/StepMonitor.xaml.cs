@@ -27,17 +27,18 @@ namespace SaintX.StageControls
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
-            InitStepsInfo();
-            this.Loaded += StepMonitor_Loaded;
-         
+            //
+            //this.Loaded += StepMonitor_Loaded;
         }
-
-        void StepMonitor_Loaded(object sender, RoutedEventArgs e)
+        
+        protected override void Initialize()
         {
+            InitStepsInfo();
             CreateNamedPipeServer();
             CalculateShoppingList();
         }
 
+  
         private void CalculateShoppingList()
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
@@ -199,9 +200,6 @@ namespace SaintX.StageControls
 
         private bool CheckLabwares(List<StepDefinition> stepsDef, ref string errMsg)
         {
-#if DEBUG
-            return true;
-#endif
             List<string> labels = null;
             try
             {

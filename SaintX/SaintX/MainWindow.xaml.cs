@@ -83,7 +83,7 @@ namespace SaintX
         {
             foreach (var userControl in stageUserControls)
                 userControlHost.Children.Add(userControl);
-            NavigateTo(Stage.AssayDef);
+            NavigateTo(Stage.Selection);
         }
         #endregion
 

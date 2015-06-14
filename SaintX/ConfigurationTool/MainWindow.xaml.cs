@@ -132,8 +132,9 @@ namespace ConfigurationTool
                 SetInfo(string.Format("位于{0}的文件不存在，请先定义。",sProtocolFile),Colors.Red);
                 return;
             }
+            bool DNA = (bool)rdbDNA.IsChecked;
 
-            testSetting.ProtocolFileName = sProtocolFile;
+            testSetting.ProtocolFileName = DNA ? "DNA.csv" : "RNA.csv";
 
             if(testSetting.Assays.Count == 0)
             {

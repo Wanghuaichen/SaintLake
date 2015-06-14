@@ -22,16 +22,24 @@ namespace SaintX.StageControls
             : base(stage, host)
         {
             InitializeComponent();
-            _assays = SettingsManager.Instance.Assays;
-            lstAssays.DataContext = _assays;
             this.Loaded += AssayDefinition_Loaded;
         }
 
         void AssayDefinition_Loaded(object sender, RoutedEventArgs e)
         {
+          
             System.Windows.Forms.Application.EnableVisualStyles();
             DataGridViewHelper.InitDataGridView(dataGridView, CurStage );
         }
+
+
+        protected override void Initialize()
+        {
+            _assays = SettingsManager.Instance.Assays;
+            lstAssays.DataContext = _assays;
+        }
+
+    
 
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {

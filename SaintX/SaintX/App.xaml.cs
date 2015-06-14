@@ -56,9 +56,6 @@ namespace SaintX
 
                     //Perform your work here.
                     FolderHelper.WriteResult(false);
-                    ChoosePanel choosePanelForm = new ChoosePanel();
-                    choosePanelForm.ShowDialog();
-
                     if (hasHandle)
                     {
                         try

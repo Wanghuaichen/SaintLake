@@ -80,6 +80,9 @@
     <Compile Include="HelpForm.xaml.cs">
       <DependentUpon>HelpForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StageControls\ProtocolSelection.xaml.cs">
+      <DependentUpon>ProtocolSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\TimeEstimation.cs" />
     <Compile Include="StageControls\StepMonitor.xaml.cs">
       <DependentUpon>StepMonitor.xaml</DependentUpon>
@@ -123,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StageControls\BarcodeDefinition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StageControls\ProtocolSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
