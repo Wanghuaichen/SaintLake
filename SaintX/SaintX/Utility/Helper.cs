@@ -49,9 +49,9 @@ namespace SaintX.Utility
                 CellPosition cellPos = pair.Key;
                 SampleInfo sampleInfo = pair.Value;
                 var cell = dataGridView.Rows[cellPos.rowIndex].Cells[cellPos.colIndex];
-                if (curStage == Stage.BarcodeDef)
-                    cell.Value = string.Format("{0} [{1}]", sampleInfo.ColorfulAssay.Name, sampleInfo.Barcode);
-                else
+                //if (curStage == Stage.BarcodeDef)
+                //    cell.Value = string.Format("{0} [{1}]", sampleInfo.ColorfulAssay.Name, sampleInfo.Barcode);
+                //else
                     cell.Value = sampleInfo.ColorfulAssay.Name;
                 cell.Style.BackColor = Convert2SystemDrawingColor(sampleInfo.ColorfulAssay.Color);
             }

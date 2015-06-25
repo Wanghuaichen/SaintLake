@@ -31,17 +31,17 @@ namespace SaintX.StageControls
             : base(stage, host)
         {
             InitializeComponent();
-            _assays = SettingsManager.Instance.Assays;
-            _sampleInfos = GlobalVars.Instance.SampleLayoutSettings;
-            this.Loaded += BarcodeDefinition_Loaded;
+           
             dataGridView.CellPainting += dataGridView_CellPainting;
             this.DataContext = this;
         }
 
-        void BarcodeDefinition_Loaded(object sender, RoutedEventArgs e)
+        protected override void Initialize()
         {
+            _assays = SettingsManager.Instance.Assays;
+            _sampleInfos = GlobalVars.Instance.SampleLayoutSettings;
             InitTreeview(_assays.Select(x => x.Name).ToList());
-            DataGridViewHelper.InitDataGridView(dataGridView,CurStage);
+            DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
         }
 
         protected override void onStageChanged(object sender, EventArgs e)

@@ -54,6 +54,12 @@ namespace SaintX.Utility
         {
             return GetDataFolder() + "protocol1.xml";
         }
+
+        internal static void WriteVariable(string file, string s)
+        {
+            string filePath = GetOutputFolder() + file + ".txt";
+            File.WriteAllText(filePath, s);
+        }
     }
 
   

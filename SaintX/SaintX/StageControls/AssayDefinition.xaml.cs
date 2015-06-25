@@ -27,19 +27,15 @@ namespace SaintX.StageControls
 
         void AssayDefinition_Loaded(object sender, RoutedEventArgs e)
         {
-          
             System.Windows.Forms.Application.EnableVisualStyles();
             DataGridViewHelper.InitDataGridView(dataGridView, CurStage );
         }
-
 
         protected override void Initialize()
         {
             _assays = SettingsManager.Instance.Assays;
             lstAssays.DataContext = _assays;
         }
-
-    
 
         private void btnSetSampleCnt_Click(object sender, RoutedEventArgs e)
         {
@@ -56,7 +52,6 @@ namespace SaintX.StageControls
                 ResultIsOk = false;
             }
             #endregion
-
 
             if (GlobalVars.Instance.SampleLayoutSettings.AlreadyHasInfo())
             {

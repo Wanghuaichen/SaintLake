@@ -150,17 +150,18 @@ namespace SaintX.StageControls
         {
             string errMsg = "";
             
-            bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, ref errMsg);
-            if(!bAllExist)
-            {
-                SetInfo(errMsg, Colors.Red);
-                return;
-            }
+            //bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, ref errMsg);
+            //if(!bAllExist)
+            //{
+            //    SetInfo(errMsg, Colors.Red);
+            //    return;
+            //}
             try
             {
                 //GenerateScripts();
                 worklist worklist = new worklist();
                 worklist.GenerateScripts();
+                WriteVariables();
             }
             catch(Exception ex)
             {
@@ -173,6 +174,12 @@ namespace SaintX.StageControls
             btnStart.IsEnabled = false;
             
             
+        }
+
+        private void WriteVariables()
+        {
+            FolderHelper.WriteVariable("sampleCount", GlobalVars.Instance.SampleCount.ToString());
+            FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.PanelType.ToString());
         }
 
         private void FeedWaiter()

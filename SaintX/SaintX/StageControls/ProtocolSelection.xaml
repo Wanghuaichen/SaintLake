@@ -11,6 +11,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
+        <Grid>
+            <Image Name="layoutImg" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+        </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
@@ -18,8 +22,8 @@
             </Grid.RowDefinitions>
             <GroupBox FontSize="16">
                 <Grid>
-                    <RadioButton Name="rdbMagnetic" Content="磁珠法" HorizontalAlignment="Left" Margin="37,16,0,0"  IsChecked="True" VerticalAlignment="Top"/>
-                    <RadioButton Name="rdbOneStep" Content="一步法" HorizontalAlignment="Left" Margin="37,42,0,0" VerticalAlignment="Top"/>
+                    <RadioButton Name="rdbMagnetic" Content="磁珠法" HorizontalAlignment="Left" Margin="37,16,0,0"  IsChecked="True" VerticalAlignment="Top" Checked="rdbMagnetic_Checked"/>
+                    <RadioButton Name="rdbOneStep" Content="一步法" HorizontalAlignment="Left" Margin="37,42,0,0" VerticalAlignment="Top" Checked="rdbOneStep_Checked"/>
                     
                 </Grid>
             </GroupBox>
