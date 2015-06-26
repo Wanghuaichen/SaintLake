@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSetting xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Assays>
+    <ColorfulAssay
+      Name="HBV">
+      <Color>
+        <A>255</A>
+        <R>255</R>
+        <G>0</G>
+        <B>0</B>
+        <ScA>1</ScA>
+        <ScR>1</ScR>
+        <ScG>0</ScG>
+        <ScB>0</ScB>
+      </Color>
+    </ColorfulAssay>
+    <ColorfulAssay
+      Name="HIV">
+      <Color>
+        <A>255</A>
+        <R>0</R>
+        <G>255</G>
+        <B>0</B>
+        <ScA>1</ScA>
+        <ScR>0</ScR>
+        <ScG>1</ScG>
+        <ScB>0</ScB>
+      </Color>
+    </ColorfulAssay>
+    <ColorfulAssay
+      Name="HCV">
+      <Color>
+        <A>255</A>
+        <R>0</R>
+        <G>0</G>
+        <B>255</B>
+        <ScA>1</ScA>
+        <ScR>0</ScR>
+        <ScG>0</ScG>
+        <ScB>1</ScB>
+      </Color>
+    </ColorfulAssay>
+  </Assays>
+  <ProtocolFileName>oneStep.csv</ProtocolFileName>
+</TestSetting>
