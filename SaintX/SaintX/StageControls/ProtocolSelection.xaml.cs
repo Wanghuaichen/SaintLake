@@ -17,7 +17,7 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class ProtocolSelection : BaseUserControl
     {
-
+        EVOController evoController = new EVOController();
         List<string> allScripts = new List<string>();
         public ProtocolSelection(Stage stage, BaseHost host)
             : base(stage, host)
@@ -50,13 +50,22 @@ namespace SaintX.StageControls
 
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
-            //GlobalVars.Instance.PanelType = (bool)rdbMagnetic.IsChecked ? "mag" : "oneStep";
-            if(lstProtocols.SelectedItem == null)
+            if (lstProtocols.SelectedItem == null)
             {
                 SetInfo("请选中一个实验！");
                 return;
             }
             GlobalVars.Instance.ScriptName = (string)lstProtocols.SelectedItem;
+            try
+            {
+                evoController.Start();
+                
+            }
+            catch(Exception ex)
+            {
+                SetInfo(ex.Message);
+                return;
+            }
             SettingsManager.Instance.UpdateProtocol();
             NotifyFinished();
         }

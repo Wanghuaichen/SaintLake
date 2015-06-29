@@ -22,7 +22,7 @@ namespace SaintX.StageControls
     {
         TimeEstimation timeEstimation = null;
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
-
+        EVOController evoController = new EVOController();
 
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
@@ -150,18 +150,9 @@ namespace SaintX.StageControls
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             string errMsg = "";
-            
-            //bool bAllExist = CheckLabwares(SettingsManager.Instance.Protocol.StepsDefinition, ref errMsg);
-            //if(!bAllExist)
-            //{
-            //    SetInfo(errMsg, Colors.Red);
-            //    return;
-            //}
             try
             {
-                //GenerateScripts();
-                //worklist worklist = new worklist();
-                //worklist.GenerateScripts();
+                evoController.RunScript();
                 WriteVariables();
             }
             catch(Exception ex)
@@ -169,12 +160,12 @@ namespace SaintX.StageControls
                 SetInfo(ex.Message, Colors.Red);
                 return;
             }
+            Window parentWindow = Window.GetWindow(this);
+            parentWindow.Topmost = true;
             FolderHelper.WriteResult(true);
             FeedWaiter();
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
-            
-            
         }
 
         private void WriteVariables()
@@ -240,7 +231,15 @@ namespace SaintX.StageControls
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                evoController.Close();
+            }
+            catch(Exception ex)
+            {
+                SetInfo(ex.Message,Colors.Red);
+            }
+            
         }
     }
 
