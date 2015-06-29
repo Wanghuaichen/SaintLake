@@ -56,6 +56,7 @@ namespace SaintX
             winOp.SelectScript(GlobalVars.Instance.ScriptName);
             winOp.WaitForRunWindow();
             winOp.RunScript();
+           
         }
 
         public void Close()

@@ -70,6 +70,16 @@ namespace SaintX
 
         [DllImport("user32.dll")]
         static extern bool SetCursorPos(int X, int Y);
+        
+        const int SW_SHOWMINNOACTIVE = 7;
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private void MinimizeWindow(IntPtr handle)
+        {
+            ShowWindow(handle, SW_SHOWMINNOACTIVE);
+        }
 
 
 
@@ -107,6 +117,7 @@ namespace SaintX
                 Thread.Sleep(200);
             }
             ClickRunButton(runWindow);
+            MinimizeWindow(runWindow.HWnd);
 
         }
 

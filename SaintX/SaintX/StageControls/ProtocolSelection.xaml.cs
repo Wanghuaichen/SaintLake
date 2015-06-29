@@ -59,7 +59,6 @@ namespace SaintX.StageControls
             try
             {
                 evoController.Start();
-                
             }
             catch(Exception ex)
             {
