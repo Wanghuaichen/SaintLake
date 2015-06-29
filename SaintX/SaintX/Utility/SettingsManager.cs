@@ -17,8 +17,8 @@ namespace SaintX.Utility
     {
         static SettingsManager _settingsManager = null;
         Protocol _protocol = null;
-        TestSetting testSetting = new TestSetting();
-        private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
+        //TestSetting testSetting = new TestSetting();
+        //private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
         static public SettingsManager Instance
         {
             get
@@ -39,34 +39,35 @@ namespace SaintX.Utility
 
         public void UpdateProtocol()
         {
-            string panelType = GlobalVars.Instance.PanelType;
-            string assayGroupSettingXml = FolderHelper.GetDataFolder() + string.Format("{0}.xml", panelType);
-            string protocolCSV = string.Format("{0}.csv", panelType);
-            if (File.Exists(assayGroupSettingXml))
-            {
-                testSetting = SerializeHelper.Deserialize<TestSetting>(assayGroupSettingXml);
-                protocolCSV = testSetting.ProtocolFileName;
-            }
-            else
-            {
-                testSetting.Assays = GetDummyAssays();
-                testSetting.ProtocolFileName = protocolCSV;
-                SerializeHelper.Serialize(assayGroupSettingXml, testSetting);
-            }
-            _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + protocolCSV);
+            //string panelType = GlobalVars.Instance.ScriptName;
+            //string assayGroupSettingXml = FolderHelper.GetDataFolder() + string.Format("{0}.xml", panelType);
+            //string protocolCSV = string.Format("{0}.csv", panelType);
+            //if (File.Exists(assayGroupSettingXml))
+            //{
+            //    testSetting = SerializeHelper.Deserialize<TestSetting>(assayGroupSettingXml);
+            //    protocolCSV = testSetting.ProtocolFileName;
+            //}
+            //else
+            //{
+            //    testSetting.Assays = GetDummyAssays();
+            //    testSetting.ProtocolFileName = protocolCSV;
+            //    SerializeHelper.Serialize(assayGroupSettingXml, testSetting);
+            //}
+
+            _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + GlobalVars.Instance.ScriptName + ".csv");
         }
 
-        public List<ColorfulAssay> Assays
-        {
-            get 
-            {
-                return testSetting.Assays.ToList();
-            }
-            set
-            {
-                testSetting.Assays = new ObservableCollection<ColorfulAssay>(value);
-            }
-        }
+        //public List<ColorfulAssay> Assays
+        //{
+        //    get 
+        //    {
+        //        return testSetting.Assays.ToList();
+        //    }
+        //    set
+        //    {
+        //        testSetting.Assays = new ObservableCollection<ColorfulAssay>(value);
+        //    }
+        //}
 
         public Protocol Protocol
         {
@@ -80,26 +81,26 @@ namespace SaintX.Utility
             }
         }
 
-        public PhysicalSettings PhysicalSettings
-        {
-            get
-            {
-                return _physicalSettings;
-            }
-            set
-            {
-                _physicalSettings = value;
-            }
-        }
+        //public PhysicalSettings PhysicalSettings
+        //{
+        //    get
+        //    {
+        //        return _physicalSettings;
+        //    }
+        //    set
+        //    {
+        //        _physicalSettings = value;
+        //    }
+        //}
 
-        private ObservableCollection<ColorfulAssay> GetDummyAssays()
-        {
-            List<ColorfulAssay> assays = new List<ColorfulAssay>();
-            assays.Add(new ColorfulAssay("HBV",Color.FromArgb(255,255,0,0)));
-            assays.Add(new ColorfulAssay("HIV",Color.FromArgb(255,0,255,0)));
-            assays.Add(new ColorfulAssay("HCV",Color.FromArgb(255,0,0,255)));
-            return  new ObservableCollection<ColorfulAssay>(assays);
-        }
+        //private ObservableCollection<ColorfulAssay> GetDummyAssays()
+        //{
+        //    List<ColorfulAssay> assays = new List<ColorfulAssay>();
+        //    assays.Add(new ColorfulAssay("HBV",Color.FromArgb(255,255,0,0)));
+        //    assays.Add(new ColorfulAssay("HIV",Color.FromArgb(255,0,255,0)));
+        //    assays.Add(new ColorfulAssay("HCV",Color.FromArgb(255,0,0,255)));
+        //    return  new ObservableCollection<ColorfulAssay>(assays);
+        //}
     }
 
 

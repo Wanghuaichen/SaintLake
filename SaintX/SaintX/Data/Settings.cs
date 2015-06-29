@@ -24,7 +24,7 @@ namespace SaintX.Data
         }
         static public Protocol  CreateFromCSVFile(string csvFile)
         {
-            int commaCnt = 12;
+            int commaCnt = 9;
             
             FileInfo fileInfo = new FileInfo(csvFile);
             string name = fileInfo.Name;
@@ -34,17 +34,12 @@ namespace SaintX.Data
             for (int i = 1; i < strLines.Length; i++ )
             {
                 string sLine = strLines[i];
-                string sPreAction = "";
-                string sPostAction = "";
-                ExtractPrePostActionString(ref sLine, ref sPreAction, ref sPostAction);
-                if (sLine.Count(x => x == comma) != commaCnt)
+                int currentCnt = sLine.Count(x => x == comma);
+                if (currentCnt != commaCnt)
                 {
                     throw new Exception("CSV文件格式非法！");
                 }
-
                 string[] lineContents = sLine.Split(',');
-                SetPrePostActionString(lineContents, sPreAction, sPostAction);
-               
                 StepDefinition stepDefinition = new StepDefinition(lineContents,i);
                 stepDefinitions.Add(stepDefinition);
             }
@@ -114,8 +109,8 @@ namespace SaintX.Data
         public string DispenseConstrain { get; set; }
         public string LiquidClass { get; set; }
         public int LineNumber { get; set; }
-        public string PreAction { get; set; }
-        public string PostAction { get; set; }
+        //public string PreAction { get; set; }
+        //public string PostAction { get; set; }
         public string DelaySeconds { get; set; }
 
         public StepDefinition()
@@ -128,9 +123,9 @@ namespace SaintX.Data
             LineNumber = no;
             Description = lines[(int)StepDefCol.Description];
             RepeatTimes = lines[(int)StepDefCol.RepeatTimes];
-            PreAction = lines[(int)StepDefCol.PreAction];
-            PostAction = lines[(int)StepDefCol.PostAction];
-            DelaySeconds = lines[(int)StepDefCol.DelaySeconds];
+            //PreAction = lines[(int)StepDefCol.PreAction];
+            //PostAction = lines[(int)StepDefCol.PostAction];
+            //DelaySeconds = lines[(int)StepDefCol.DelaySeconds];
             Volume = lines[(int)StepDefCol.Volume];
             if (Volume == "")
                 return;

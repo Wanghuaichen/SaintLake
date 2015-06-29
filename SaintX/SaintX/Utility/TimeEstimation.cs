@@ -21,7 +21,7 @@ namespace SaintX.Data
             {
                 
                 int nStep = stepDef.LineNumber;
-                int repeatTimes = int.Parse(stepDef.RepeatTimes);
+                int repeatTimes = 1;//int.Parse(stepDef.RepeatTimes);
                 step_MinorStepCnt.Add(nStep, repeatTimes);
                 for(int i = 0; i< repeatTimes;i++)
                 {

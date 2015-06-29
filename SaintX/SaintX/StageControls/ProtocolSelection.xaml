@@ -17,17 +17,29 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="200"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GroupBox FontSize="16">
+            <GroupBox FontSize="16" Header="实验选择">
                 <Grid>
-                    <RadioButton Name="rdbMagnetic" Content="磁珠法" HorizontalAlignment="Left" Margin="37,16,0,0"  IsChecked="True" VerticalAlignment="Top" Checked="rdbMagnetic_Checked"/>
-                    <RadioButton Name="rdbOneStep" Content="一步法" HorizontalAlignment="Left" Margin="37,42,0,0" VerticalAlignment="Top" Checked="rdbOneStep_Checked"/>
-                    
+                    <ListBox Name="lstProtocols"/>
                 </Grid>
             </GroupBox>
-            <Button FontSize="16" Content="确定" Name="btnConfirm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="200" Height="39" Click="btnConfirm_Click"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label>提示：</Label>
+                <TextBox Name="txtInfo" Grid.Row="1" IsReadOnly="True" VerticalAlignment="Stretch"></TextBox>
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Label Content="样品数量：" Height="36" HorizontalAlignment="Left"  Name="label5" VerticalAlignment="Top" Width="80" />
+                <TextBox Text="16"  Height="36" HorizontalAlignment="Left"  Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
+            </StackPanel>
+            <Button FontSize="16" Content="确定" Name="btnConfirm" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Width="200" Height="39" Click="btnConfirm_Click"/>
 
         </Grid>
         

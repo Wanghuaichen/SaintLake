@@ -9,11 +9,11 @@ namespace SaintX.Data
     {
         private static GlobalVars _instance;
         private int _sampleCnt = 16;
-        private string panelType = "DNA";
+        private string panelType = "";
 
         public GlobalVars()
         {
-            SampleLayoutSettings = new SampleLayoutSettings();
+            //SampleLayoutSettings = new SampleLayoutSettings();
         }
         
         static public GlobalVars Instance
@@ -29,7 +29,7 @@ namespace SaintX.Data
         }
 
 
-        public string PanelType
+        public string ScriptName
         {
             get
             {
@@ -53,7 +53,7 @@ namespace SaintX.Data
             }
         }
 
-        public SampleLayoutSettings SampleLayoutSettings { get; set; }
+        //public SampleLayoutSettings SampleLayoutSettings { get; set; }
 
 
         public Stage FarthestStage { get; set; }

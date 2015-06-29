@@ -43,6 +43,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="ManagedWinapi">
+      <HintPath>..\..\..\..\EVOwareShell\EVOwareShell\trunk\ManagedWinapi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -56,6 +59,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -77,6 +82,7 @@
     <Compile Include="Data\SampleInfo.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\PanelViewModel.cs" />
+    <Compile Include="Utility\EVOController.cs" />
     <Compile Include="HelpForm.xaml.cs">
       <DependentUpon>HelpForm.xaml</DependentUpon>
     </Compile>
@@ -94,17 +100,12 @@
     <Compile Include="Utility\SettingsManager.cs" />
     <Compile Include="Navigation\Interfaces.cs" />
     <Compile Include="Navigation\NavigationImpl.cs" />
-    <Compile Include="StageControls\AssayDefinition.xaml.cs">
-      <DependentUpon>AssayDefinition.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StageControls\BarcodeDefinition.xaml.cs">
-      <DependentUpon>BarcodeDefinition.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utility\FolderHelper.cs" />
     <Compile Include="Utility\VirtualToggleButton.cs" />
-    <Compile Include="Utility\worklist.cs" />
     <Compile Include="viewModel\StepViewModel.cs" />
     <Compile Include="viewModel\viewModelbase.cs" />
+    <Compile Include="Utility\WindowMessenger.cs" />
+    <Compile Include="Utility\WindowOp.cs" />
     <Page Include="HelpForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,14 +122,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="StageControls\AssayDefinition.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StageControls\BarcodeDefinition.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="StageControls\ProtocolSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -187,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\project.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

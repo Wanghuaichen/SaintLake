@@ -21,7 +21,7 @@ namespace SaintX
 
         void ChoosePanel_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GlobalVars.Instance.PanelType = rdbDNA.Checked ? "DNA" : "RNA";
+            GlobalVars.Instance.ScriptName = rdbDNA.Checked ? "DNA" : "RNA";
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)

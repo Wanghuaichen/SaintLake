@@ -68,6 +68,7 @@ namespace SaintX.StageControls
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
             timeEstimation = new TimeEstimation(stepsDef);
+            stepsDefWithProgressInfo.Clear();
             foreach(var stepDef in stepsDef)
             {
                 var stepDefEx = new StepDefinitionWithProgressInfo(stepDef);
@@ -159,8 +160,8 @@ namespace SaintX.StageControls
             try
             {
                 //GenerateScripts();
-                worklist worklist = new worklist();
-                worklist.GenerateScripts();
+                //worklist worklist = new worklist();
+                //worklist.GenerateScripts();
                 WriteVariables();
             }
             catch(Exception ex)
@@ -179,7 +180,7 @@ namespace SaintX.StageControls
         private void WriteVariables()
         {
             FolderHelper.WriteVariable("sampleCount", GlobalVars.Instance.SampleCount.ToString());
-            FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.PanelType.ToString());
+            FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.ScriptName.ToString());
         }
 
         private void FeedWaiter()
@@ -235,6 +236,11 @@ namespace SaintX.StageControls
                 }
             }
             return true;
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

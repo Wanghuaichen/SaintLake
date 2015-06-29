@@ -70,7 +70,7 @@ namespace SaintX.Navigation
         private void AddSteps()
         {
             stageUserControls.Add(new ProtocolSelection(Stage.Selection, this));
-            stageUserControls.Add(new AssayDefinition(Stage.AssayDef, this));
+            //stageUserControls.Add(new AssayDefinition(Stage.AssayDef, this));
             //stageUserControls.Add(new BarcodeDefinition(Stage.BarcodeDef, this));
             stageUserControls.Add(new StepMonitor(Stage.StepMonitor, this));
             RegisterCallbacks();
