@@ -31,8 +31,11 @@ namespace SaintX
             log.Info("Main window created.");
             this.Loaded += MainWindow_Loaded;
             this.Closed += MainWindow_Closed;
+            this.Closing += MainWindow_Closing;
             lstSteps.DataContext = stepViewModel.StepsModel;
         }
+
+        
 
         
 
@@ -72,6 +75,10 @@ namespace SaintX
             }
         }
 
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            EVOController.Instance.AbortMonitoring = true;
+        }
 
         void MainWindow_Closed(object sender, EventArgs e)
         {

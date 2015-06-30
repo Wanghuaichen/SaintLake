@@ -60,6 +60,13 @@ namespace SaintX.Utility
             string filePath = GetOutputFolder() + file + ".txt";
             File.WriteAllText(filePath, s);
         }
+
+        internal static void WriteRunInfo(string info)
+        {
+            string filePath = GetOutputFolder() + "history.txt";
+            string timeStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(filePath, timeStr +"  "+ info);
+        }
     }
 
   

@@ -2,6 +2,7 @@
 using SaintX.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -15,21 +16,50 @@ namespace SaintX
         WindowOp winOp = new WindowOp();
         System.Timers.Timer timer = new System.Timers.Timer(1000);
         CheckCondition checkCondition;
-        public delegate void delStartFinished();
-        public event delStartFinished onStartFinished;
-        public void Start()
+        BackgroundWorker backGroundWorker;
+
+        public delegate void DelegateStartFinished();
+        public delegate void CloseSucceed();
+        public event DelegateStartFinished onStartFinished;
+        public event CloseSucceed onCloseSucceed;
+        private static EVOController instance;
+        public bool AbortMonitoring { get; set; }
+        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        static public EVOController Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new EVOController();
+                return instance;
+            }
+        }
+
+        private EVOController()
+        {
+            AbortMonitoring = false;
+        }
+
+        private bool EVOIsRunning()
         {
             Process[] processlist = Process.GetProcesses();
-            string[] mainWindowTitles = processlist.Where(x=>x.MainWindowTitle != "").Select(x => x.MainWindowTitle).ToArray();
+            string[] mainWindowTitles = processlist.Where(x => x.MainWindowTitle != "").Select(x => x.MainWindowTitle).ToArray();
             bool evoRunning = mainWindowTitles.Where(x => x.Contains("Freedom EVOware")).Count() > 0;
-            if (evoRunning)
+            return evoRunning;
+        }
+
+        public void Start()
+        {
+            if (EVOIsRunning())
+            {
+                Started = true;
                 return;
+            }
             checkCondition = new CheckCondition("Selection", 60);
             timer.Elapsed += timer_Elapsed;
             timer.Start();
-            Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", "-b -r " + GlobalVars.Instance.ScriptName);
+            Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", "-b -u Sansure -w natchs -r " + GlobalVars.Instance.ScriptName);
         }
-
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             checkCondition.remainSeconds--;
@@ -41,6 +71,7 @@ namespace SaintX
             }
             if (bStarted)
             {
+                Started = true;
                 Debug.WriteLine("Started!");
                 if (onStartFinished != null)
                     onStartFinished();
@@ -53,62 +84,110 @@ namespace SaintX
 
         public void RunScript()
         {
-            winOp.SelectScript(GlobalVars.Instance.ScriptName);
+            winOp.SelectScriptListBoxItem(GlobalVars.Instance.ScriptName);
             winOp.WaitForRunWindow();
-            winOp.RunScript();
-           
+            winOp.ClickRunButton();
         }
 
         public void Close()
         {
+            StartMonitoring();
             SystemWindow selectionWindow = winOp.GetSelectionWindow();
             SystemWindow runWindow = winOp.GetRuntimeControllerWindow();
-
+            SystemWindow startUp = winOp.GetStartupWindow();
             if (runWindow != null)
             {
                 CloseRuntimeControlWindow(runWindow);
+                return;
             }
 
             if (selectionWindow != null)
             {
                 CloseSelectionWindow(selectionWindow);
+                return;
+            }
+
+            if(startUp != null)
+            {
+                startUp.SendClose();
+                CloseQuestionWindow();
+                return;
             }
         }
 
+        private void StartMonitoring()
+        {
+            var myThread = new Thread(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    SleepALittle();
+                    SleepALittle();
+                    bool processDead = !EVOIsRunning();
+                    log.Info(string.Format("Process is dead: {0}", processDead));
+                    bool isClosing = false;
+                    SystemWindow closingWindow = winOp.GetShuttingDownWindow();
+                    if (closingWindow != null)
+                    {
+                        log.Info("Shutting Down");
+                        isClosing = true;
+                    }
+                    if (isClosing || processDead)
+                    {
+                        if (onCloseSucceed != null)
+                            onCloseSucceed();
+                        break;
+                    }
+                    if (AbortMonitoring)
+                        break;
+                }
+            });
+            myThread.Start(); 
+        }
+
+        void SleepALittle()
+        {
+            Thread.Sleep(400);
+        }
     
         private void CloseSelectionWindow(SystemWindow selectionWindow)
         {
             selectionWindow.SendClose();
             CloseQuestionWindow();
         }
+
         private void CloseQuestionWindow()
         {
-            Thread.Sleep(800);
-            SystemWindow questionWindow = winOp.GetWindow("Question");
-            if (questionWindow != null)
-                questionWindow.SendClose();
+            DelayCloseWindow("Question");
         }
 
-        private void CloseRuntimeControlWindow(SystemWindow runWindow)
+        private bool DelayCloseWindow(string sName)
         {
-            bool bok = false;
-            runWindow.SendClose();
+            bool bClosed = false;
             for (int i = 0; i < 5; i++)
             {
-                Thread.Sleep(500);
-                SystemWindow startupWindow = winOp.GetWindow("Startup");
-                if (startupWindow != null)
+                SleepALittle();
+                SystemWindow win2Close = winOp.GetWindow(sName);
+                if (win2Close != null)
                 {
-                    startupWindow.SendClose();
-                    bok = true;
+                    win2Close.SendClose();
+                    bClosed = true;
                     break;
                 }
             }
+            return bClosed;
+        }
+        private void CloseRuntimeControlWindow(SystemWindow runWindow)
+        {
+            runWindow.SendClose();
+            bool bok = DelayCloseWindow("Startup");
             if (!bok)
                 throw new Exception("无法正常关闭！");
             CloseQuestionWindow();
 
         }
+
+        public bool Started { get; set; }
     }
 
     struct CheckCondition

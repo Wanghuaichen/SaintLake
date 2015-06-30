@@ -22,25 +22,93 @@ namespace SaintX.StageControls
     {
         TimeEstimation timeEstimation = null;
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
-        EVOController evoController = new EVOController();
+        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
-            //
-            //this.Loaded += StepMonitor_Loaded;
+            EVOController.Instance.onCloseSucceed += Instance_onCloseSucceed;
+            EVOController.Instance.onStartFinished += Instance_onStartFinished;
         }
-        
+
         protected override void Initialize()
         {
+            log.Info("Initialize StepMonitor");
             InitStepsInfo();
             CreateNamedPipeServer();
             CalculateShoppingList();
+            if(EVOController.Instance.Started)
+            {
+                btnStart.IsEnabled = true;
+                btnCloseEVOware.IsEnabled = true;
+            }
+            else
+            {
+                SetInfo("等待EVOware启动完成。", Colors.Black);
+                
+            }
         }
 
-  
+
+        #region events
+        void Instance_onCloseSucceed()
+        {
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                log.Info("close EVOware successfully.");
+                SetInfo("成功关闭EVOWare", Colors.Green);
+            });
+        }
+
+        void Instance_onStartFinished()
+        {
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                btnStart.IsEnabled = true;
+                btnCloseEVOware.IsEnabled = true;
+                log.Info("EVOware started successfully.");
+                SetInfo("EVOware已经启动。", Colors.Green);
+            });
+        }
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
+            log.Info("btn start clicked.");
+            try
+            {
+                EVOController.Instance.RunScript();
+                WriteVariables();
+            }
+            catch (Exception ex)
+            {
+                SetInfo(ex.Message, Colors.Red);
+                return;
+            }
+            FolderHelper.WriteResult(true);
+            FeedWaiter();
+            timeEstimation.StartMajorStep(1);
+            btnStart.IsEnabled = false;
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            log.Info("btn exit clicked.");
+            try
+            {
+                EVOController.Instance.Close();
+            }
+            catch (Exception ex)
+            {
+                SetInfo(ex.Message, Colors.Red);
+            }
+
+        }
+
+        #endregion
+     
         private void CalculateShoppingList()
         {
+            log.Info("calculate shopping list.");
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
            
             List<ReagentShopplist> shoppingList = new List<ReagentShopplist>();
@@ -147,31 +215,13 @@ namespace SaintX.StageControls
         #endregion
    
 
-        private void btnStart_Click(object sender, RoutedEventArgs e)
-        {
-            string errMsg = "";
-            try
-            {
-                evoController.RunScript();
-                WriteVariables();
-            }
-            catch(Exception ex)
-            {
-                SetInfo(ex.Message, Colors.Red);
-                return;
-            }
-            Window parentWindow = Window.GetWindow(this);
-            parentWindow.Topmost = true;
-            FolderHelper.WriteResult(true);
-            FeedWaiter();
-            timeEstimation.StartMajorStep(1);
-            btnStart.IsEnabled = false;
-        }
-
+      
         private void WriteVariables()
         {
             FolderHelper.WriteVariable("sampleCount", GlobalVars.Instance.SampleCount.ToString());
             FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.ScriptName.ToString());
+            FolderHelper.WriteRunInfo(string.Format("Sample Count: {0}, ProtocolName: {1}", GlobalVars.Instance.SampleCount, GlobalVars.Instance.ScriptName));
+
         }
 
         private void FeedWaiter()
@@ -199,6 +249,7 @@ namespace SaintX.StageControls
 
         private bool CheckLabwares(List<StepDefinition> stepsDef, ref string errMsg)
         {
+            log.Info("check labwares.");
             List<string> labels = null;
             try
             {
@@ -229,18 +280,7 @@ namespace SaintX.StageControls
             return true;
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                evoController.Close();
-            }
-            catch(Exception ex)
-            {
-                SetInfo(ex.Message,Colors.Red);
-            }
-            
-        }
+     
     }
 
     class PipettingInfo

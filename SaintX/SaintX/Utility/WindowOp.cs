@@ -11,7 +11,7 @@ namespace SaintX
 {
     public class WindowOp
     {
-        
+        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static bool firstRun = true;
         WindowMessenger winMessenger = new WindowMessenger();
         public List<string> EnumTopWindows()
@@ -27,8 +27,14 @@ namespace SaintX
             else
                 return selectionWindows[0];
         }
-
-
+        public SystemWindow GetStartupWindow()
+        {
+            return GetWindow("Startup");
+        }
+        public SystemWindow GetShuttingDownWindow()
+        {
+            return GetWindow("Shutting Down");
+        }
         public SystemWindow GetSelectionWindow()
         {
             return GetWindow("Selection");
@@ -38,17 +44,15 @@ namespace SaintX
             return GetWindow("Runtime Controller");
         }
 
+        private SystemWindow GetNewRunWindow()
+        {
+            return GetWindow("New Run");
+        }
+
         private bool IsEVOware(string s)
         {
             return s.Contains("EVOware") && s.Contains("Freedom");
         }
-
-        //public bool ShowEVOware(bool bVisible)
-        //{
-        //    if (winEVOware != null)
-        //        winEVOware.Visible = bVisible;
-        //    return winEVOware != null;
-        //}
 
         protected void Select(AutomationElement element)
         {
@@ -61,6 +65,7 @@ namespace SaintX
             var click = element.GetCurrentPattern(InvokePattern.Pattern) as InvokePattern;
             click.Invoke();
         }
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
@@ -72,7 +77,7 @@ namespace SaintX
         static extern bool SetCursorPos(int X, int Y);
         
         const int SW_SHOWMINNOACTIVE = 7;
-
+        const int SW_SHOW = 5;
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -81,76 +86,94 @@ namespace SaintX
             ShowWindow(handle, SW_SHOWMINNOACTIVE);
         }
 
-
+        private void ShowWindow(IntPtr handle)
+        {
+            ShowWindow(handle, SW_SHOW);
+        }
 
         internal void WaitForRunWindow()
         {
+            log.Info("Wait for run window");
             bool bFound = false;
             for (int i = 0; i < 20; i++)
             {
                 var runWindow = GetWindow("Runtime Controller");
                 if (runWindow != null)
                 {
+                    log.Info("found the window");
                     bFound = true;
                     break;
                 }
                 Thread.Sleep(250);
             }
-            Thread.Sleep(200);
+            Thread.Sleep(500);
             if (!bFound)
                 throw new Exception("运行窗口不存在！");
 
         }
 
-        public void RunScript()
+        public void ClickRunButton()
         {
+            log.Info("try to run script");
             var runWindow = GetWindow("Runtime Controller");
             if (runWindow == null)
                 throw new Exception("运行窗口不存在！");
-            if (firstRun)
-            {
-                firstRun = false;
-            }
-            else
-            {
-                ClickNewButton(runWindow);
-                Thread.Sleep(200);
-            }
+            Thread.Sleep(1000);
+            var newRunWindow = GetNewRunWindow();
+            if (newRunWindow != null)
+                ClickNewButton(newRunWindow);
+            log.Info("click run button");
             ClickRunButton(runWindow);
+            log.Info("minimize");
             MinimizeWindow(runWindow.HWnd);
 
         }
 
+    
         private void ClickNewButton(SystemWindow runWindow)
         {
-            SystemWindow[] newButtons = runWindow.AllDescendantWindows.Where(x => x.Title == "New Run").ToArray();
-            if (newButtons.Count() == 0)
+            var newButton = GetNewRunWindow();
+            if(newButton == null)
                 throw new Exception("新建按钮无法找到！");
-            ClickButton(newButtons[0]);
-
+            ClickButton(newButton);
         }
+
         private void ClickRunButton(SystemWindow runWindow)
         {
-            SystemWindow[] runButtons = runWindow.AllDescendantWindows.Where(x => x.Title == "Run").ToArray();
-            if (runButtons.Count() == 0)
-                throw new Exception("运行按钮无法找到！");
-            ClickButton(runButtons[0]);
+            int retryTimes = 6;
+            for (;;)
+            {
+                SystemWindow[] runButtons = runWindow.AllDescendantWindows.Where(x => x.Title == "Run" && x.Visible).ToArray();
+                if (runButtons.Count() == 0)
+                {
+                    retryTimes--;
+                    Thread.Sleep(400);
+                    if (retryTimes == 0)
+                        throw new Exception("运行按钮无法找到！");
+                }
+                else
+                {
+                    ClickButton(runButtons.First());
+                    break;
+                }
+            } 
         }
 
         private void ClickButton(SystemWindow systemWindow)
         {
-            systemWindow.Highlight();
             POINT pt = winMessenger.GetWindowCenter(systemWindow);
             winMessenger.MouseMove(pt.X, pt.Y);
+            Thread.Sleep(100);
             winMessenger.Click();
         }
 
 
-        public void SelectScript(string scriptName)
+        public void SelectScriptListBoxItem(string scriptName)
         {
             var window = GetSelectionWindow();
             if (window == null)
                 throw new Exception("无法找到脚本选择窗口！");
+            ShowWindow(window.HWnd);
             AutomationElement scriptWindow = AutomationElement.FromHandle(window.HWnd);
             AutomationElement result = scriptWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, scriptName));
             if (result == null)
@@ -175,5 +198,9 @@ namespace SaintX
 
 
 
+
+
+
+        
     }
 }

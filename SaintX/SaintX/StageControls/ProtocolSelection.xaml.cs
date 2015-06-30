@@ -17,7 +17,7 @@ namespace SaintX.StageControls
     /// </summary>
     public partial class ProtocolSelection : BaseUserControl
     {
-        EVOController evoController = new EVOController();
+        
         List<string> allScripts = new List<string>();
         public ProtocolSelection(Stage stage, BaseHost host)
             : base(stage, host)
@@ -58,7 +58,7 @@ namespace SaintX.StageControls
             GlobalVars.Instance.ScriptName = (string)lstProtocols.SelectedItem;
             try
             {
-                evoController.Start();
+                EVOController.Instance.Start();
             }
             catch(Exception ex)
             {

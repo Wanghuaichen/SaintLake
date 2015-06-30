@@ -88,7 +88,7 @@ namespace SaintX.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.04.
+        ///   Looks up a localized string similar to 0.06.
         /// </summary>
         internal static string version {
             get {
