@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using SaintX.Properties;
+using Natchs.Properties;
 
 namespace SaintX
 {

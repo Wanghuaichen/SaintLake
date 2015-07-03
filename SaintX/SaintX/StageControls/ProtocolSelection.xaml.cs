@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace SaintX.StageControls
 {
@@ -29,17 +30,30 @@ namespace SaintX.StageControls
                 FileInfo fileInfo = new FileInfo(s);
                 allScripts.Add(fileInfo.Name.Replace(".esc",""));
             }
-            lstProtocols.ItemsSource = allScripts;
-            lstProtocols.SelectionChanged += lstProtocols_SelectionChanged;
-            lstProtocols.SelectedIndex = 0;
+            lstAssay.ItemsSource = new List<string> {"HBV","HCV"};
+            lstAssay.SelectedIndex = 0;
+            chkOneStep.Click += chkOneStep_Click;
+            chkMag.Click += chkMag_Click;
+            //lstProtocols.ItemsSource = allScripts;
+            //lstProtocols.SelectionChanged += lstProtocols_SelectionChanged;
+            //lstProtocols.SelectedIndex = 0;
         }
 
-        void lstProtocols_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        void chkMag_Click(object sender, RoutedEventArgs e)
         {
-            if(lstProtocols.Items != null && lstProtocols.SelectedItem != null)
-            {
-                UpdateBackGroundImage((string)lstProtocols.SelectedItem);
-            }
+            OnProtocolChanged();
+        }
+
+        void chkOneStep_Click(object sender, RoutedEventArgs e)
+        {
+            OnProtocolChanged();
+        }
+
+        private void OnProtocolChanged()
+        {
+           string imageName = GetProtocolName();
+            UpdateBackGroundImage(imageName);
+            
         }
 
         private IEnumerable<string> EnumScripts()
@@ -50,12 +64,36 @@ namespace SaintX.StageControls
 
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
-            if (lstProtocols.SelectedItem == null)
+            if (lstAssay.SelectedItem == null)
             {
                 SetInfo("请选中一个实验！");
                 return;
             }
-            GlobalVars.Instance.ScriptName = (string)lstProtocols.SelectedItem;
+            int smpCnt = 16;
+            bool bInteger = int.TryParse(txtSampleCount.Text, out smpCnt);
+            if(!bInteger)
+            {
+                SetInfo("样品数量必须为数字！");
+                return;
+            }
+
+            if(smpCnt <16)
+            {
+                SetInfo("样品数量不得小于16！");
+                return;
+            }
+            string scriptName = "";
+
+            try
+            {
+               scriptName = GetScriptName((string)lstAssay.SelectedItem);
+            }
+            catch(Exception ex)
+            {
+                SetInfo(string.Format("无法找到合适的脚本，试验方法必须是{0}且用{1}试剂！",GetProtocolName(),(string)lstAssay.SelectedItem));
+                return;
+            }
+            GlobalVars.Instance.ScriptName = scriptName;
             try
             {
                 EVOController.Instance.Start();
@@ -67,6 +105,16 @@ namespace SaintX.StageControls
             }
             SettingsManager.Instance.UpdateProtocol();
             NotifyFinished();
+        }
+        private string GetProtocolName()
+        {
+            string protocolName = (bool)chkMag.IsChecked ? "mag" : "oneStep";
+            return protocolName;
+        }
+        private string GetScriptName(string assayName)
+        {
+            string protocolName = GetProtocolName();
+            return allScripts.Where(x => x.Contains(assayName) && x.Contains(protocolName)).First();
         }
 
         private void SetInfo(string s)
@@ -80,6 +128,15 @@ namespace SaintX.StageControls
         private void UpdateBackGroundImage(string imageName)
         {
             string file = FolderHelper.GetImageFolder() + imageName + ".jpg";
+            if(!File.Exists(file))
+            {
+                SetInfo("无法找到相应的布局图!");
+                return;
+            }
+            else
+            {
+                SetInfo("");
+            }
             ImageSource imageSource = new BitmapImage(new Uri(file));
             layoutImg.Source = imageSource;
 

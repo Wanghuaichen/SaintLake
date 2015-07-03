@@ -1,4 +1,4 @@
-﻿using SaintX.Properties;
+﻿using Natchs.Properties;
 using System;
 using System.Collections;
 using System.ComponentModel;

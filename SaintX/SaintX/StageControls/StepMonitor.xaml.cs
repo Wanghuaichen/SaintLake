@@ -49,7 +49,6 @@ namespace SaintX.StageControls
             }
         }
 
-
         #region events
         void Instance_onCloseSucceed()
         {
@@ -62,6 +61,7 @@ namespace SaintX.StageControls
 
         void Instance_onStartFinished()
         {
+            log.Info("Instance_onStartFinished");
             this.Dispatcher.Invoke((Action)delegate
             {
                 btnStart.IsEnabled = true;
@@ -101,7 +101,6 @@ namespace SaintX.StageControls
             {
                 SetInfo(ex.Message, Colors.Red);
             }
-
         }
 
         #endregion

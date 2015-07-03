@@ -44,8 +44,7 @@ namespace SaintX
     {
         Selection = 0,
         //AssayDef = 1,
-        //BarcodeDef = 2,
-        StepMonitor =1
+        StepMonitor = 1
     };
 
     class StepDesc

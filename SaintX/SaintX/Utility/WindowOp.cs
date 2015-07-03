@@ -126,7 +126,6 @@ namespace SaintX
             ClickRunButton(runWindow);
             log.Info("minimize");
             MinimizeWindow(runWindow.HWnd);
-
         }
 
     
@@ -195,12 +194,5 @@ namespace SaintX
                 throw new Exception("无法找到下一步按钮！");
             return okButton;
         }
-
-
-
-
-
-
-        
     }
 }

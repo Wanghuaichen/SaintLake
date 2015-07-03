@@ -68,7 +68,4 @@ namespace SaintX.Utility
             File.AppendAllText(filePath, timeStr +"  "+ info);
         }
     }
-
-  
-
 }

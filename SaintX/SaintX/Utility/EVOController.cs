@@ -3,6 +3,7 @@ using SaintX.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -50,20 +51,26 @@ namespace SaintX
 
         public void Start()
         {
-            if (EVOIsRunning())
+            if (!EVOIsRunning())
             {
-                Started = true;
-                return;
+                string userName = ConfigurationManager.AppSettings["user"];
+                string password = ConfigurationManager.AppSettings["password"];
+                string cmdLine = string.Format(@" -b -u {0} -w {1} -r {2}", userName, password, GlobalVars.Instance.ScriptName);
+                Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", cmdLine);
             }
             checkCondition = new CheckCondition("Selection", 60);
             timer.Elapsed += timer_Elapsed;
             timer.Start();
-            Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", "-b -u Sansure -w natchs -r " + GlobalVars.Instance.ScriptName);
+       
         }
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             checkCondition.remainSeconds--;
-            bool bStarted = winOp.GetWindow(checkCondition.windowName) != null;
+            //bool bStarted = winOp.GetWindow(checkCondition.windowName) != null;
+            var allTopWindows = winOp.EnumTopWindows();
+            //allTopWindows.ForEach(x => log.Info(x));
+            bool bStarted = allTopWindows.Exists(x => x.Contains(checkCondition.windowName));
+            log.InfoFormat("found selection:{0}", bStarted);
             bool noTime = checkCondition.remainSeconds == 0;
             if (noTime)
             {
@@ -71,6 +78,7 @@ namespace SaintX
             }
             if (bStarted)
             {
+                log.Info("Started!");
                 Started = true;
                 Debug.WriteLine("Started!");
                 if (onStartFinished != null)
@@ -100,13 +108,11 @@ namespace SaintX
                 CloseRuntimeControlWindow(runWindow);
                 return;
             }
-
             if (selectionWindow != null)
             {
                 CloseSelectionWindow(selectionWindow);
                 return;
             }
-
             if(startUp != null)
             {
                 startUp.SendClose();
@@ -184,7 +190,6 @@ namespace SaintX
             if (!bok)
                 throw new Exception("无法正常关闭！");
             CloseQuestionWindow();
-
         }
 
         public bool Started { get; set; }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:bb="clr-namespace:SaintX.Navigation"
         Icon="Images\project.png"
-        Title="SaintX" Height="800" Width="1200" MinHeight="780" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="Natchs" Height="800" Width="1200" MinHeight="780" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.CommandBindings>
         <CommandBinding Command="Help" Executed="CommandHelp_Executed" CanExecute="CommandHelp_CanExecute"/>
     </Window.CommandBindings>

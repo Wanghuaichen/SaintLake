@@ -35,10 +35,6 @@ namespace SaintX
             lstSteps.DataContext = stepViewModel.StepsModel;
         }
 
-        
-
-        
-
         #region commands
         private void CommandHelp_Executed(object sender, ExecutedRoutedEventArgs e)
         {
