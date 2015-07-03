@@ -13,7 +13,7 @@ namespace SaintX.Data
 
         public GlobalVars()
         {
-            //SampleLayoutSettings = new SampleLayoutSettings();
+            SampleLayoutSettings = new SampleLayoutSettings();
         }
         
         static public GlobalVars Instance
@@ -57,6 +57,8 @@ namespace SaintX.Data
 
 
         public Stage FarthestStage { get; set; }
+
+        public SampleLayoutSettings SampleLayoutSettings { get; set; }
     }
     
 }

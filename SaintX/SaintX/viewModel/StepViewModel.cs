@@ -17,12 +17,12 @@ namespace SaintX
         {
             string sDataFolder =  FolderHelper.GetImageFolder();
             //BitmapImage scan = new BitmapImage(new Uri(sDataFolder + "sampleDef.png"));
-            //BitmapImage dissolve = new BitmapImage(new Uri(sDataFolder + "barcodeDef.jpg"));
+            BitmapImage barcodeDef = new BitmapImage(new Uri(sDataFolder + "barcodeDef.jpg"));
             BitmapImage tick = new BitmapImage(new Uri(sDataFolder + "genScript.jpg"));
             BitmapImage selection = new BitmapImage(new Uri(sDataFolder + "selection.jpg"));
             stepDescs.Add(new StepDesc("方法选择", selection, Stage.Selection));
             //stepDescs.Add(new StepDesc("样品定义", scan, Stage.AssayDef));
-            //stepDescs.Add(new StepDesc("条码设置", dissolve, Stage.BarcodeDef));
+            stepDescs.Add(new StepDesc("条码设置", barcodeDef, Stage.BarcodeDef));
             stepDescs.Add(new StepDesc("运行实验", tick, Stage.StepMonitor));
         }
 
@@ -44,7 +44,8 @@ namespace SaintX
     {
         Selection = 0,
         //AssayDef = 1,
-        StepMonitor = 1
+        BarcodeDef = 1,
+        StepMonitor = 2
     };
 
     class StepDesc

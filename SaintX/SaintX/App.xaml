@@ -5,7 +5,7 @@
              xmlns:utility="clr-namespace:SaintX.Utility"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <src:MyColorConverter x:Key="colorConverter"/>
+        <!--<src:MyColorConverter x:Key="colorConverter"/>-->
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="SimSun"/>

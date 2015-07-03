@@ -15,10 +15,8 @@ namespace SaintX
     class EVOController
     {
         WindowOp winOp = new WindowOp();
-        System.Timers.Timer timer = new System.Timers.Timer(1000);
+        System.Timers.Timer timer = new System.Timers.Timer(400);
         CheckCondition checkCondition;
-        BackgroundWorker backGroundWorker;
-
         public delegate void DelegateStartFinished();
         public delegate void CloseSucceed();
         public event DelegateStartFinished onStartFinished;
@@ -58,7 +56,7 @@ namespace SaintX
                 string cmdLine = string.Format(@" -b -u {0} -w {1} -r {2}", userName, password, GlobalVars.Instance.ScriptName);
                 Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", cmdLine);
             }
-            checkCondition = new CheckCondition("Selection", 60);
+            checkCondition = new CheckCondition("Selection", 150);
             timer.Elapsed += timer_Elapsed;
             timer.Start();
        
@@ -68,7 +66,11 @@ namespace SaintX
             checkCondition.remainSeconds--;
             //bool bStarted = winOp.GetWindow(checkCondition.windowName) != null;
             var allTopWindows = winOp.EnumTopWindows();
-            //allTopWindows.ForEach(x => log.Info(x));
+            var loadingWindow = winOp.GetWindow("Loading");
+            if(loadingWindow != null)
+            {
+                winOp.HideWindow(loadingWindow);
+            }
             bool bStarted = allTopWindows.Exists(x => x.Contains(checkCondition.windowName));
             log.InfoFormat("found selection:{0}", bStarted);
             bool noTime = checkCondition.remainSeconds == 0;
@@ -136,6 +138,7 @@ namespace SaintX
                     if (closingWindow != null)
                     {
                         log.Info("Shutting Down");
+                        winOp.HideWindow(closingWindow);
                         isClosing = true;
                     }
                     if (isClosing || processDead)

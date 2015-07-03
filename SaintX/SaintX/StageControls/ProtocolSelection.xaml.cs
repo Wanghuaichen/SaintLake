@@ -103,6 +103,7 @@ namespace SaintX.StageControls
                 SetInfo(ex.Message);
                 return;
             }
+            GlobalVars.Instance.SampleLayoutSettings = SampleLayoutSettings.Create(smpCnt);
             SettingsManager.Instance.UpdateProtocol();
             NotifyFinished();
         }

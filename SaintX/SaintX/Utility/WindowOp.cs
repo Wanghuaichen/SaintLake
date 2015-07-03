@@ -78,6 +78,7 @@ namespace SaintX
         
         const int SW_SHOWMINNOACTIVE = 7;
         const int SW_SHOW = 5;
+        const int SW_HIDE = 0;
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -193,6 +194,11 @@ namespace SaintX
             if (okButton == null)
                 throw new Exception("无法找到下一步按钮！");
             return okButton;
+        }
+
+        internal void HideWindow(SystemWindow window)
+        {
+            ShowWindow(window.HWnd, SW_HIDE);
         }
     }
 }

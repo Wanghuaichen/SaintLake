@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:bb="clr-namespace:SaintX.Navigation"
         Icon="Images\project.png"
-        Title="Natchs" Height="800" Width="1200" MinHeight="780" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="Natchs" HorizontalAlignment="Left" Height="800" Width="1200" MinHeight="780" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.CommandBindings>
         <CommandBinding Command="Help" Executed="CommandHelp_Executed" CanExecute="CommandHelp_CanExecute"/>
     </Window.CommandBindings>
@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel >
             <Label Content="步骤指示：" Width="100"/>
-            <Image Source="/SaintX;component/Images/guidePost2.png" Height="100" Width="100" Margin="50,0"/>
+            <Image Source="/Natchs;component/Images/guidePost2.png" Height="100" Width="100" Margin="50,0"/>
         </StackPanel>
         <ListBox ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  ItemTemplate="{StaticResource ImageListbox}" Margin="0,0,0,0" Name="lstSteps" SelectionMode="Single"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="lstSteps_PreviewMouseLeftButtonUp" BorderBrush="LightGray">
             <ListBox.ItemsPanel>

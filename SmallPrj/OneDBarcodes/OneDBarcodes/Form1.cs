@@ -14,14 +14,25 @@ namespace OneDBarcodes
     public partial class Form1 : Form
     {
         
-        public delegate void UpdateViewDelegate(string text);
-        UpdateViewDelegate updateDelegate;
+        public delegate void UpdateDelegate(string text);
+        public delegate void UpdateLogDelegate(string text);
+        public delegate void SwitchCellDelegate();
+        UpdateDelegate updateDelegate;
+        SwitchCellDelegate switchCellDelegate;
+        UpdateLogDelegate updateLogDelegate;
         CellPosition curPositon = new CellPosition();
         public Form1()
         {
             InitializeComponent();
             InitSerialPort();
             updateDelegate = UpdateSingleCell;
+            switchCellDelegate = SwitchCurrentCell;
+            updateLogDelegate = UpdateLog;
+        }
+
+        private void UpdateLog(string text)
+        {
+            txtLog.Text += text + "\r\n";
         }
 
         private void InitSerialPort()
@@ -48,17 +59,23 @@ namespace OneDBarcodes
 
         void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            byte[] readBuffer = new byte[serialPort1.ReadBufferSize];
-            serialPort1.Read(readBuffer, 0, readBuffer.Length);
-            string barcode = Encoding.ASCII.GetString(readBuffer);
-            if (barcode == "")
-                return;
-            if(barcode.Length == 2)
-            {
-                curPositon = GetPositon(barcode);
-                return;
-            }
-            dataGridView1.Invoke(updateDelegate, new string[] { barcode });
+            try
+              {
+                  StringBuilder currentline = new StringBuilder();
+                  //循环接收数据
+                  while (serialPort1.BytesToRead > 0)
+                  {
+                      char ch = (char)serialPort1.ReadByte();
+                      currentline.Append(ch);
+                  }
+                  
+                  this.Invoke(updateLogDelegate, new string[] { currentline.ToString() });
+              }
+              catch(Exception ex)
+              {
+                  this.Invoke(updateLogDelegate, new string[] { ex.Message });
+             }
+
            
         }
 
@@ -67,14 +84,22 @@ namespace OneDBarcodes
             int val = int.Parse(barcode);
             return new CellPosition(val - 1);
         }
+        
+        private void SwitchCurrentCell()
+        {
+            //dataGridView1.CurrentCell = dataGridView1.Rows[curPositon.rowIndex].Cells[curPositon.colIndex];
 
+        }
       
 
         private void UpdateSingleCell(string barcode)
         {
-            GlobalVars.Instance.BarcodeSetting[curPositon] = barcode;
-            var cell = dataGridView1.Rows[curPositon.rowIndex].Cells[curPositon.colIndex];
-            cell.Value = barcode;
+            if (barcode.Length == 2)
+                return;
+
+            //GlobalVars.Instance.BarcodeSetting[curPositon] = barcode;
+            //var cell = dataGridView1.Rows[curPositon.rowIndex].Cells[curPositon.colIndex];
+            //cell.Value = barcode;
         }
 
         private void btnSet_Click(object sender, EventArgs e)

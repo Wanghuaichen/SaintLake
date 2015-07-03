@@ -18,7 +18,7 @@ namespace SaintX.Utility
         static SettingsManager _settingsManager = null;
         Protocol _protocol = null;
         //TestSetting testSetting = new TestSetting();
-        //private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
+        private Utility.PhysicalSettings _physicalSettings = new PhysicalSettings();
         static public SettingsManager Instance
         {
             get
@@ -81,17 +81,17 @@ namespace SaintX.Utility
             }
         }
 
-        //public PhysicalSettings PhysicalSettings
-        //{
-        //    get
-        //    {
-        //        return _physicalSettings;
-        //    }
-        //    set
-        //    {
-        //        _physicalSettings = value;
-        //    }
-        //}
+        public PhysicalSettings PhysicalSettings
+        {
+            get
+            {
+                return _physicalSettings;
+            }
+            set
+            {
+                _physicalSettings = value;
+            }
+        }
 
         //private ObservableCollection<ColorfulAssay> GetDummyAssays()
         //{

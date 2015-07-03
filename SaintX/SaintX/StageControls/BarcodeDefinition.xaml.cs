@@ -19,7 +19,7 @@ namespace SaintX.StageControls
     public partial class BarcodeDefinition : BaseUserControl
     {
         SampleLayoutSettings _sampleInfos = null;
-        List<ColorfulAssay> _assays;
+        //List<ColorfulAssay> _assays;
         PanelViewModel panelVM;
         
 
@@ -38,9 +38,10 @@ namespace SaintX.StageControls
 
         protected override void Initialize()
         {
-            _assays = SettingsManager.Instance.Assays;
+            //_assays = SettingsManager.Instance.Assays;
+           
             _sampleInfos = GlobalVars.Instance.SampleLayoutSettings;
-            InitTreeview(_assays.Select(x => x.Name).ToList());
+            //InitTreeview(_assays.Select(x => x.Name).ToList());
             DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
         }
 
@@ -48,17 +49,18 @@ namespace SaintX.StageControls
         {
             base.onStageChanged(sender, e);
             DataGridViewHelper.InitDataGridView(dataGridView, CurStage);
+            
             if(this.Visibility != System.Windows.Visibility.Visible)
                 return;
             DataGridViewHelper.UpdateDataGridView(dataGridView,CurStage);
         }
 
-        private void InitTreeview(List<string> assays)
-        {
-            panelVM = PanelViewModel.CreateViewModel(assays);
-            tree.ItemsSource = new ObservableCollection<PanelViewModel>() { panelVM };
-            this.tree.Focus();
-        }
+        //private void InitTreeview(List<string> assays)
+        //{
+        //    panelVM = PanelViewModel.CreateViewModel(assays);
+        //    tree.ItemsSource = new ObservableCollection<PanelViewModel>() { panelVM };
+        //    this.tree.Focus();
+        //}
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -134,26 +136,11 @@ namespace SaintX.StageControls
         #region barcode setting
         private void btnBarcodeOk_Click(object sender, RoutedEventArgs e)
         {
-            // Might be a bit lengthy operation
-            // Assays need to assign barcode
-            PanelViewModel root_PVM = ((ObservableCollection<PanelViewModel>)tree.ItemsSource)[0];
-            List<PanelViewModel> checked_PVMs = root_PVM.Children.FindAll(pvm => pvm.IsChecked.Value);
-            List<string> checked_assays = new List<string>();
-            foreach (var pvm in checked_PVMs)
-                checked_assays.Add(pvm.Name);
-
-            if (checked_assays.Count == 0)
-            {
-                this.Cursor = System.Windows.Input.Cursors.Arrow;
-                return;
-            }
-
             int startCol = dataGridView.SelectedCells[0].ColumnIndex;
             int startRow = dataGridView.SelectedCells[0].RowIndex;
             int startSampleID = GetID(new CellPosition(startCol, startRow));
             GlobalVars.Instance.SampleLayoutSettings.Sort();
-
-
+            
             int totalBarcodeCnt = 0;
             int usedBarcodeCnt = 0;
             int curBarcodeNum = 0;
@@ -165,8 +152,8 @@ namespace SaintX.StageControls
                     break;
                 if (GetID(pair.Key) < startSampleID)
                     continue;
-                if (!checked_assays.Contains(pair.Value.ColorfulAssay.Name))
-                    continue;
+                //if (!checked_assays.Contains(pair.Value.ColorfulAssay.Name))
+                //    continue;
                 pair.Value.Barcode = curBarcodeNum.ToString();
                 curBarcodeNum++;
                 usedBarcodeCnt++;
@@ -349,6 +336,11 @@ namespace SaintX.StageControls
             ValidateBarcodeSettingApproach2();
         }
         #endregion
+
+        private void btnSkip_Click(object sender, RoutedEventArgs e)
+        {
+            NotifyFinished();
+        }
     }
 
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]

@@ -88,7 +88,7 @@ namespace Natchs.Properties {
         }
         
         /// <summary>
-        ///   查找类似 0.07 的本地化字符串。
+        ///   查找类似 0.09 的本地化字符串。
         /// </summary>
         internal static string version {
             get {

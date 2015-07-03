@@ -22,8 +22,7 @@ namespace SaintX.StageControls
     {
         TimeEstimation timeEstimation = null;
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
-        protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+    
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
@@ -39,13 +38,11 @@ namespace SaintX.StageControls
             CalculateShoppingList();
             if(EVOController.Instance.Started)
             {
-                btnStart.IsEnabled = true;
-                btnCloseEVOware.IsEnabled = true;
+                Instance_onStartFinished();
             }
             else
             {
                 SetInfo("等待EVOware启动完成。", Colors.Black);
-                
             }
         }
 
@@ -85,10 +82,13 @@ namespace SaintX.StageControls
                 return;
             }
             FolderHelper.WriteResult(true);
+            FolderHelper.Backup();
             FeedWaiter();
             timeEstimation.StartMajorStep(1);
             btnStart.IsEnabled = false;
         }
+
+       
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {

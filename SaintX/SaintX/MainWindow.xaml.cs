@@ -95,24 +95,24 @@ namespace SaintX
 
 
 
-    #region  color converter
-    [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
-    public class MyColorConverter : IValueConverter
-    {
+    //#region  color converter
+    //[ValueConversion(typeof(Color), typeof(SolidColorBrush))]
+    //public class MyColorConverter : IValueConverter
+    //{
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return new SolidColorBrush((Color)value);
-        }
+    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        return new SolidColorBrush((Color)value);
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            //throw new NotImplementedException();
-            SolidColorBrush solidColorBrush = (SolidColorBrush)value;
-            return solidColorBrush.Color;
-        }
-    }
-    #endregion endregion
+    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        //throw new NotImplementedException();
+    //        SolidColorBrush solidColorBrush = (SolidColorBrush)value;
+    //        return solidColorBrush.Color;
+    //    }
+    //}
+    //#endregion endregion
 
 
 }
