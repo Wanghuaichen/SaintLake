@@ -54,13 +54,14 @@ namespace SaintX
                 string userName = ConfigurationManager.AppSettings["user"];
                 string password = ConfigurationManager.AppSettings["password"];
                 string cmdLine = string.Format(@" -b -u {0} -w {1} -r {2}", userName, password, GlobalVars.Instance.ScriptName);
-                Process.Start(@"C:\Program Files (x86)\TECAN\EVOware\Evoware.exe", cmdLine);
+                string exePath = ConfigurationManager.AppSettings["exePath"];
+                Process.Start(exePath, cmdLine);
             }
             checkCondition = new CheckCondition("Selection", 150);
             timer.Elapsed += timer_Elapsed;
             timer.Start();
-       
         }
+
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             checkCondition.remainSeconds--;
@@ -72,7 +73,8 @@ namespace SaintX
                 winOp.HideWindow(loadingWindow);
             }
             bool bStarted = allTopWindows.Exists(x => x.Contains(checkCondition.windowName));
-            log.InfoFormat("found selection:{0}", bStarted);
+            //log.InfoFormat("found selection:{0}", bStarted);
+            Started = bStarted;
             bool noTime = checkCondition.remainSeconds == 0;
             if (noTime)
             {
@@ -80,13 +82,20 @@ namespace SaintX
             }
             if (bStarted)
             {
-                log.Info("Started!");
+                log.Info("EVO has started!");
+                timer.Stop();
                 Started = true;
-                Debug.WriteLine("Started!");
                 if (onStartFinished != null)
+                {
+                    log.Info("on start finished event raised");
                     onStartFinished();
+                }
+                else
+                {
+                    log.Info("on startedFinished has not been registed!");
+                }
             }
-            if (noTime || bStarted)
+            if (noTime)
             {
                 timer.Stop();
             }

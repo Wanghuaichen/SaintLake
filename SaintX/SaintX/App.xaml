@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:SaintX"
              xmlns:utility="clr-namespace:SaintX.Utility"
-             StartupUri="MainWindow.xaml">
+             >
     <Application.Resources>
         <!--<src:MyColorConverter x:Key="colorConverter"/>-->
         <Style TargetType="TextBlock">

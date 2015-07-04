@@ -22,33 +22,50 @@ namespace SaintX.StageControls
     {
         TimeEstimation timeEstimation = null;
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
-    
+        bool createdNamedPipe = false;
+        System.Timers.Timer chkTimer = new System.Timers.Timer(1000);
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
             EVOController.Instance.onCloseSucceed += Instance_onCloseSucceed;
-            EVOController.Instance.onStartFinished += Instance_onStartFinished;
+            EVOController.Instance.onStartFinished +=Instance_onStartFinished;
+        }
+        
+        private void UpdateWaitStatus()
+        {
+            if (EVOController.Instance.Started)
+            {
+                btnStart.IsEnabled = true;
+                btnCloseEVOware.IsEnabled = true;
+                log.Info("EVOware started successfully.");
+                SetInfo("EVOware已经启动。", Colors.Green);
+            }
+            else
+            {
+                log.Info("waiting EVOWare.");
+                SetInfo("等待EVOware启动完成。", Colors.Black);
+            }
         }
 
         protected override void Initialize()
         {
             log.Info("Initialize StepMonitor");
-            InitStepsInfo();
-            CreateNamedPipeServer();
-            CalculateShoppingList();
-            if(EVOController.Instance.Started)
+            try
             {
-                Instance_onStartFinished();
+                InitStepsInfo();
+                CalculateShoppingList();
+                UpdateWaitStatus();
             }
-            else
+            catch(Exception ex)
             {
-                SetInfo("等待EVOware启动完成。", Colors.Black);
+                SetInfo(ex.Message, Colors.Red);
             }
         }
 
         #region events
         void Instance_onCloseSucceed()
         {
+            log.Info("Instance_onCloseFinished");
             this.Dispatcher.Invoke((Action)delegate
             {
                 log.Info("close EVOware successfully.");
@@ -63,7 +80,6 @@ namespace SaintX.StageControls
             {
                 btnStart.IsEnabled = true;
                 btnCloseEVOware.IsEnabled = true;
-                log.Info("EVOware started successfully.");
                 SetInfo("EVOware已经启动。", Colors.Green);
             });
         }
@@ -146,17 +162,7 @@ namespace SaintX.StageControls
         }
 
         #region namedpipe
-        private void CreateNamedPipeServer()
-        {
-            Pipeserver.owner = this;
-            Pipeserver.ownerInvoker = new Invoker(this);
-            ThreadStart pipeThread = new ThreadStart(Pipeserver.createPipeServer);
-            Thread listenerThread = new Thread(pipeThread);
-            listenerThread.SetApartmentState(ApartmentState.STA);
-            listenerThread.IsBackground = true;
-            listenerThread.Start();
-        }
-
+      
         internal void ExecuteCommand(string sCommand)
         {
             if (sCommand.Contains("shutdown"))

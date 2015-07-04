@@ -59,6 +59,10 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TestSetting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TestSetting\bin\Debug\TestSetting.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationClient" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
@@ -167,12 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\guidePost2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TestSetting\TestSetting.csproj">
-      <Project>{73edf999-d3ba-41cd-a621-4159837f0711}</Project>
-      <Name>TestSetting</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\project.png" />

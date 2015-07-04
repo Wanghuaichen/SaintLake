@@ -37,6 +37,7 @@ namespace SaintX.StageControls
             //lstProtocols.ItemsSource = allScripts;
             //lstProtocols.SelectionChanged += lstProtocols_SelectionChanged;
             //lstProtocols.SelectedIndex = 0;
+            OnProtocolChanged();
         }
 
         void chkMag_Click(object sender, RoutedEventArgs e)
@@ -52,8 +53,7 @@ namespace SaintX.StageControls
         private void OnProtocolChanged()
         {
            string imageName = GetProtocolName();
-            UpdateBackGroundImage(imageName);
-            
+           UpdateBackGroundImage(imageName);
         }
 
         private IEnumerable<string> EnumScripts()
@@ -97,15 +97,16 @@ namespace SaintX.StageControls
             try
             {
                 EVOController.Instance.Start();
+                GlobalVars.Instance.SampleLayoutSettings = SampleLayoutSettings.Create(smpCnt);
+                SettingsManager.Instance.UpdateProtocol();
+                NotifyFinished();
             }
             catch(Exception ex)
             {
                 SetInfo(ex.Message);
                 return;
             }
-            GlobalVars.Instance.SampleLayoutSettings = SampleLayoutSettings.Create(smpCnt);
-            SettingsManager.Instance.UpdateProtocol();
-            NotifyFinished();
+            
         }
         private string GetProtocolName()
         {
