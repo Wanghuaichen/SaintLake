@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Natchs.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,8 @@ namespace SaintX.Data
     {
         private static GlobalVars _instance;
         private int _sampleCnt = 16;
-        private string panelType = "";
-
+        private string protocolName = "";
+        
         public GlobalVars()
         {
             SampleLayoutSettings = new SampleLayoutSettings();
@@ -27,17 +28,17 @@ namespace SaintX.Data
                 return _instance;
             }
         }
+        public LastRunInfos LastRunInfos { get; set; }
 
-
-        public string ScriptName
+        public string ProtocolName
         {
             get
             {
-                return panelType;
+                return protocolName;
             }
             set
             {
-                panelType = value;
+                protocolName = value;
             }
         }
 
@@ -59,6 +60,10 @@ namespace SaintX.Data
         public Stage FarthestStage { get; set; }
 
         public SampleLayoutSettings SampleLayoutSettings { get; set; }
+
+        public bool UseLastTimeSetting { get; set; }
+
+        public object AssayName { get; set; }
     }
     
 }

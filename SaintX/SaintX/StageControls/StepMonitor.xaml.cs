@@ -22,13 +22,15 @@ namespace SaintX.StageControls
     {
         TimeEstimation timeEstimation = null;
         ObservableCollection<StepDefinitionWithProgressInfo> stepsDefWithProgressInfo = new ObservableCollection<StepDefinitionWithProgressInfo>();
-        bool createdNamedPipe = false;
+        bool pipeCreated = false;
         System.Timers.Timer chkTimer = new System.Timers.Timer(1000);
+
         public StepMonitor(Stage stage, BaseHost host):base(stage,host)
         {
             InitializeComponent();
             EVOController.Instance.onCloseSucceed += Instance_onCloseSucceed;
             EVOController.Instance.onStartFinished +=Instance_onStartFinished;
+            
         }
         
         private void UpdateWaitStatus()
@@ -52,13 +54,50 @@ namespace SaintX.StageControls
             log.Info("Initialize StepMonitor");
             try
             {
+                CreateNamedPipeServer();
                 InitStepsInfo();
+                SetNeededTips();
+                SetLastRunInfo();
                 CalculateShoppingList();
                 UpdateWaitStatus();
             }
             catch(Exception ex)
             {
                 SetInfo(ex.Message, Colors.Red);
+            }
+        }
+
+        private void SetNeededTips()
+        {
+            string fileName = string.Format("tipCount_{0}.txt", GlobalVars.Instance.ProtocolName);
+            string fullPath = FolderHelper.GetDataFolder() + fileName;
+          
+            try
+            {
+                if (!File.Exists(fullPath))
+                    throw new FileNotFoundException(string.Format("无法找到位于{0}的文件！", fullPath));
+                string expression = File.ReadAllText(fullPath);
+                
+                expression = expression.Replace("N", GlobalVars.Instance.SampleCount.ToString());
+                NCalc.Expression e = new NCalc.Expression(expression);
+                
+                txtTipsNeed.Text = e.Evaluate().ToString();
+            }
+            catch(Exception ex)
+            {
+                SetInfo(ex.Message, Colors.Red);
+            }
+         
+
+        }
+
+        private void SetLastRunInfo()
+        {
+            if (GlobalVars.Instance.UseLastTimeSetting)
+            {
+                int startStep = GlobalVars.Instance.LastRunInfos.FinishedSteps + 1;
+                txtFromStep.Text = startStep.ToString();
+                ChangeBackGroudColor(startStep, true);
             }
         }
 
@@ -131,14 +170,15 @@ namespace SaintX.StageControls
 
             foreach(StepDefinition thisStepDef in stepsDef)
             {
-                if (thisStepDef.Volume == "")
+                if (thisStepDef.Volume == 0)
                     continue;
                 int repeatTimes = int.Parse(thisStepDef.RepeatTimes);
-                double vol =  double.Parse(thisStepDef.Volume);
+                double thisStepVolumeTotal = thisStepDef.DeadVolume / 1000.0 + thisStepDef.Volume * repeatTimes * GlobalVars.Instance.SampleCount / 1000.0;
                 if (reagent_vol.ContainsKey(thisStepDef.SourceLabware))
-                    reagent_vol[thisStepDef.SourceLabware] += vol * repeatTimes * GlobalVars.Instance.SampleCount / 1000.0;
+                    reagent_vol[thisStepDef.SourceLabware] += thisStepVolumeTotal;
                 else
-                    reagent_vol.Add(thisStepDef.SourceLabware, vol * repeatTimes * GlobalVars.Instance.SampleCount / 1000.0);
+                    reagent_vol.Add(thisStepDef.SourceLabware, thisStepVolumeTotal);
+                
             }
             foreach(KeyValuePair<string,double> pair in reagent_vol)
             {
@@ -162,7 +202,20 @@ namespace SaintX.StageControls
         }
 
         #region namedpipe
-      
+        private void CreateNamedPipeServer()
+        {
+            if (pipeCreated)
+                return;
+
+            pipeCreated = true;
+            Pipeserver.owner = this;
+            Pipeserver.ownerInvoker = new Invoker(this);
+            ThreadStart pipeThread = new ThreadStart(Pipeserver.createPipeServer);
+            Thread listenerThread = new Thread(pipeThread);
+            listenerThread.SetApartmentState(ApartmentState.STA);
+            listenerThread.IsBackground = true;
+            listenerThread.Start();
+        }
         internal void ExecuteCommand(string sCommand)
         {
             if (sCommand.Contains("shutdown"))
@@ -188,9 +241,11 @@ namespace SaintX.StageControls
                 if(isStart)
                 {
                     timeEstimation.StartMajorStep(nStep);
+                    GlobalVars.Instance.LastRunInfos.FinishedSteps = nStep - 1;
                 }
                 else
                 {
+                    GlobalVars.Instance.LastRunInfos.FinishedSteps = nStep;
                     timeEstimation.UpdateProgress(nStep, nTimes);
                 }
             }
@@ -224,8 +279,8 @@ namespace SaintX.StageControls
         private void WriteVariables()
         {
             FolderHelper.WriteVariable("sampleCount", GlobalVars.Instance.SampleCount.ToString());
-            FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.ScriptName.ToString());
-            FolderHelper.WriteRunInfo(string.Format("Sample Count: {0}, ProtocolName: {1}", GlobalVars.Instance.SampleCount, GlobalVars.Instance.ScriptName));
+            FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.ProtocolName.ToString());
+            FolderHelper.WriteRunInfo(string.Format("Sample Count: {0}, ProtocolName: {1},AssayName {2}", GlobalVars.Instance.SampleCount, GlobalVars.Instance.ProtocolName, GlobalVars.Instance.AssayName));
 
         }
 
@@ -268,7 +323,7 @@ namespace SaintX.StageControls
 
             foreach(var thisStepDef in stepsDef)
             {
-                if (thisStepDef.Volume == "0" || thisStepDef.Volume == "")
+                if (thisStepDef.Volume == 0 )
                     continue;
 
                 string[] srcAndDst = new string[] { thisStepDef.SourceLabware, thisStepDef.DestLabware };

@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Linq;
+using Natchs.Utility;
 
 namespace SaintX.StageControls
 {
@@ -30,7 +31,8 @@ namespace SaintX.StageControls
                 FileInfo fileInfo = new FileInfo(s);
                 allScripts.Add(fileInfo.Name.Replace(".esc",""));
             }
-            lstAssay.ItemsSource = new List<string> {"HBV","HCV"};
+            
+            lstAssay.ItemsSource = ReadAssays();
             lstAssay.SelectedIndex = 0;
             chkOneStep.Click += chkOneStep_Click;
             chkMag.Click += chkMag_Click;
@@ -38,6 +40,18 @@ namespace SaintX.StageControls
             //lstProtocols.SelectionChanged += lstProtocols_SelectionChanged;
             //lstProtocols.SelectedIndex = 0;
             OnProtocolChanged();
+        }
+
+        private System.Collections.IEnumerable ReadAssays()
+        {
+            string filePath = FolderHelper.GetDataFolder() + "assays.txt";
+            if(!File.Exists(filePath))
+            {
+                SetInfo("无法找到项目定义文件！");
+                return null;
+            }
+            return File.ReadAllLines(filePath);
+
         }
 
         void chkMag_Click(object sender, RoutedEventArgs e)
@@ -64,6 +78,7 @@ namespace SaintX.StageControls
 
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
+            SetInfo("");
             if (lstAssay.SelectedItem == null)
             {
                 SetInfo("请选中一个实验！");
@@ -93,12 +108,16 @@ namespace SaintX.StageControls
                 SetInfo(string.Format("无法找到合适的脚本，试验方法必须是{0}且用{1}试剂！",GetProtocolName(),(string)lstAssay.SelectedItem));
                 return;
             }
-            GlobalVars.Instance.ScriptName = scriptName;
+            GlobalVars.Instance.AssayName = (string)lstAssay.SelectedItem;
+            GlobalVars.Instance.ProtocolName = GetProtocolName();
             try
             {
-                EVOController.Instance.Start();
                 GlobalVars.Instance.SampleLayoutSettings = SampleLayoutSettings.Create(smpCnt);
                 SettingsManager.Instance.UpdateProtocol();
+                GlobalVars.Instance.UseLastTimeSetting = (bool)chkkUseLastSettings.IsChecked;
+                if(!GlobalVars.Instance.UseLastTimeSetting)
+                    CreateLastRunInfos(smpCnt,(string)lstAssay.SelectedItem);
+                EVOController.Instance.Start();
                 NotifyFinished();
             }
             catch(Exception ex)
@@ -106,8 +125,16 @@ namespace SaintX.StageControls
                 SetInfo(ex.Message);
                 return;
             }
-            
+           
         }
+
+        private void CreateLastRunInfos(int smpCnt, string assayName)
+        {
+            GlobalVars.Instance.LastRunInfos = new Natchs.Utility.LastRunInfos(GetProtocolName(), assayName, smpCnt, 0);
+        }
+
+      
+
         private string GetProtocolName()
         {
             string protocolName = (bool)chkMag.IsChecked ? "mag" : "oneStep";
@@ -144,6 +171,44 @@ namespace SaintX.StageControls
 
         }
 
+        private void useLastSettings_Clicked(object sender, RoutedEventArgs e)
+        {
+          
+            bool bChked = (bool)chkkUseLastSettings.IsChecked;
+            if(bChked)
+            {
+                string lastRunXMLFile = FolderHelper.GetLastRunInfoFile();
+                if (!File.Exists(lastRunXMLFile))
+                {
+                    SetInfo("无法找到上次运行定义文件！");
+                    return;
+                }
+                string sContent = File.ReadAllText(lastRunXMLFile);
+                GlobalVars.Instance.LastRunInfos = SerializeHelper.Deserialize<LastRunInfos>(sContent);
+            }
+            bool bEnabled = !bChked;
+            EnableControls(bEnabled);
+       
+        }
+
+        private void EnableControls(bool bEnable)
+        {
+            txtSampleCount.IsEnabled = bEnable;
+            if(!bEnable)
+            {
+                lstAssay.SelectedItem = GlobalVars.Instance.LastRunInfos.AssayName;
+                bool bMag = GlobalVars.Instance.LastRunInfos.Protocol == "mag";
+                chkMag.IsChecked = bMag;
+                chkOneStep.IsChecked = !bMag;
+                txtSampleCount.Text = GlobalVars.Instance.LastRunInfos.SampleCount.ToString();
+                OnProtocolChanged();
+            }
+            lstAssay.IsEnabled = bEnable;
+            chkMag.IsEnabled = bEnable;
+            chkOneStep.IsEnabled = bEnable;
+        }
+
+     
     
     }
 }

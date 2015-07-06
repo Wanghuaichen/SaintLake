@@ -54,7 +54,7 @@ namespace SaintX.Utility
             //    SerializeHelper.Serialize(assayGroupSettingXml, testSetting);
             //}
 
-            _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + GlobalVars.Instance.ScriptName + ".csv");
+            _protocol = Protocol.CreateFromCSVFile(FolderHelper.GetDataFolder() + GlobalVars.Instance.ProtocolName + ".csv");
         }
 
         //public List<ColorfulAssay> Assays

@@ -46,6 +46,9 @@
     <Reference Include="ManagedWinapi">
       <HintPath>..\..\..\..\EVOShell\ManagedWinapi.dll</HintPath>
     </Reference>
+    <Reference Include="NCalc">
+      <HintPath>..\..\lib\NCalc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -88,6 +91,7 @@
     <Compile Include="StageControls\ProtocolSelection.xaml.cs">
       <DependentUpon>ProtocolSelection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utility\LastRunSettings.cs" />
     <Compile Include="Utility\TimeEstimation.cs" />
     <Compile Include="StageControls\StepMonitor.xaml.cs">
       <DependentUpon>StepMonitor.xaml</DependentUpon>

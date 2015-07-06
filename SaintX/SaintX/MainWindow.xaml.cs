@@ -1,8 +1,10 @@
-﻿using SaintX.Navigation;
+﻿using SaintX.Data;
+using SaintX.Navigation;
 using SaintX.StageControls;
 using SaintX.Utility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +76,17 @@ namespace SaintX
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             EVOController.Instance.AbortMonitoring = true;
+            SaveLastRunInfos();
+        }
+
+
+
+
+        private void SaveLastRunInfos()
+        {
+            string sFile = FolderHelper.GetLastRunInfoFile();
+            string sLastRunInfo = Utility.SerializeHelper.Serialize(GlobalVars.Instance.LastRunInfos);
+            File.WriteAllText(sFile, sLastRunInfo);
         }
 
         void MainWindow_Closed(object sender, EventArgs e)

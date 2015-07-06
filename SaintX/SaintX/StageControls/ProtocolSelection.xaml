@@ -21,6 +21,7 @@
                 <RowDefinition Height="150"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
             <GroupBox FontSize="20" Header="实验方法">
                 <Grid>
@@ -53,8 +54,9 @@
                 <TextBox FontSize ="18"  Text="16"  Height="36" HorizontalAlignment="Left"  Name="txtSampleCount" VerticalAlignment="Top" Width="100" TabIndex="2" />
             </StackPanel>
             <Button FontSize ="20" Content="确定" Name="btnConfirm" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Width="200" Height="39" Click="btnConfirm_Click"/>
+            <CheckBox FontSize="20" Content="使用上一次的设置" Grid.Row="4" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="chkkUseLastSettings" Click="useLastSettings_Clicked"/>
 
         </Grid>
-        
+      
     </Grid>
 </bb:BaseUserControl>

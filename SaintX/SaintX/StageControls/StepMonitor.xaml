@@ -28,9 +28,9 @@
                     <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="提示信息："/>
-                <Button Grid.Row="1" Grid.Column="1"  Content="开始"  Name="btnStart" IsEnabled="True" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" VerticalAlignment="Top"/>
+                <Button Grid.Row="1" Grid.Column="1"  Content="开始"  Name="btnStart" IsEnabled="True" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" VerticalAlignment="Top" Margin="0,0,72,0"/>
                 <TextBox Text="等待EVOware启动完成。"  Grid.Row ="1" Name="txtInfo" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="0,0,0,10" />
-                <Button Grid.Row="1" Grid.Column="1"  Content="关闭EVOware" IsEnabled="False"  x:Name="btnCloseEVOware" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnExit_Click" VerticalAlignment="Top" Margin="0,37,0,0"/>
+                <Button Grid.Row="1" Grid.Column="1"  Content="关闭EVOware" IsEnabled="False"  x:Name="btnCloseEVOware" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnExit_Click" VerticalAlignment="Top" Margin="0,37,72,0"/>
             </Grid>
         </GroupBox>
         <GroupBox  Grid.Column="1">
@@ -50,15 +50,17 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="当前步骤用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Left"  Grid.Row="0" Margin="140,0,0,0" TextWrapping="Wrap"  Name="txtTimeUsedThisStep" Text="{Binding Path=CurrentStepUsed}"  VerticalAlignment="Center"/>
-                    <Label Grid.Row="1" Content="当前步骤剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Text="{Binding Path=CurrentStepRemaining}"  Name="txtRemianingTimeThisStep" VerticalAlignment="Center"/>
+                    <Label Content="所需枪头数" Grid.Row="0"></Label>
+                    <TextBox Name="txtTipsNeed" Grid.Row="0" Text="" Margin="80,2,10,2"/>
+                    <Label Grid.Row="1" Content="开始步骤："></Label>
+                    <TextBox Name="txtFromStep" Grid.Row="1" Text="1" Margin="80,2,10,2"/>
                     <Label Grid.Row="2" Content ="总用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="{Binding Path=TotalUsed}" VerticalAlignment="Center"/>
                     <Label Grid.Row="3" Content="预计剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="3" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Text="{Binding Path=TotalRemaining}"  Name="txtRemainingTime" VerticalAlignment="Center"/>
+                    
                 </Grid>
             </StackPanel>
         </GroupBox>
@@ -75,6 +77,7 @@
                             <GridViewColumn Header="目标Label" Width="120" DisplayMemberBinding="{Binding Path=DestLabware}"></GridViewColumn>
                             <GridViewColumn Header="重复次数" Width="120" DisplayMemberBinding="{Binding Path=RepeatTimes}"></GridViewColumn>
                             <GridViewColumn Header="枪头类型" Width="120" DisplayMemberBinding="{Binding Path=TipType}"></GridViewColumn>
+                            <GridViewColumn Header="死体积" Width="120" DisplayMemberBinding="{Binding Path=DeadVolume}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>

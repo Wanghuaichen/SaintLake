@@ -53,7 +53,7 @@ namespace SaintX
             {
                 string userName = ConfigurationManager.AppSettings["user"];
                 string password = ConfigurationManager.AppSettings["password"];
-                string cmdLine = string.Format(@" -b -u {0} -w {1} -r {2}", userName, password, GlobalVars.Instance.ScriptName);
+                string cmdLine = string.Format(@" -b -u {0} -w {1} -r {2}", userName, password, "");
                 string exePath = ConfigurationManager.AppSettings["exePath"];
                 Process.Start(exePath, cmdLine);
             }
@@ -103,7 +103,7 @@ namespace SaintX
 
         public void RunScript()
         {
-            winOp.SelectScriptListBoxItem(GlobalVars.Instance.ScriptName);
+            winOp.SelectScriptListBoxItem(string.Format("{0}_{1}", GlobalVars.Instance.ProtocolName,GlobalVars.Instance.AssayName));
             winOp.WaitForRunWindow();
             winOp.ClickRunButton();
         }

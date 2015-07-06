@@ -15,6 +15,10 @@ namespace SaintX.Utility
             string s = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             return s + "\\";
         }
+        static public string GetLastRunInfoFile()
+        {
+            return FolderHelper.GetExeFolder() + "lastRunInfo.xml";
+        }
 
         static public void WriteResult(bool bok)
         {
