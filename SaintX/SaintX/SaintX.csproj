@@ -44,7 +44,7 @@
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="ManagedWinapi">
-      <HintPath>..\..\..\..\EVOShell\ManagedWinapi.dll</HintPath>
+      <HintPath>..\..\lib\ManagedWinapi.dll</HintPath>
     </Reference>
     <Reference Include="NCalc">
       <HintPath>..\..\lib\NCalc.dll</HintPath>

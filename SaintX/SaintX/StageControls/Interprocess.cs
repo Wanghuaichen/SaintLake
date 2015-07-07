@@ -1,11 +1,11 @@
-﻿using SaintX.StageControls;
+﻿using Natchs.StageControls;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 
-namespace SaintX.StageControls
+namespace Natchs.StageControls
 {
     public class Invoker
     {
@@ -48,7 +48,7 @@ namespace SaintX.StageControls
             int numBytes = 0;
             StringBuilder msg = new StringBuilder();
             ownerInvoker.sDel = ExecuteCommand;
-            pipeName = "SaintX";
+            pipeName = "Natchs";
             try
             {
                 pipeServer = new NamedPipeServerStream(pipeName, PipeDirection.In, 1,

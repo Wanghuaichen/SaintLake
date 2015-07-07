@@ -1,7 +1,7 @@
-﻿using SaintX.Data;
-using SaintX.Navigation;
-using SaintX.StageControls;
-using SaintX.Utility;
+﻿using Natchs.Data;
+using Natchs.Navigation;
+using Natchs.StageControls;
+using Natchs.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SaintX
+namespace Natchs
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

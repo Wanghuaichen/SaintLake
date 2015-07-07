@@ -1,7 +1,6 @@
-﻿using Saint.Setting;
-using SaintX.Data;
-using SaintX.Navigation;
-using SaintX.Utility;
+﻿using Natchs.Data;
+using Natchs.Navigation;
+using Natchs.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +10,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace SaintX.StageControls
+namespace Natchs.StageControls
 {
     /// <summary>
     /// BarcodeDefinition.xaml 的交互逻辑

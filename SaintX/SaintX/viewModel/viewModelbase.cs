@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaintX.viewModel
+namespace Natchs.viewModel
 {
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {

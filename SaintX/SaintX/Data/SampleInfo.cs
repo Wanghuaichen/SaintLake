@@ -6,10 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using SaintX.Utility;
-using Saint.Setting;
+using Natchs.Utility;
 
-namespace SaintX.Data
+namespace Natchs.Data
 {
     public class SampleLayoutSettings : IEnumerable, INotifyPropertyChanged
     {

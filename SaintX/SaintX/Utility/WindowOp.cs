@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Automation;
 
-namespace SaintX
+namespace Natchs
 {
     public class WindowOp
     {

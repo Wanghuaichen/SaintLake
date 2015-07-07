@@ -1,4 +1,4 @@
-﻿using SaintX.Data;
+﻿using Natchs.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
 
-namespace SaintX.Utility
+namespace Natchs.Utility
 {
 
     class SerializeHelper

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace SaintX.Data
+namespace Natchs.Data
 {
     public class PanelViewModel : INotifyPropertyChanged
     {

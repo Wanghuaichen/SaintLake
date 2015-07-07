@@ -1,8 +1,8 @@
-﻿<Application x:Class="SaintX.App"
+﻿<Application x:Class="Natchs.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:src="clr-namespace:SaintX"
-             xmlns:utility="clr-namespace:SaintX.Utility"
+             xmlns:src="clr-namespace:Natchs"
+             xmlns:utility="clr-namespace:Natchs.Utility"
              >
     <Application.Resources>
         <!--<src:MyColorConverter x:Key="colorConverter"/>-->

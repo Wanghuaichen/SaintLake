@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Natchs.Properties;
 
-namespace SaintX
+namespace Natchs
 {
     /// <summary>
     /// HelpForm.xaml 的交互逻辑
@@ -11,7 +11,7 @@ namespace SaintX
         public HelpForm()
         {
             InitializeComponent();
-            lblDescription.Content = "SaintX:版本号：" + stringRes.version;
+            lblDescription.Content = "Natchs:版本号：" + stringRes.version;
         }
     }
 }

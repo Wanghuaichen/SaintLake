@@ -1,6 +1,6 @@
-﻿using SaintX.Data;
-using SaintX.Navigation;
-using SaintX.Utility;
+﻿using Natchs.Data;
+using Natchs.Navigation;
+using Natchs.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using Natchs.Utility;
 
-namespace SaintX.StageControls
+namespace Natchs.StageControls
 {
     /// <summary>
     /// ProtocolSelection.xaml 的交互逻辑

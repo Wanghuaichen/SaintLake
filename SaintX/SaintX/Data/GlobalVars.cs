@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SaintX.Data
+namespace Natchs.Data
 {
     class GlobalVars
     {

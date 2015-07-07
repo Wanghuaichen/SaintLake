@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace SaintX.Data
+namespace Natchs.Data
 {
     public abstract class BindableBase : INotifyPropertyChanged
     {

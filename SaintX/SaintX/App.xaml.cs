@@ -1,4 +1,4 @@
-﻿using SaintX.Utility;
+﻿using Natchs.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace SaintX
+namespace Natchs
 {
     /// <summary>
     /// App.xaml 的交互逻辑
@@ -22,7 +22,7 @@ namespace SaintX
             base.OnStartup(e);
 
             // unique id for global mutex - Global prefix means it is global to the machine
-            string mutexId = "Global\\SaintX";
+            string mutexId = "Global\\Natchs";
             using (var mutex = new Mutex(false, mutexId))
             {
                 // edited by Jeremy Wiebe to add example of setting up security for multi-user usage

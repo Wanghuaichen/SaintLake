@@ -1,7 +1,5 @@
-﻿using Saint.Setting;
-using SaintX.Data;
-using SaintX.Setting;
-using SaintX.Utility;
+﻿using Natchs.Data;
+using Natchs.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 
-namespace SaintX.Utility
+namespace Natchs.Utility
 {
     class SettingsManager
     {

@@ -1,6 +1,6 @@
-﻿using SaintX.Data;
-using SaintX.Interfaces;
-using SaintX.StageControls;
+﻿using Natchs.Data;
+using Natchs.Interfaces;
+using Natchs.StageControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace SaintX.Navigation
+namespace Natchs.Navigation
 {
     public class StageArgs : EventArgs
     {
