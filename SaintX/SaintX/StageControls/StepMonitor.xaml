@@ -53,7 +53,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Content="所需枪头数" Grid.Row="0"></Label>
-                    <TextBox Name="txtTipsNeed" Grid.Row="0" Text="" Margin="80,2,10,2"/>
+                    <TextBox Name="txtTipsNeed" IsReadOnly="True" Grid.Row="0" Text="" Margin="80,2,10,2"/>
                     <Label Grid.Row="1" Content="开始步骤："></Label>
                     <TextBox Name="txtFromStep" Grid.Row="1" Text="1" Margin="80,2,10,2"/>
                     <Label Grid.Row="2" Content ="总用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>

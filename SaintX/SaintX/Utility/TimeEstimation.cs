@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Natchs.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -14,7 +16,36 @@ namespace Natchs.Data
         int totalMinorSteps = 0;
         Timer timer = new Timer(1000);
         TimeSpan oneSecond = TimeSpan.FromSeconds(1);
-        
+
+        public TimeEstimation()
+        {
+            timer.Elapsed += timer_Elapsed;
+            int seconds = GetEstimateSeconds(GlobalVars.Instance.SampleCount, GlobalVars.Instance.ProtocolName);
+            TotalRemaining = TimeSpan.FromSeconds(seconds);
+        }
+
+        private int GetEstimateSeconds(int sampleCnt, string protocolName)
+        {
+            string estimateFile = FolderHelper.GetDataFolder() + string.Format("timeEstimation_{0}.txt", protocolName);
+            if(!File.Exists(estimateFile))
+            {
+                throw new FileNotFoundException("无法找到时间估算文件！");
+            }
+            string[] lines = File.ReadAllLines(estimateFile);
+            Dictionary<int, int> cnt_time = new Dictionary<int, int>();
+            foreach(string line in lines)
+            {
+                string[] strs = line.Split(',');
+                if (strs.Length != 2)
+                    throw new Exception("时间估算文件格式非法！");
+                
+                cnt_time.Add(int.Parse(strs[0]),int.Parse(strs[1]));
+            }
+            if(!cnt_time.ContainsKey(sampleCnt))
+                throw new Exception("估算文件中无法找到对应的样品数量！");
+            return cnt_time[sampleCnt];
+        }
+
         public TimeEstimation(List<StepDefinition> stepsDefinition)
         {
             foreach(StepDefinition stepDef in stepsDefinition)

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Saint.Setting
+namespace Natchs.Setting
 {
     [Serializable]
     public class TestSetting : BindableBase

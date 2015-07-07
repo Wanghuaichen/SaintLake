@@ -105,7 +105,7 @@ namespace Natchs.StageControls
             }
             catch(Exception ex)
             {
-                SetInfo(string.Format("无法找到合适的脚本，试验方法必须是{0}且用{1}试剂！",GetProtocolName(),(string)lstAssay.SelectedItem));
+                SetInfo(string.Format("无法找到名为{0}的脚本！",scriptName));
                 return;
             }
             GlobalVars.Instance.AssayName = (string)lstAssay.SelectedItem;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace Saint.Setting
+namespace Natchs.Setting
 {
     [Serializable]
     public class ColorfulAssay : INotifyPropertyChanged
