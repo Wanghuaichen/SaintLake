@@ -20,7 +20,7 @@ namespace Natchs.Data
         public TimeEstimation()
         {
             timer.Elapsed += timer_Elapsed;
-            int seconds = GetEstimateSeconds(GlobalVars.Instance.SampleCount, GlobalVars.Instance.ProtocolName);
+            int seconds = GetEstimateSeconds();
             TotalRemaining = TimeSpan.FromSeconds(seconds);
         }
         internal void Go()
@@ -28,8 +28,13 @@ namespace Natchs.Data
             timer.Start();
         }
 
-        private int GetEstimateSeconds(int sampleCnt, string protocolName)
+        private int GetEstimateSeconds()
         {
+
+            int sampleCnt = GlobalVars.Instance.SampleCount;
+            string protocolName = GlobalVars.Instance.ProtocolName;
+            string assayName = GlobalVars.Instance.AssayName;
+
             string estimateFile = FolderHelper.GetDataFolder() + string.Format("timeEstimation_{0}.txt", protocolName);
             if(!File.Exists(estimateFile))
             {
@@ -37,17 +42,24 @@ namespace Natchs.Data
             }
             string[] lines = File.ReadAllLines(estimateFile);
             Dictionary<int, int> cnt_time = new Dictionary<int, int>();
-            foreach(string line in lines)
+            int nColIndexs = GetColumnIndex(lines[0], assayName);
+            for (int i = 1; i < lines.Length; i++ )
             {
-                string[] strs = line.Split(',');
-                if (strs.Length != 2)
+                string[] strs = lines[i].Split(',');
+                if (strs.Length < 2)
                     throw new Exception("时间估算文件格式非法！");
-                
-                cnt_time.Add(int.Parse(strs[0]),int.Parse(strs[1]));
+
+                cnt_time.Add(int.Parse(strs[0]), int.Parse(strs[nColIndexs]));
             }
             if(!cnt_time.ContainsKey(sampleCnt))
                 throw new Exception("估算文件中无法找到对应的样品数量！");
             return cnt_time[sampleCnt];
+        }
+
+        private int GetColumnIndex(string firstLine, string assayName)
+        {
+            string[] strs = firstLine.Split(',');
+            return Array.FindIndex(strs, x=> x == assayName);
         }
 
         public TimeEstimation(List<StepDefinition> stepsDefinition)

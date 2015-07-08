@@ -63,7 +63,7 @@ namespace Natchs.Data
 
         public bool UseLastTimeSetting { get; set; }
 
-        public object AssayName { get; set; }
+        public string AssayName { get; set; }
     }
     
 }

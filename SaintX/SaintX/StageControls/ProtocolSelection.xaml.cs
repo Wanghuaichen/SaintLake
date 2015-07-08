@@ -110,6 +110,7 @@ namespace Natchs.StageControls
             }
             GlobalVars.Instance.AssayName = (string)lstAssay.SelectedItem;
             GlobalVars.Instance.ProtocolName = GetProtocolName();
+            GlobalVars.Instance.SampleCount = smpCnt;
             try
             {
                 GlobalVars.Instance.SampleLayoutSettings = SampleLayoutSettings.Create(smpCnt);

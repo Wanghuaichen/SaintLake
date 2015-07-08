@@ -88,7 +88,7 @@ namespace Natchs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.15.
+        ///   Looks up a localized string similar to 0.16.
         /// </summary>
         internal static string version {
             get {
