@@ -105,7 +105,7 @@ namespace Natchs.StageControls
             }
             catch(Exception ex)
             {
-                SetInfo(string.Format("无法找到名为{0}的脚本！",scriptName));
+                SetInfo(ex.Message);
                 return;
             }
             GlobalVars.Instance.AssayName = (string)lstAssay.SelectedItem;
@@ -143,7 +143,10 @@ namespace Natchs.StageControls
         private string GetScriptName(string assayName)
         {
             string protocolName = GetProtocolName();
-            return allScripts.Where(x => x.Contains(assayName) && x.Contains(protocolName)).First();
+            string scriptName = string.Format("{0}_{1}", protocolName, assayName);  //
+            if (!allScripts.Contains(scriptName))
+                throw new FileNotFoundException(string.Format("无法找到名为{0}的脚本！", scriptName));
+            return scriptName;
         }
 
         private void SetInfo(string s)
@@ -184,6 +187,11 @@ namespace Natchs.StageControls
                     return;
                 }
                 string sContent = File.ReadAllText(lastRunXMLFile);
+                if(sContent == "")
+                {
+                    SetInfo("上一次运行定义文件非法！");
+                    return;
+                }
                 GlobalVars.Instance.LastRunInfos = SerializeHelper.Deserialize<LastRunInfos>(sContent);
             }
             bool bEnabled = !bChked;

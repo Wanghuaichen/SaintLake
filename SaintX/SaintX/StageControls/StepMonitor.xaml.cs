@@ -126,10 +126,16 @@ namespace Natchs.StageControls
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             log.Info("btn start clicked.");
+            bool bok = CheckFromStep();
+            if (!bok)
+                return;
+           
+
             try
             {
                 EVOController.Instance.RunScript();
                 WriteVariables();
+                SetInfo("脚本已经开始运行！", Colors.Green);
             }
             catch (Exception ex)
             {
@@ -139,8 +145,30 @@ namespace Natchs.StageControls
             FolderHelper.WriteResult(true);
             FolderHelper.Backup();
             FeedWaiter();
-            timeEstimation.StartMajorStep(1);
+            //timeEstimation.StartMajorStep(1);
+            timeEstimation.Go();
             btnStart.IsEnabled = false;
+        }
+
+        private bool CheckFromStep()
+        {
+        
+
+            int step;
+            SetInfo("", Colors.Black);
+            if (!int.TryParse(txtFromStep.Text, out step))
+            {
+                SetInfo("开始步骤必须为整数！", Colors.Red);
+                return false;
+            }
+            
+            int maxStep = SettingsManager.Instance.Protocol.StepsDefinition.Count;
+            if (step < 1 || step > maxStep)
+            {
+                SetInfo(string.Format("开始步骤必须位于1到{0}之间！", maxStep), Colors.Red);
+                return false;
+            }
+            return true;
         }
 
        
@@ -190,7 +218,7 @@ namespace Natchs.StageControls
         private void InitStepsInfo()
         {
             var stepsDef = SettingsManager.Instance.Protocol.StepsDefinition;
-            timeEstimation = new TimeEstimation(stepsDef);
+            timeEstimation = new TimeEstimation();
             stepsDefWithProgressInfo.Clear();
             foreach(var stepDef in stepsDef)
             {
@@ -240,7 +268,8 @@ namespace Natchs.StageControls
                 ChangeBackGroudColor(nStep,isStart);
                 if(isStart)
                 {
-                    timeEstimation.StartMajorStep(nStep);
+                    //timeEstimation.StartMajorStep(nStep);
+                    timeEstimation.Go();
                     GlobalVars.Instance.LastRunInfos.FinishedSteps = nStep - 1;
                 }
                 else
@@ -280,6 +309,7 @@ namespace Natchs.StageControls
         {
             FolderHelper.WriteVariable("sampleCount", GlobalVars.Instance.SampleCount.ToString());
             FolderHelper.WriteVariable("protocolName", GlobalVars.Instance.ProtocolName.ToString());
+            FolderHelper.WriteVariable("fromStep", txtFromStep.Text);
             FolderHelper.WriteRunInfo(string.Format("Sample Count: {0}, ProtocolName: {1},AssayName {2}", GlobalVars.Instance.SampleCount, GlobalVars.Instance.ProtocolName, GlobalVars.Instance.AssayName));
 
         }
@@ -338,6 +368,16 @@ namespace Natchs.StageControls
                 }
             }
             return true;
+        }
+
+        private void txtFromStep_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (!this.IsInitialized)
+                return;
+            bool bok = CheckFromStep();
+            if (!bok)
+                return;
+            ChangeBackGroudColor(int.Parse(txtFromStep.Text), true);
         }
 
      

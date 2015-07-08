@@ -23,6 +23,10 @@ namespace Natchs.Data
             int seconds = GetEstimateSeconds(GlobalVars.Instance.SampleCount, GlobalVars.Instance.ProtocolName);
             TotalRemaining = TimeSpan.FromSeconds(seconds);
         }
+        internal void Go()
+        {
+            timer.Start();
+        }
 
         private int GetEstimateSeconds(int sampleCnt, string protocolName)
         {
@@ -70,6 +74,10 @@ namespace Natchs.Data
             {
                 TotalUsed += oneSecond;
                 TotalRemaining -= oneSecond;
+            }
+            else
+            {
+                timer.Stop();
             }
             
             if( _currentStepRemaining.TotalSeconds > 0)
@@ -149,6 +157,8 @@ namespace Natchs.Data
                 SetProperty(ref _currentStepRemaining, value);
             }
         }
+
+   
     }
 
     struct ProgressInfo

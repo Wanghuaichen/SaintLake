@@ -55,7 +55,7 @@
                     <Label Content="所需枪头数" Grid.Row="0"></Label>
                     <TextBox Name="txtTipsNeed" IsReadOnly="True" Grid.Row="0" Text="" Margin="80,2,10,2"/>
                     <Label Grid.Row="1" Content="开始步骤："></Label>
-                    <TextBox Name="txtFromStep" Grid.Row="1" Text="1" Margin="80,2,10,2"/>
+                    <TextBox Name="txtFromStep" Grid.Row="1" Text="1" Margin="80,2,10,2" TextChanged="txtFromStep_TextChanged"/>
                     <Label Grid.Row="2" Content ="总用时：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="140,0,0,0" TextWrapping="Wrap" Name="txtTimeUsed" Text="{Binding Path=TotalUsed}" VerticalAlignment="Center"/>
                     <Label Grid.Row="3" Content="预计剩余时间：" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>

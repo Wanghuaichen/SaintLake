@@ -79,9 +79,6 @@ namespace Natchs
             SaveLastRunInfos();
         }
 
-
-
-
         private void SaveLastRunInfos()
         {
             string sFile = FolderHelper.GetLastRunInfoFile();
@@ -102,11 +99,7 @@ namespace Natchs
             NavigateTo(Stage.Selection);
         }
         #endregion
-
-
     }
-
-
 
     //#region  color converter
     //[ValueConversion(typeof(Color), typeof(SolidColorBrush))]
