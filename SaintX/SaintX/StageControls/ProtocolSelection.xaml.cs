@@ -138,7 +138,7 @@ namespace Natchs.StageControls
 
         private string GetProtocolName()
         {
-            string protocolName = (bool)chkMag.IsChecked ? "mag" : "oneStep";
+            string protocolName = (bool)chkMag.IsChecked ? "PRO" : "FAST";
             return protocolName;
         }
         private string GetScriptName(string assayName)
