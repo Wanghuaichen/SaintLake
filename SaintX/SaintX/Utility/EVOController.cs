@@ -15,7 +15,7 @@ namespace Natchs
     class EVOController
     {
         WindowOp winOp = new WindowOp();
-        System.Timers.Timer timer = new System.Timers.Timer(400);
+        System.Timers.Timer timer = new System.Timers.Timer(200);
         CheckCondition checkCondition;
         public delegate void DelegateStartFinished();
         public delegate void CloseSucceed();

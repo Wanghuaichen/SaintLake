@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="提示信息："/>
-                <Button Grid.Row="1" Grid.Column="1"  Content="开始"  Name="btnStart" IsEnabled="True" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" VerticalAlignment="Top" Margin="0,0,72,0"/>
+                <Button Grid.Row="1" Grid.Column="1"  Content="开始"  Name="btnStart" IsEnabled="False" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnStart_Click" VerticalAlignment="Top" Margin="0,0,72,0"/>
                 <TextBox Text="等待EVOware启动完成。"  Grid.Row ="1" Name="txtInfo" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="0,0,0,10" />
                 <Button Grid.Row="1" Grid.Column="1"  Content="关闭EVOware" IsEnabled="False"  x:Name="btnCloseEVOware" HorizontalAlignment="Right" Width="100" Height="32"  Click="btnExit_Click" VerticalAlignment="Top" Margin="0,37,72,0"/>
             </Grid>
